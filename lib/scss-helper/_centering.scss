@@ -1,0 +1,77 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Scss-Helper: Centering -
+///
+///     Contains mixins and functions to center elements
+///
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+
+///
+/// @todo Documentation
+///
+$center-container-max-width : em(1024px) !default;
+
+
+///
+/// Default value for the "center in the unknown element" (based on spacing configuration).
+///
+$default-citue-font-size: ms-font(0) !default;
+
+
+///
+/// Mixin to center a container
+///
+/// @param {number} $max-width [$center-container-max-width] - [`optional`] max-width of the centered container
+///
+@mixin center-container($max-width : $center-container-max-width) {
+
+    display: block;
+    max-width: $max-width;
+
+    margin: {
+        right: auto;
+        left: auto;
+    }
+}
+
+
+///
+/// Solution to vertically center an element. This mixin just creates the (parent) `center in the unknown container`.
+///
+/// An additional (child) `center in the unknown element` **is needed** for this to work.
+///
+/// @require {mixin} center-in-the-unknown-element
+///
+@mixin center-in-the-unknown-container() {
+
+    font-size: 0;
+
+    &:before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+}
+
+
+///
+/// Solution to vertically center an element. This mixin just creates the (child) `center in the unknown element`.
+///
+/// An additional (parent) `center in the unknown container` **is needed** for this to work.
+///
+/// @param {number} $font-size [$default-citue-font-size] - [`optional`] font-size
+///
+/// @require {mixin} center-in-the-unknown-container
+///
+@mixin center-in-the-unknown-element($font-size: ms-font(0)) {
+
+    display: inline-block;
+    vertical-align: middle;
+
+    font-size: $font-size;
+}

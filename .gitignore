@@ -1,0 +1,11 @@
+
+
+node_modules
+bower_components
+
+
+#dont version hidden files (or cache folder etc. #
+/.*
+
+#but force gitignore versioning #
+!/.gitignore

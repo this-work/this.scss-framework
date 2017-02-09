@@ -1,0 +1,41 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Theming: Spacings -
+///
+/// @group Theming
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+
+@import './bower_components/modular-scale/stylesheets/modular-scale';
+
+// modular scale base definitions
+$ms-base: 16px !default;
+$ms-ratio: $golden !default;
+
+$ms-spacing-base: 44px !default;
+$ms-spacing-ratio: $ms-ratio !default;
+
+
+///
+/// @alias ms
+///
+@function ms-font($value) {
+    @return ms($value);
+}
+
+
+///
+///
+///
+@function ms-spacing($values...) {
+
+    $spacing: ();
+
+    @each $value in $values {
+        $spacing: append($spacing, ms($value, $ms-spacing-base, $ms-spacing-ratio));
+    }
+
+    @return if(length($spacing) == 1, nth($spacing, 1), $spacing);
+}

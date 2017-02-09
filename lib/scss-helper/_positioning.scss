@@ -1,0 +1,73 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Scss-Helper: Centering -
+///
+///     Contains mixins and functions to handle element positioning
+///
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+
+///
+/// Mixin shorthand to position an element relative, absolute or fixed.
+///
+/// @param {string} $position [] - [`required`] position property value. Possible values are `relative`, `absolute`, `fixed`, `initial` and `inherit`
+/// @param {length} $top [] - [`optional`] top position value
+/// @param {length} $right [] - [`optional`] right position value
+/// @param {length} $bottom [] - [`optional`] bottom position value
+/// @param {length} $left [] - [`optional`] left position value
+///
+@mixin positioned($position, $top : false, $right : false, $bottom : false, $left : false) {
+
+    position: $position;
+
+    @if ($top != false and $top != null) { top: $top; }
+    @if ($right != false and $right != null) { right: $right; }
+    @if ($bottom != false and $bottom != null) { bottom: $bottom }
+    @if ($left != false and $left != null) { left: $left; }
+}
+
+
+///
+/// Mixin to position an element `absolute`.
+///
+/// @param {length} $top [] - [`optional`] top position value
+/// @param {length} $right [] - [`optional`] right position value
+/// @param {length} $bottom [] - [`optional`] bottom position value
+/// @param {length} $left [] - [`optional`] left position value
+///
+@mixin absolute($top : false, $right : false, $bottom : false, $left : false) {
+    @include positioned(absolute, $top, $right, $bottom, $left);
+}
+
+
+///
+/// @todo DOCUMENTATION
+///
+/// Mixin to position an element `fixed`.
+///
+/// @param {length} $top [] - [`optional`] top position value
+/// @param {length} $right [] - [`optional`] right position value
+/// @param {length} $bottom [] - [`optional`] bottom position value
+/// @param {length} $left [] - [`optional`] left position value
+///
+@mixin fixed($top : false, $right : false, $bottom : false, $left : false) {
+    @include positioned(fixed, $top, $right, $bottom, $left);
+}
+
+
+///
+/// @todo DOCUMENTATION
+///
+/// Mixin to position an element `relative`.
+///
+/// @param {length} $top [] - [`optional`] top position value
+/// @param {length} $right [] - [`optional`] right position value
+/// @param {length} $bottom [] - [`optional`] bottom position value
+/// @param {length} $left [] - [`optional`] left position value
+///
+@mixin relative($top : false, $right : false, $bottom : false, $left : false) {
+    @include positioned(relative, $top, $right, $bottom, $left);
+}

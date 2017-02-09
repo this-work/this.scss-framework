@@ -1,0 +1,19 @@
+{
+  "name": "@this/scss-framework",
+  "version": "0.0.1",
+  "author": "",
+  "description": "THIS SCSS Framework",
+  "scripts": {
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@bitbucket.org:this-work/this.scss-framework.git"
+  },
+  "private": true,
+  "devDependencies": {
+
+  },
+  "dependencies": {
+
+  }
+}

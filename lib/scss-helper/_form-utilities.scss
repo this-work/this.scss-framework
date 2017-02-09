@@ -1,0 +1,58 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Scss-Helper: Centering -
+///
+///     Contains mixins and functions to style forms
+///
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+
+///
+/// Mixin to style the `placeholder` text of an `input` element.
+///
+/// @param {string} $context ['&'] - [`optional`] <br> context for the placeholder rules
+///
+/// @example scss
+/// // Method 1
+/// .selector input {
+///     @include o-placeholder(){
+///         color: red;
+///     }
+/// }
+///
+/// // Method 2
+///  @include o-placeholder('.selector input'){
+///     color: red;
+/// }
+///
+///
+/// // Output
+///
+/// .selector input::-webkit-input-placeholder {
+///     color: red;
+/// }
+///
+/// .selector input:moz-placeholder {
+///     color: red;
+/// }
+///
+/// .selector input::-moz-placeholder {
+///     color: red;
+/// }
+///
+/// .selector input:-ms-input-placeholder {
+///     color: red;
+/// }
+///
+@mixin style-placeholder($context : '&') {
+
+    @each $prefix in "::-webkit-input", ":moz", "::-moz", ":-ms-input" {
+
+        #{$context}#{$prefix}-placeholder {
+            @content;
+        }
+    }
+}
