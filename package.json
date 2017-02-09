@@ -3,17 +3,14 @@
   "version": "0.0.1",
   "author": "",
   "description": "THIS SCSS Framework",
-  "scripts": {
-  },
+  "scripts": {},
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:this-work/this.scss-framework.git"
   },
   "private": true,
-  "devDependencies": {
-
-  },
+  "devDependencies": {},
   "dependencies": {
-
+    "modularscale-sass": "^2.1.1"
   }
 }
