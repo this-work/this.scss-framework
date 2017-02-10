@@ -1,0 +1,49 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Theming: Spacings -
+///
+/// @group Theming
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+@import '~modularscale-sass/stylesheets/modular-scale';
+
+
+///
+$font-size-config: (
+    // 'color-name' : color-value
+) !default;
+
+///
+$default-font-size-map: $font-size-config !default;
+
+
+///
+///
+///
+@function font-size($typo-size-id, $font-size-map: $default-font-size-map) {
+
+    @if (not map-has-key($font-size-map, $typo-size-id)) {
+        @error 'Given font size map has no font size named "#{$typo-size-id}".';
+    }
+
+    @return map-get($font-size-map, $typo-size-id);
+}
+
+
+
+
+// modular scale base definitions
+$ms-base: 16px !default;
+$ms-ratio: $golden !default;
+
+
+///
+/// @alias ms
+///
+@function ms-font($value) {
+    @return ms($value);
+}
+
+
