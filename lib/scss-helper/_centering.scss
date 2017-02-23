@@ -76,3 +76,23 @@ $default-citue-font-size: ms-font(0) !default;
 
     font-size: $font-size;
 }
+
+
+@mixin center($horizontal: true, $vertical: true) {
+
+    position: absolute;
+    transform: translate(if($horizontal, -50%, 0), if($vertical, -50%, 0));
+
+    @if ($vertical) { top: 50%; }
+    @if ($horizontal) { left: 50%; }
+}
+
+
+@mixin center-vertical() {
+    @include center(false, true);
+}
+
+
+@mixin center-horizontal() {
+    @include center(true, false);
+}

@@ -11,14 +11,6 @@
 
 
 ///
-/// Tracks, if the global box sizing has been applied.
-///
-/// @type {boolean}
-///
-$_GLOBAL_BOX_SIZING_APPLIED : false;
-
-
-///
 /// Mixin to set the global box-sizing.
 ///
 /// @link http://www.paulirish.com/2012/box-sizing-border-box-ftw/
@@ -50,8 +42,6 @@ $_GLOBAL_BOX_SIZING_APPLIED : false;
     *:after {
         box-sizing: inherit;
     }
-
-    $GLOBAL_BOX_SIZING_APPLIED : true !global;
 }
 
 
