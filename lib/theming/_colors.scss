@@ -20,7 +20,7 @@ $default-color-map: $color-config !default;
 ///
 ///
 ///
-@function color($color-id, $color-map: $color-config) {
+@function color($color-id, $color-map: $default-color-map) {
 
     @if (not map-has-key($color-map, $color-id)) {
         @error 'Given color map has no color named "#{$color-id}".';
