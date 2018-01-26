@@ -7,7 +7,7 @@
 /// @since 0.0.1
 //// ---------------------------------------------------------------------------------------------
 
-@import '~modularscale-sass/stylesheets/modular-scale';
+// @import '~modularscale-sass/stylesheets/modular-scale';
 
 
 ///
@@ -34,24 +34,24 @@ $default-spacing-map: $spacing-config !default;
 
 
 
-// modular scale base definitions
-$ms-spacing-base: 44px !default;
-$ms-spacing-ratio: $ms-ratio !default;
+// // modular scale base definitions
+// $ms-spacing-base: 44px !default;
+// $ms-spacing-ratio: $ms-ratio !default;
 
 
 
-///
-///
-///
-@function ms-spacing($values...) {
+// ///
+// ///
+// ///
+// @function ms-spacing($values...) {
 
-    $spacing: ();
+//     $spacing: ();
 
-    @each $value in $values {
-        $spacing: append($spacing, ms($value, $ms-spacing-base, $ms-spacing-ratio));
-    }
+//     @each $value in $values {
+//         $spacing: append($spacing, ms($value, $ms-spacing-base, $ms-spacing-ratio));
+//     }
 
-    @return if(length($spacing) == 1, nth($spacing, 1), $spacing);
-}
+//     @return if(length($spacing) == 1, nth($spacing, 1), $spacing);
+// }
 
 
