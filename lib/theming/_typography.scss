@@ -24,7 +24,7 @@ $default-font-size-map: $font-size-config !default;
 $line-height-config: (
     // 'line-height-id': line height value
     // 'l1': 24px
-) !default
+) !default;
 
 ///
 $default-line-height-map: $line-height-config !default;
@@ -73,7 +73,7 @@ $default-font-type-map: $font-type-config !default;
 }
 
 
-@fuction line-height($line-height-id, $line-height-map: $default-line-height-map) {
+@function line-height($line-height-id, $line-height-map: $default-line-height-map) {
 
     @if (not map-has-key($line-height-map, $line-height-id)) {
         @error 'Given line-height map has no line height named "#{$line-height-id}".';
