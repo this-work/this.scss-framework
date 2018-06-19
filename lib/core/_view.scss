@@ -245,6 +245,8 @@ $mq-config : () !default;
 
         @each $bp-val in $breakpoints {
 
+
+
             @if ($generate-fallbacks) {
                 // Create fallback for outdated browser (ie-8)
                 @include _generate-mq-fallback($bp-val) { @content }
@@ -252,6 +254,18 @@ $mq-config : () !default;
 
             // Get breakpoint value if id is given
             $bp-val: if(type-of($bp-val) == string, _get-breakpoint-value($bp-val), $bp-val);
+
+            $unit: unit($bp-val);
+            @if ($min-max-feature) {
+
+                @if ($unit == 'px') {
+                    $bp-val: $bp-val - 1px;
+                }
+                @if ($unit == 'em') {
+                    $bp-val: $bp-val - 0.01em;
+                }
+
+            }
             $mq : append($mq, 'only screen and (#{$min-max-feature}-width: #{$bp-val})', comma);
         }
     }
