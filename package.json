@@ -1,9 +1,16 @@
 {
   "name": "@this/scss-framework",
-  "version": "0.0.5",
+  "version": "2.0.0",
   "author": "",
   "description": "THIS SCSS Framework",
   "scripts": {},
+  "files": [
+    "lib",
+    "lib/core",
+    "lib/grid-system",
+    "lib/scss-helper",
+    "lib/scss-theming"
+  ],
   "repository": {
     "type": "git",
     "url": "git@bitbucket.org:this-work/this.scss-framework.git"
