@@ -9,3 +9,4 @@ bower_components
 
 #but force gitignore versioning #
 !/.gitignore
+!/.npmignore
