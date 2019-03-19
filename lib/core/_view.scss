@@ -230,7 +230,7 @@ $mq-config : () !default;
                 // Get breakpoint value if id is given and generate mq string
                 $min: if(type-of($min) == string, _get-breakpoint-value($min), $min);
                 $max: if(type-of($max) == string, _get-breakpoint-value($max), $max);
-                $mq : append($mq, 'only screen and (min-width: #{$min}) and (max-width: #{$max})', comma);
+                $mq : append($mq, '(min-width: #{$min}) and (max-width: #{$max})', comma);
 
                 $i : $i + 2;
             }
@@ -266,7 +266,7 @@ $mq-config : () !default;
                 }
 
             }
-            $mq : append($mq, 'only screen and (#{$min-max-feature}-width: #{$bp-val})', comma);
+            $mq : append($mq, '(#{$min-max-feature}-width: #{$bp-val})', comma);
         }
     }
 
