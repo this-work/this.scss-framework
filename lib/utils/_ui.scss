@@ -1,0 +1,46 @@
+////
+///
+/// UI Libary
+///
+/// @group Utils
+/// @since 1.0.0
+///
+////
+
+
+
+///
+/// Mixin to style the `placeholder` text of an `input` element.
+///
+/// @param {string} $context ['&'] - [`optional`] Context for the placeholder rules
+///
+/// @example scss - Set placeholder color to purple
+/// include placeholder() {
+///     color: purple;
+/// };
+///
+@mixin placeholder($context : '&') {
+
+    @each $prefix in "::-webkit-input", ":moz", "::-moz", ":-ms-input" {
+
+        #{$context}#{$prefix}-placeholder {
+            @content;
+        }
+
+    }
+
+}
+
+
+
+///
+/// Deactivate all user interactions.
+///
+/// @example scss
+/// include deactivate-user-selection();
+///
+@mixin deactivate-user-selection() {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}

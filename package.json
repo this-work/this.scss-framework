@@ -7,9 +7,10 @@
   "files": [
     "lib",
     "lib/core",
-    "lib/grid-system",
-    "lib/scss-helper",
-    "lib/scss-theming"
+    "lib/grid",
+    "lib/styling",
+    "lib/view",
+    "lib/utils"
   ],
   "repository": {
     "type": "git",

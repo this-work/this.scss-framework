@@ -1,0 +1,161 @@
+////
+///
+/// Centering Libary
+///
+/// @group Utils
+/// @since 1.0.0
+///
+////
+
+
+
+///
+/// Max width of the center container
+/// @type number
+///
+$center-container-max-width: unitize(1024px) !default;
+
+
+
+///
+/// Mixin to center relative a container horizontal
+///
+/// @param {number} $max-width [$center-container-max-width] - [`optional`] max-width of the centered container
+/// @param {string} $unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @example scss - Center the container
+/// include center-relative-horizontal();
+///
+@mixin center-relative-horizontal(
+    $max-width: $center-container-max-width,
+    $unit-type: $default-unit-type
+) {
+
+    display: block;
+    max-width: unitize($max-width, $unit-type);
+    margin: {
+        right: auto;
+        left: auto;
+    }
+
+}
+
+
+
+///
+/// Solution to vertically center relative an element. This mixin just creates the (parent) `center-relative-vertical-wrapper`.
+/// An additional (child) `center-relative-vertical` **is needed** for this to work.
+///
+/// @require {mixin} center-relative-vertical
+///
+/// @example scss - Center the container
+/// include center-relative-vertical-wrapper();
+///
+@mixin center-relative-vertical-wrapper() {
+
+    font-size: 0;
+
+    &:before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+}
+
+
+
+///
+/// Solution to vertically center relative an element. This mixin just creates the (child) `center-relative-vertical`.
+/// An additional (parent) `center-relative-vertical-wrapper` **is needed** for this to work.
+///
+/// @param {number} $font-size - [`optional`] font-size to set in children
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @require {mixin} center-relative-vertical-wrapper
+///
+/// @example scss - Center the container
+/// include center-relative-vertical(12px);
+///
+@mixin center-relative-vertical(
+    $font-size: null,
+    $font-unit-type: $default-unit-type
+) {
+
+    display: inline-block;
+    vertical-align: middle;
+
+    @if ($font-size) {
+        font-size: unitize($font-size, $font-unit-type);
+    }
+
+}
+
+
+
+///
+/// Mixin to center absolute a container
+///
+/// @param {bool} $horizontal - Boolean to indicate centering horizontal
+/// @param {bool} $vertical - Boolean to indicate centering vertical
+///
+/// @example scss - Centering element absolute horizontal & vertical
+/// include center-absolute();
+///
+@mixin center-absolute(
+    $horizontal: true,
+    $vertical: true
+) {
+
+    display: block;
+    position: absolute;
+
+    @if (not $vertical) {
+
+        left: 50%;
+        transform: translateX(-50%);
+
+    } @else if (not $horizontal) {
+
+        top: 50%;
+        transform: translateY(-50%);
+
+
+    } @else {
+
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+    }
+
+}
+
+
+
+///
+/// Mixin to center absolute a container horizontal
+///
+/// @example scss - Center the container
+/// include center-absolute-horizontal();
+///
+@mixin center-absolute-horizontal() {
+
+    @include center-absolute(true, false);
+
+}
+
+
+
+///
+/// Mixin to center absolute a container vertical
+///
+/// @example scss - Center the container
+/// include center-absolute-horizontal();
+///
+@mixin center-absolute-vertical() {
+
+    @include center-absolute(false, true);
+
+}

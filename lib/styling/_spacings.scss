@@ -1,0 +1,106 @@
+////
+///
+/// Spacing Libary
+///
+/// @group Spacings
+/// @since 2.0.0
+///
+////
+
+
+
+///
+/// Associate spacing array.
+/// Includes a key/value pair of the spacing to increase the consistency.
+///
+/// @prop {String} name -  Name of the spacing
+/// @prop {Number} value -  Value of the spacing
+///
+/// @type array
+/// @example scss - Set two spacings
+///  $spacing-config (
+///     '2' : 2px,
+///     '6' : 6px
+///  );
+///
+$spacing-config: () !default;
+
+
+
+///
+/// Default spacing-map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-spacing-map: $spacing-config !default;
+
+
+
+///
+/// Get the entry from spacing array with unit
+///
+/// @param {string} $spacing-name - Name of the spacing pair
+/// @param {string} $spacing-unit-type [$default-unit-type] - [`optional`] Type of unit ('relative' or 'absolute')
+/// @param {array} $spacing-map [$default-spacing-map] - [`optional`] Spacing array
+///
+/// @return {string} spacing with unit
+///
+/// @example scss - Set the padding to spacing '2'
+/// padding: spacing('2');
+/// @example scss - Set the padding to spacing '2' with rem units
+/// padding: spacing('2', 'relative');
+///
+@function spacing(
+    $spacing-name,
+    $spacing-unit-type: $default-unit-type,
+    $spacing-map: $default-spacing-map
+) {
+
+    @if (not map-has-key($spacing-map, $spacing-name)) {
+        @error 'Given spacing map has no spacing named "#{$spacing-name}".';
+    }
+
+    $spacing: map-get($spacing-map, $spacing-name);
+
+    $spacing: unitize($spacing, $spacing-unit-type);
+
+    @return $spacing;
+
+}
+
+
+
+///
+/// Generate from the spacing array a bundle of padding spacing classes
+///
+/// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
+/// @param {string} $class-prefix [padding] - [`optional`] Class prefix
+/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
+///
+@mixin generate-spacing-padding-classes(
+    $spacing-map: $spacing-config,
+    $class-prefix: 'padding',
+    $class-separator: $default-class-separator
+) {
+
+    @include _generate-classes($spacing-map, padding, $class-prefix, $class-separator);
+
+}
+
+
+
+///
+/// Generate from the spacing array a bundle of margin spacing classes
+///
+/// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
+/// @param {string} $class-prefix [margin] - [`optional`] Class prefix
+/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
+///
+@mixin generate-spacing-margin-classes(
+    $spacing-map: $spacing-config,
+    $class-prefix: 'margin',
+    $class-separator: $default-class-separator
+) {
+
+    @include _generate-classes($spacing-map, margin, $class-prefix, $class-separator);
+
+}

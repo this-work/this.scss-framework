@@ -1,15 +1,33 @@
-//// ---------------------------------------------------------------------------------------------
-///   THIS: scss-core
+////
 ///
-///   - Conversion -
+/// Tool Libary
 ///
 /// @group Core
-/// @since 0.0.1
-//// ---------------------------------------------------------------------------------------------
+/// @since 2.0.0
+///
+////
 
 
-/// Default conversion context
+
+///
+/// Default unit type. Defined the unit output for all mixins and functions.
+///
+/// `absolute` - All Outputs are in an absolute unit type (px) or rather the orginal value.
+///
+/// `relative` - All Outputs are in an relative unit type (rem) when the orginal value are PX values.
+///
+/// @type string
+///
+$default-unit-type: 'absolute' !default;
+
+
+
+///
+/// Default conversion context. Used for from and to rem calculation.
+/// @type number
+///
 $default-conversion-context: 16px !default;
+
 
 
 ///
@@ -29,6 +47,7 @@ $default-conversion-context: 16px !default;
 }
 
 
+
 ///
 /// Converts `px` to `em`
 ///
@@ -40,6 +59,7 @@ $default-conversion-context: 16px !default;
 @function em($px, $context: $default-conversion-context) {
     @return (strip-unit($px) / strip-unit($context)) * 1em;
 }
+
 
 
 ///
@@ -55,6 +75,7 @@ $default-conversion-context: 16px !default;
 }
 
 
+
 ///
 /// Converts `rem` | `em` to `px`
 ///
@@ -65,4 +86,38 @@ $default-conversion-context: 16px !default;
 ///
 @function px($r-em, $context: $default-conversion-context) {
     @return (strip-unit($r-em) * strip-unit($context)) * 1px;
+}
+
+
+
+///
+/// Converts Unit to given unit type
+///
+/// @param {number} $value - Value to convert
+/// @param {string} $unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @returns {number} - the converted value
+///
+@function unitize($value, $unit-type: $default-unit-type) {
+
+    @if ($unit-type == "relative" and unit($value) == "px" ) {
+
+        $value: rem($value);
+
+    }
+
+    @if ($unit-type == "absolute" and unit($value) == "rem" ) {
+
+        $value: px($value);
+
+    }
+
+    @if ($unit-type == "absolute" and unit($value) == "em" ) {
+
+        $value: px($value);
+
+    }
+
+    @return $value;
+
 }
