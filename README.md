@@ -7,6 +7,25 @@ The framework is a flat simple toolbox to make frontend programming easier. All 
 - [NodeJS](https://nodejs.org/en/)
 - Task Manager like [Gulp](https://gulpjs.com/), [Grunt](https://gruntjs.com/) or [Webpack](https://webpack.js.org/)
 
+#### Install
+
+Install via node
+
+```bash
+npm install @this/scss-framework --save-dev
+```
+
+#### Using
+
+Include in your scss with:
+
+```bash
+@import '../node_modules/@this/scss-framework/import';
+```
+
+
+
+
 
 #### Documentation
 

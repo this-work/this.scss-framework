@@ -145,7 +145,7 @@ $default-breakpoint-map: $breakpoint-config !default;
 
                 $max: _decrease-value($max);
 
-                $mediaquery : append($mediaquery, 'all and (min-#{$attribute}: #{$min}) and (max-#{$attribute}: #{$max})', comma);
+                $mediaquery : append($mediaquery, '(min-#{$attribute}: #{$min}) and (max-#{$attribute}: #{$max})', comma);
 
                 $i : $i + 2;
             }
@@ -172,7 +172,7 @@ $default-breakpoint-map: $breakpoint-config !default;
 
             }
 
-            $mediaquery : append($mediaquery, 'all and (#{$type}-#{$attribute}: #{$breakpoint})', comma);
+            $mediaquery : append($mediaquery, '(#{$type}-#{$attribute}: #{$breakpoint})', comma);
 
         }
 
