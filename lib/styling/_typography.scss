@@ -16,12 +16,15 @@
 /// @prop {String} style -  Name of font style
 /// @prop {Number} style.size -  Value with absolute unit
 /// @prop {Number} style.line-height -  Factor without Unit
+/// @prop {Number} style.letter-spacing - [`optional`] Letter spacing with unit. Zero when no spacing given.
 ///
 /// @type array
 /// @example scss - Set a font dimension for a copytext
 ///  $font-dimensions (
 ///     'Copytext': (
-///          size: 12px, line-height: 1.45
+///          'size': 12px,
+///          'line-height': 1.45,
+///          'letter-spacing': 1px
 ///      )
 ///  );
 ///
@@ -43,12 +46,11 @@ $default-font-dimensions-map: $font-dimensions !default;
 /// @prop {String} font - Name of font
 /// @prop {Array} font.faces - Array with all font faces
 /// @prop {Array} font.faces.paths - Array with all file paths for the current font face
-/// @prop {String} font.faces.style [Optional] - Font-style css attribute for the current font face
+/// @prop {String} font.faces.style - [`optional`] Font-style css attribute for the current font face
 /// @prop {String or Number} font.faces.weight - Declaration of font weight as String or Number. As String you can use the mapping of the font-weight array.
-/// @prop {String} font.faces.display [Optional] - Font-display css attribute for the current font face
+/// @prop {String} font.faces.display - [`optional`] Font-display css attribute for the current font face
 /// @prop {Number} font.line-height-scale - Line height scale factor for the font compared to the $font-dimension line-height value
 /// @prop {String} font.stack - Font-family stack with an alternate font and the font-type
-///
 ///
 /// @type array
 /// @example scss - Set the Roboto font with a regular and demi font face
@@ -148,6 +150,46 @@ $default-font-weights-map: $font-weights !default;
     $font-size: unitize($font-size, $font-unit-type);
 
     @return $font-size;
+
+}
+
+
+
+///
+/// Get the letter spacing of a font dimension with unit
+///
+/// @param {string} $font-dimension - Name of the font-dimension
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+/// @param {array} $font-dimensions-map [$default-font-dimensions-map] - [`optional`] Font-dimension array
+///
+/// @return {string} letter spacing with unit
+///
+/// @example scss - Set the font-size from the Copytext dimension size
+/// font-size: letter-spacing('Copytext');
+///
+@function letter-spacing(
+    $font-dimension,
+    $font-unit-type: $default-unit-type,
+    $font-dimensions-map: $default-font-dimensions-map
+) {
+
+    @if (not map-has-key($font-dimensions-map, $font-dimension)) {
+
+        @error 'Given font dimensions has no dimension named "#{$font-dimension}".';
+
+    }
+
+    $letter-spacing: 0;
+
+    @if (map-has-key(map-get($font-dimensions-map, $font-dimension), "letter-spacing")) {
+
+        $letter-spacing: map-get(map-get($font-dimensions-map, $font-dimension), "letter-spacing");
+
+        $letter-spacing: unitize($letter-spacing, $font-unit-type);
+
+    }
+
+    @return $letter-spacing;
 
 }
 
@@ -320,7 +362,7 @@ $default-font-weights-map: $font-weights !default;
 
     }
 
-    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name);
+    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: 1px");
 
 }
 

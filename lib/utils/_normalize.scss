@@ -30,6 +30,16 @@ $default-normalize-line-height: 1.5 !default;
 
 
 ///
+/// Default normalize bold font weight
+///
+/// Can be defined as number, string or font-dimension name
+/// @type string
+///
+$default-normalize-bold-weight: bolder !default;
+
+
+
+///
 /// Default normalize word break
 /// @type string
 ///
@@ -70,10 +80,29 @@ $default-normalize-word-break: break-word !default;
 /// **padding:** Remove the padding in all browsers.
 ///
 @mixin normalize-document(
-    $normalize-font-size: if(type-of($default-normalize-font-size) == string and function-exists(font-size), font-size($default-normalize-font-size), $default-normalize-font-size),
-    $normalize-line-height: if(type-of($default-normalize-line-height) == string and function-exists(line-height), line-height($default-normalize-line-height), $default-normalize-line-height),
+    $normalize-font-size: $default-normalize-font-size,
+    $normalize-line-height: $default-normalize-line-height,
     $normalize-word-break: $default-normalize-word-break
 ) {
+
+    @if (function-exists(font-size) and
+         type-of($normalize-font-size) == string and
+         str-is-quoted($normalize-font-size)
+    ) {
+
+        $normalize-font-size: font-size($normalize-font-size)
+
+    }
+
+    @if (function-exists(line-height) and
+         type-of($normalize-line-height) == string and
+         str-is-quoted($normalize-line-height)
+    ) {
+
+        $normalize-bold-weight: line-height($normalize-line-height)
+
+    }
+
 
     html {
         box-sizing: border-box;
@@ -185,7 +214,18 @@ $default-normalize-word-break: break-word !default;
 ///
 /// Prevent `sub` and `sup` elements from affecting the line height in all browsers.
 ///
-@mixin normalize-text-semantics() {
+@mixin normalize-text-semantics(
+    $normalize-bold-weight: $default-normalize-bold-weight
+) {
+
+    @if (function-exists(font-weight) and
+         type-of($normalize-bold-weight) == string and
+         str-is-quoted($normalize-bold-weight)
+    ) {
+
+        $normalize-bold-weight: font-weight($normalize-bold-weight)
+
+    }
 
     pre {
         font-family: monospace, monospace;
@@ -208,7 +248,7 @@ $default-normalize-word-break: break-word !default;
     }
 
     b, strong {
-        font-weight: bolder;
+        font-weight: $normalize-bold-weight;
     }
 
     code, kbd, samp {
@@ -419,8 +459,17 @@ $default-normalize-word-break: break-word !default;
 /// **box-shadow** Remove the additional :invalid styles in Firefox.
 ///
 @mixin normalize-ui(
-    $normalize-line-height: if(type-of($default-normalize-line-height) == string and function-exists(line-height), line-height($default-normalize-line-height), $default-normalize-line-height)
+    $normalize-line-height: $default-normalize-line-height
 ) {
+
+    @if (function-exists(line-height) and
+         type-of($normalize-line-height) == string and
+         str-is-quoted($normalize-line-height)
+    ) {
+
+        $normalize-bold-weight: line-height($normalize-line-height)
+
+    }
 
     button, input, optgroup, select, textarea {
         margin: 0;

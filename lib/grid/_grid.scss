@@ -43,7 +43,7 @@ $grid-config: (
 
 
 ///
-/// Default grid declaration. Used when no grid name is definied in the mixin.
+/// Default grid declaration. Used as default in grid mixins when no grid is definied.
 /// @type string
 ///
 $default-grid: 'default' !default;
