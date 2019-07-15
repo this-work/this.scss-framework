@@ -10,22 +10,12 @@
 
 
 ///
-/// Default normalize font size
+/// Default normalize font dimension
 ///
-/// Can be defined as number, string or font-dimension name
+/// Can be defined as font-dimension name
 /// @type string
 ///
-$default-normalize-font-size: 16px !default;
-
-
-
-///
-/// Default normalize line-height
-///
-/// Can be defined as number, string or font-dimension name
-/// @type string
-///
-$default-normalize-line-height: 1.5 !default;
+$default-normalize-font-dimension: if(variable-exists($default-font-dimensions), $default-font-dimensions, '') !default;
 
 
 
@@ -55,7 +45,7 @@ $default-normalize-word-break: break-word !default;
 ///
 /// **box-sizing:** Apply a natural box layout model to all elements.
 ///
-/// **font-size:** Set the font size in all browsers. Converted to rem if unit type is relative
+/// **font-size:** Set the font in relative mode to 100% and in absolute mode to the browser standard of 16px
 ///
 /// **word-break:** Breaks words to prevent overflow in all browsers.line-height:** Set the line height in all browsers.
 ///
@@ -80,28 +70,8 @@ $default-normalize-word-break: break-word !default;
 /// **padding:** Remove the padding in all browsers.
 ///
 @mixin normalize-document(
-    $normalize-font-size: $default-normalize-font-size,
-    $normalize-line-height: $default-normalize-line-height,
     $normalize-word-break: $default-normalize-word-break
 ) {
-
-    @if (function-exists(font-size) and
-         type-of($normalize-font-size) == string and
-         str-is-quoted($normalize-font-size)
-    ) {
-
-        $normalize-font-size: font-size($normalize-font-size)
-
-    }
-
-    @if (function-exists(line-height) and
-         type-of($normalize-line-height) == string and
-         str-is-quoted($normalize-line-height)
-    ) {
-
-        $normalize-bold-weight: line-height($normalize-line-height)
-
-    }
 
 
     html {
@@ -113,14 +83,12 @@ $default-normalize-word-break: break-word !default;
 
         } @else {
 
-            font-size: $normalize-font-size;
+            font-size: 16px;
 
         }
 
-        line-height: $normalize-line-height;
         word-break: $normalize-word-break;
         tab-size: 4;
-
         cursor: default;
 
         -webkit-tap-highlight-color: transparent;
@@ -130,15 +98,15 @@ $default-normalize-word-break: break-word !default;
         -webkit-text-size-adjust: 100%;
     }
 
-    *,
-    *:before,
-    *:after {
-        box-sizing: border-box;
+    *, *:before, *:after {
+        box-sizing: inherit;
     }
 
     body {
+
         margin: 0;
         padding: 0;
+
     }
 
 }
@@ -287,9 +255,6 @@ $default-normalize-word-break: break-word !default;
 ///
 /// **vertical-align** Change the alignment on media elements in all browsers.
 ///
-///
-/// `img`
-///
 /// **max-width** Disallow image overflow
 ///
 /// **border-style** Remove the border on images within links in IE 10-.
@@ -317,11 +282,8 @@ $default-normalize-word-break: break-word !default;
 @mixin normalize-media() {
 
     audio, canvas, iframe, img, svg, video {
-        vertical-align: middle;
-    }
-
-    img {
         max-width: 100%;
+        vertical-align: middle;
         border-style: none;
     }
 
@@ -401,41 +363,41 @@ $default-normalize-word-break: break-word !default;
 /// **text-transform** Remove the inheritance of text transform in Firefox.
 ///
 ///
-/// `button, [type="button"], [type="reset"], [type="submit"]`
+/// `button, [type='button'], [type='reset'], [type='submit']`
 ///
 /// **-webkit-appearance** Correct the inability to style clickable types in iOS and Safari.
 ///
 ///
-/// `button::-moz-focus-inner, [type="button"]::-moz-focus-inner, [type="reset"]::-moz-focus-inner, [type="submit"]::-moz-focus-inner`
+/// `button::-moz-focus-inner, [type='button']::-moz-focus-inner, [type='reset']::-moz-focus-inner, [type='submit']::-moz-focus-inner`
 ///
 /// **padding**  Remove the inner padding in Firefox.
 ///
 /// **border-style**  Remove the inner border in Firefox.
 ///
 ///
-/// `button:-moz-focusring, [type="button"]:-moz-focusring, [type="reset"]:-moz-focusring, [type="submit"]:-moz-focusring`
+/// `button:-moz-focusring, [type='button']:-moz-focusring, [type='reset']:-moz-focusring, [type='submit']:-moz-focusring`
 ///
 /// **outline** Restore the focus styles unset by the previous rule.
 ///
 ///
-/// `[type="checkbox"], [type="radio"]`
+/// `[type='checkbox'], [type='radio']`
 ///
 /// **padding** Remove the padding in IE 10-.
 ///
 ///
-/// `[type="number"]::-webkit-inner-spin-button, [type="number"]::-webkit-outer-spin-button`
+/// `[type='number']::-webkit-inner-spin-button, [type='number']::-webkit-outer-spin-button`
 ///
 /// **height** Correct the cursor style of increment and decrement buttons in Chrome.
 ///
 ///
-/// `[type="search"]`
+/// `[type='search']`
 ///
 /// **-webkit-appearance** Correct the odd appearance in Chrome and Safari.
 ///
 /// **outline-offset** Correct the outline style in Safari.
 ///
 ///
-/// `[type="search"]::-webkit-search-decoration`
+/// `[type='search']::-webkit-search-decoration`
 ///
 /// **-webkit-appearance** Remove the inner padding in Chrome and Safari on macOS.
 ///
@@ -459,15 +421,14 @@ $default-normalize-word-break: break-word !default;
 /// **box-shadow** Remove the additional :invalid styles in Firefox.
 ///
 @mixin normalize-ui(
-    $normalize-line-height: $default-normalize-line-height
+    $normalize-font-dimension: $default-normalize-font-dimension
 ) {
 
-    @if (function-exists(line-height) and
-         type-of($normalize-line-height) == string and
-         str-is-quoted($normalize-line-height)
-    ) {
+    $normalize-line-height: 1.45;
 
-        $normalize-bold-weight: line-height($normalize-line-height)
+    @if (function-exists(line-height)) {
+
+        $normalize-line-height: line-height($normalize-font-dimension)
 
     }
 
@@ -520,44 +481,44 @@ $default-normalize-word-break: break-word !default;
     }
 
     button,
-    [type="button"],
-    [type="reset"],
-    [type="submit"] {
+    [type='button'],
+    [type='reset'],
+    [type='submit'] {
         -webkit-appearance: button;
     }
 
     button::-moz-focus-inner,
-    [type="button"]::-moz-focus-inner,
-    [type="reset"]::-moz-focus-inner,
-    [type="submit"]::-moz-focus-inner {
+    [type='button']::-moz-focus-inner,
+    [type='reset']::-moz-focus-inner,
+    [type='submit']::-moz-focus-inner {
         padding: 0;
         border-style: none;
     }
 
     button:-moz-focusring,
-    [type="button"]:-moz-focusring,
-    [type="reset"]:-moz-focusring,
-    [type="submit"]:-moz-focusring {
+    [type='button']:-moz-focusring,
+    [type='reset']:-moz-focusring,
+    [type='submit']:-moz-focusring {
         outline: 1px dotted ButtonText;
     }
 
-    [type="checkbox"],
-    [type="radio"] {
+    [type='checkbox'],
+    [type='radio'] {
         padding: 0;
     }
 
-    [type="number"]::-webkit-inner-spin-button,
-    [type="number"]::-webkit-outer-spin-button {
+    [type='number']::-webkit-inner-spin-button,
+    [type='number']::-webkit-outer-spin-button {
         height: auto;
     }
 
-    [type="search"] {
+    [type='search'] {
         -webkit-appearance: textfield;
         outline-offset: -2px;
     }
 
 
-    [type="search"]::-webkit-search-decoration {
+    [type='search']::-webkit-search-decoration {
         -webkit-appearance: none;
     }
 

@@ -1,6 +1,6 @@
 ////
 ///
-/// Centering Libary
+/// Positioning Libary
 ///
 /// @group Utils
 /// @since 1.0.0
@@ -13,7 +13,7 @@
 /// Max width of the center container
 /// @type number
 ///
-$center-container-max-width: unitize(1024px) !default;
+$root-container-max-width: unitize(1024px) !default;
 
 
 
@@ -26,8 +26,8 @@ $center-container-max-width: unitize(1024px) !default;
 /// @example scss - Center the container
 /// include center-relative-horizontal();
 ///
-@mixin center-relative-horizontal(
-    $max-width: $center-container-max-width,
+@mixin center-root-container(
+    $max-width: $root-container-max-width,
     $unit-type: $default-unit-type
 ) {
 
@@ -51,7 +51,7 @@ $center-container-max-width: unitize(1024px) !default;
 /// @example scss - Center the container
 /// include center-relative-vertical-wrapper();
 ///
-@mixin center-relative-vertical-wrapper() {
+@mixin center-in-the-unknown-container() {
 
     font-size: 0;
 
@@ -78,7 +78,7 @@ $center-container-max-width: unitize(1024px) !default;
 /// @example scss - Center the container
 /// include center-relative-vertical(12px);
 ///
-@mixin center-relative-vertical(
+@mixin center-in-the-unknown-element(
     $font-size: null,
     $font-unit-type: $default-unit-type
 ) {
@@ -89,73 +89,5 @@ $center-container-max-width: unitize(1024px) !default;
     @if ($font-size) {
         font-size: unitize($font-size, $font-unit-type);
     }
-
-}
-
-
-
-///
-/// Mixin to center absolute a container
-///
-/// @param {bool} $horizontal - Boolean to indicate centering horizontal
-/// @param {bool} $vertical - Boolean to indicate centering vertical
-///
-/// @example scss - Centering element absolute horizontal & vertical
-/// include center-absolute();
-///
-@mixin center-absolute(
-    $horizontal: true,
-    $vertical: true
-) {
-
-    display: block;
-    position: absolute;
-
-    @if (not $vertical) {
-
-        left: 50%;
-        transform: translateX(-50%);
-
-    } @else if (not $horizontal) {
-
-        top: 50%;
-        transform: translateY(-50%);
-
-
-    } @else {
-
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-
-    }
-
-}
-
-
-
-///
-/// Mixin to center absolute a container horizontal
-///
-/// @example scss - Center the container
-/// include center-absolute-horizontal();
-///
-@mixin center-absolute-horizontal() {
-
-    @include center-absolute(true, false);
-
-}
-
-
-
-///
-/// Mixin to center absolute a container vertical
-///
-/// @example scss - Center the container
-/// include center-absolute-horizontal();
-///
-@mixin center-absolute-vertical() {
-
-    @include center-absolute(false, true);
 
 }

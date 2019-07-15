@@ -41,6 +41,14 @@ $default-font-dimensions-map: $font-dimensions !default;
 
 
 ///
+/// Default font dimension for project
+/// @type string
+///
+$default-font-dimensions: '' !default;
+
+
+
+///
 /// Associate font config array with all informations to generate the font-face css declaration
 ///
 /// @prop {String} font - Name of font

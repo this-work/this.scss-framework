@@ -43,25 +43,10 @@ $grid-config: (
 
 
 ///
-/// Default grid declaration. Used as default in grid mixins when no grid is definied.
+/// Default grid declaration. Used as default in grid mixins when no grid is defined.
 /// @type string
 ///
 $default-grid: 'default' !default;
-
-
-
-///
-/// Fallback grid config declaration. Only used for fallback params in the grid.
-///
-/// Not recommendable to change. Use "$default-grid" instead.
-///
-/// @type array
-///
-$fallback-grid-config: (
-    'columns': 12,
-    'gutter': 1.5%,
-    'column-first': true
-) !default;
 
 
 
@@ -103,9 +88,7 @@ $default-grid-push-pull-affects-followers: false !default;
 
         } @else {
 
-            @warn 'Requested grid doesnt exist. Fallback used.';
-
-            $grid-data: $fallback-grid-config;
+            @error 'Requested grid doesnt exist.';
 
         }
 
@@ -121,17 +104,19 @@ $default-grid-push-pull-affects-followers: false !default;
 /// Get data from the grid config. Fallback if field doesnt exist.
 ///
 /// @param {string} $field-name - Name of field you want the value
-/// @param {array} $grid-data - grid array from grid config
+/// @param {string} $grid-name - grid name from grid config
 ///
 /// @return {mixed} Value of the field
 ///
 /// @example scss - Get the gutter from grid 1
-/// margin: _get-grid-data('gutter', _get-grid('grid-1'));
+/// margin: _get-grid-data('gutter', 'grid-1');
 ///
 @function _get-grid-data(
     $field-name,
-    $grid-data
+    $grid-name
 ) {
+
+    $grid-data: _get-grid($grid-name);
 
     $field-data: '';
 
@@ -147,17 +132,7 @@ $default-grid-push-pull-affects-followers: false !default;
 
         } @else {
 
-            @if (map-has-key($fallback-grid-config, $field-name)) {
-
-                @warn 'Requested grid data doesnt exist. Fallback used.';
-
-                $field-data: map-get($fallback-grid-config, $field-name);
-
-            } @else {
-
-                @error 'Requested grid data doesnt exist.';
-
-            }
+            @error 'Requested grid data doesnt exist.';
 
         }
 
@@ -287,13 +262,11 @@ $default-grid-push-pull-affects-followers: false !default;
     $grid-name: $default-grid
 ) {
 
-    $grid-data: _get-grid($grid-name);
+    $columns: _get-grid-data('columns', $grid-name);
 
-    $columns: _get-grid-data('columns', $grid-data);
+    $gutter: _get-grid-data('gutter', $grid-name);
 
-    $gutter: _get-grid-data('gutter', $grid-data);
-
-    $column-first: _get-grid-data('column-first', $grid-data);
+    $column-first: _get-grid-data('column-first', $grid-name);
 
     @include _grid-column($units, $columns, $gutter, $column-first);
 
@@ -361,11 +334,9 @@ $default-grid-push-pull-affects-followers: false !default;
     $grid-name: $default-grid
 ) {
 
-    $grid-data: _get-grid($grid-name);
+    $gutter: _get-grid-data('gutter', $grid-name);
 
-    $gutter: _get-grid-data('gutter', $grid-data);
-
-    $column-first: _get-grid-data('column-first', $grid-data);
+    $column-first: _get-grid-data('column-first', $grid-name);
 
     @include _grid-context($gutter, $column-first);
 
@@ -431,11 +402,9 @@ $default-grid-push-pull-affects-followers: false !default;
     $affect-followers: $default-grid-push-pull-affects-followers
 ) {
 
-    $grid-data: _get-grid($grid-name);
+    $columns: _get-grid-data('columns', $grid-name);
 
-    $columns: _get-grid-data('columns', $grid-data);
-
-    $gutter: _get-grid-data('gutter', $grid-data);
+    $gutter: _get-grid-data('gutter', $grid-name);
 
     @include _grid-column-offset($units, $columns, $gutter, right, $affect-followers);
 
@@ -459,11 +428,9 @@ $default-grid-push-pull-affects-followers: false !default;
     $affect-followers: $default-grid-push-pull-affects-followers
 ) {
 
-    $grid-data: _get-grid($grid-name);
+    $columns: _get-grid-data('columns', $grid-name);
 
-    $columns: _get-grid-data('columns', $grid-data);
-
-    $gutter: _get-grid-data('gutter', $grid-data);
+    $gutter: _get-grid-data('gutter', $grid-name);
 
     @include _grid-column-offset($units, $columns, $gutter, left, $affect-followers);
 
