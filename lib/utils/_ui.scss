@@ -48,12 +48,12 @@
 
         @if (function-exists(color)) {
 
-            background: color($color-background-nam);
+            background: color($color-background-name);
             color: color($color-foreground-name);
 
         } @else {
 
-            background: $color-background-nam;
+            background: $color-background-name;
             color: $color-foreground-name;
 
         }

@@ -15,7 +15,7 @@
 /// Can be defined as font-dimension name
 /// @type string
 ///
-$default-normalize-font-dimension: if(variable-exists($default-font-dimensions), $default-font-dimensions, '') !default;
+$default-normalize-font-dimension: if(variable-exists($default-font-dimensions), false, $default-font-dimensions) !default;
 
 
 
@@ -426,7 +426,7 @@ $default-normalize-word-break: break-word !default;
 
     $normalize-line-height: 1.45;
 
-    @if (function-exists(line-height)) {
+    @if (function-exists(line-height) and $normalize-font-dimension) {
 
         $normalize-line-height: line-height($normalize-font-dimension)
 
