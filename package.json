@@ -5,6 +5,7 @@
   "description": "THIS SCSS Framework",
   "scripts": {},
   "files": [
+    "_import.scss",
     "lib",
     "lib/core",
     "lib/grid",
