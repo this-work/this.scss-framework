@@ -1,0 +1,93 @@
+////
+///
+/// Positioning Libary
+///
+/// @group Utils
+/// @since 1.0.0
+///
+////
+
+
+
+///
+/// Max width of the center container
+/// @type number
+///
+$root-container-max-width: 1024px !default;
+
+
+
+///
+/// Mixin to center relative a container horizontal
+///
+/// @param {number} $max-width [$center-container-max-width] - [`optional`] max-width of the centered container
+/// @param {string} $unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @example scss - Center the container
+/// include center-relative-horizontal();
+///
+@mixin center-root-container(
+    $max-width: $root-container-max-width,
+    $unit-type: $default-unit-type
+) {
+
+    display: block;
+    max-width: unitize($max-width, $unit-type);
+    margin: {
+        right: auto;
+        left: auto;
+    }
+
+}
+
+
+
+///
+/// Solution to vertically center relative an element. This mixin just creates the (parent) `center-relative-vertical-wrapper`.
+/// An additional (child) `center-relative-vertical` **is needed** for this to work.
+///
+/// @require {mixin} center-relative-vertical
+///
+/// @example scss - Center the container
+/// include center-relative-vertical-wrapper();
+///
+@mixin center-in-the-unknown-container() {
+
+    font-size: 0;
+
+    &:before {
+        content: "";
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+    }
+
+}
+
+
+
+///
+/// Solution to vertically center relative an element. This mixin just creates the (child) `center-relative-vertical`.
+/// An additional (parent) `center-relative-vertical-wrapper` **is needed** for this to work.
+///
+/// @param {number} $font-size - [`optional`] font-size to set in children
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @require {mixin} center-relative-vertical-wrapper
+///
+/// @example scss - Center the container
+/// include center-relative-vertical(12px);
+///
+@mixin center-in-the-unknown-element(
+    $font-size: null,
+    $font-unit-type: $default-unit-type
+) {
+
+    display: inline-block;
+    vertical-align: middle;
+
+    @if ($font-size) {
+        font-size: unitize($font-size, $font-unit-type);
+    }
+
+}

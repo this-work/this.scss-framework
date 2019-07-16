@@ -1,0 +1,255 @@
+////
+///
+/// View Libary
+///
+/// @group View
+/// @since 2.0.0
+///
+////
+
+
+
+///
+/// Associate breakpoint array.
+/// Includes a key/value pair of the breakpoints
+///
+/// @prop {String} name -  Name of the breakpoint
+/// @prop {Number} number -  Breakpoint width
+///
+/// @type array
+/// @example scss - Set two breakpoints
+///  $breakpoint-config (
+///     'xl' : 1000px,
+///     'xxl' : 1600px
+///  );
+///
+$breakpoint-config: () !default;
+
+
+
+///
+/// Default breakpoint-map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-breakpoint-map: $breakpoint-config !default;
+
+
+
+///
+/// Get the entry from breakpoint array as number
+///
+/// @param {string} $breakpoint-name - Name of the breakpoint
+/// @param {array} $breakpoint-map [$default-breakpoint-map] - [`optional`] breakpoint array
+///
+/// @return {number} Breakpoint
+///
+/// @example scss - Set max-width to the xl breakpint
+/// max-width: _get-breakpoint('xl');
+///
+@function _get-breakpoint(
+    $breakpoint-name,
+    $breakpoint-map: $default-breakpoint-map
+) {
+
+    @if (not map-has-key($breakpoint-map, $breakpoint-name)) {
+        @error 'Given breakpoint map has no breakpoint named "#{$breakpoint-name}".';
+    }
+
+    @return map-get($breakpoint-map, $breakpoint-name);
+
+}
+
+///
+/// Decrease the input to the next safe value.
+///
+/// Solve issue that max-width includes the last value in the media query.
+///
+/// @param {number} $value - Max- height/width value
+///
+/// @return {number} Max- height/width value
+///
+///
+@function _decrease-value(
+    $value
+) {
+
+    //test case bauen
+    @if (unit($value) == 'px') {
+
+        $value: $value - 1px;
+
+    }
+
+    @if (unit($value) == 'em') {
+
+        $value: $value - 0.01em;
+
+    }
+
+    @if (unit($value) == 'rem') {
+
+        $value: $value - 0.01rem;
+
+    }
+
+    @return $value;
+
+}
+
+
+
+///
+/// Get mediaquery as string
+///
+/// @param {string} $type - type of query like `between`, `min` or `max`
+/// @param {string} $attribute [width] - Attribute of query like `width` or `height`
+/// @param {string or number} $breakpoints - breakpoints
+///
+/// @return {string} query for @media css declaration
+///
+/// @example scss - Get a media query with min-width: 700px
+///     _mediaquery('min', 'width', 700px)
+///
+@function _mediaquery(
+    $type,
+    $attribute: 'width',
+    $breakpoints...
+) {
+
+    $breakpoints: flatten($breakpoints);
+
+    $mediaquery : ();
+
+    @if ($type == 'between') {
+
+        @if ((length($breakpoints) % 2) == 0) {
+
+            $i: 1;
+
+            @while $i <= length($breakpoints) {
+
+                $min: nth($breakpoints, $i);
+                $max: nth($breakpoints, $i + 1);
+
+
+                @if (type-of($min) == string) {
+
+                    $min: _get-breakpoint($min);
+
+                }
+
+                @if (type-of($max) == string) {
+
+                    $max: _get-breakpoint($max);
+
+                }
+
+                $max: _decrease-value($max);
+
+                $mediaquery : append($mediaquery, '(min-#{$attribute}: #{$min}) and (max-#{$attribute}: #{$max})', comma);
+
+                $i : $i + 2;
+            }
+
+        } @else {
+
+            @error 'Counted given breakpoint parameter are odd';
+
+        }
+
+    } @else {
+
+        @each $breakpoint in $breakpoints {
+
+            @if (type-of($breakpoint) == string) {
+
+                $breakpoint: _get-breakpoint($breakpoint);
+
+            }
+
+            @if ($type == 'max') {
+
+                $breakpoint: _decrease-value($breakpoint);
+
+            }
+
+            $mediaquery : append($mediaquery, '(#{$type}-#{$attribute}: #{$breakpoint})', comma);
+
+        }
+
+    }
+
+    @return $mediaquery;
+
+}
+
+
+
+///
+/// Generates a max-width media query
+///
+/// @param {string | css-length} $max - breakpoint id or value
+/// @content Rules or directives, which are wrapped in a media query
+///
+@mixin below($max...) {
+
+    @media #{_mediaquery('max', 'width', $max...)} {
+
+        @content;
+
+    }
+
+}
+
+
+
+///
+/// Generates a min-width media query
+///
+/// @param {string | css-length} $min - breakpoint id or value
+/// @content Rules or directives, which are wrapped in a media query
+///
+@mixin above($min...) {
+
+    @media #{_mediaquery('min', 'width', $min...)} {
+
+        @content;
+
+    }
+
+}
+
+
+
+///
+/// Generates a in-between (min- and max-width) media query
+///
+/// @param {string | css-length} $breakpoint - breakpoint ids or values
+/// @content Rules or directives, which are wrapped in a media query
+///
+@mixin between($breakpoints...) {
+
+    @media #{_mediaquery('between', 'width', $breakpoints...)} {
+
+        @content;
+
+    }
+
+}
+
+
+
+///
+/// Generates a print media query
+///
+/// @content Rules or directives, which are wrapped in a media query
+///
+@mixin print() {
+
+    @media print {
+
+        @content;
+
+    }
+
+}

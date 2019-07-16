@@ -1,0 +1,473 @@
+////
+///
+/// Typography Libary
+///
+/// @group Typography
+/// @since 2.0.0
+///
+////
+
+
+
+///
+/// Font dimension array.
+/// Includes font-size and line height of a font style to increase the consistency.
+///
+/// @prop {String} style -  Name of font style
+/// @prop {Number} style.size -  Value with absolute unit
+/// @prop {Number} style.line-height -  Factor without Unit
+/// @prop {Number} style.letter-spacing - [`optional`] Letter spacing with unit. Zero when no spacing given.
+///
+/// @type array
+/// @example scss - Set a font dimension for a copytext
+///  $font-dimensions (
+///     'Copytext': (
+///          'size': 12px,
+///          'line-height': 1.45,
+///          'letter-spacing': 1px
+///      )
+///  );
+///
+$font-dimensions: () !default;
+
+
+
+///
+/// Default font dimension map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-font-dimensions-map: $font-dimensions !default;
+
+
+
+///
+/// Default font dimension for project
+/// @type string
+///
+$default-font-dimensions: '' !default;
+
+
+
+///
+/// Associate font config array with all informations to generate the font-face css declaration
+///
+/// @prop {String} font - Name of font
+/// @prop {Array} font.faces - Array with all font faces
+/// @prop {Array} font.faces.paths - Array with all file paths for the current font face
+/// @prop {String} font.faces.style - [`optional`] Font-style css attribute for the current font face
+/// @prop {String or Number} font.faces.weight - Declaration of font weight as String or Number. As String you can use the mapping of the font-weight array.
+/// @prop {String} font.faces.display - [`optional`] Font-display css attribute for the current font face
+/// @prop {Number} font.line-height-scale - Line height scale factor for the font compared to the $font-dimension line-height value
+/// @prop {String} font.stack - Font-family stack with an alternate font and the font-type
+///
+/// @type array
+/// @example scss - Set the Roboto font with a regular and demi font face
+///  $font-config (
+///     'Roboto' : (
+///         'faces' : (
+///             (
+///               'paths': ('/path/to/RobotRegular.ttf', '/path/to/RobotRegular.woff'),
+///               'style': normal,
+///               'weight': 'regular',
+///               'display' : auto
+///             ),
+///             (
+///               'paths': ('/path/to/RobotDemi.ttf', '/path/to/RobotDemi.woff'),
+///               'style': normal,
+///               'weight': 'demi',
+///               'display' : auto
+///             ),
+///         ),
+///         'line-height-scale': 1,
+///         'stack' : 'Arial, sans-serif'
+///     ),
+///   );
+///
+$font-config: () !default;
+
+
+
+///
+/// Default font config map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-font-config-map: $font-config !default;
+
+
+
+///
+/// Font weight array to get a mapping of the weights.
+///
+/// @type array
+/// @example scss - Set book, regular and demi as weight mapping for the project
+///  $font-weights (
+///     'book': 200,
+///     'regular': 450,
+///     'demi': 600,
+///   );
+///
+$font-weights: (
+        'extralight' : 100,
+        'light'      : 200,
+        'book'       : 300,
+        'regular'    : 400,
+        'medium'     : 500,
+        'semibold'   : 600,
+        'bold'       : 700,
+        'black'      : 800,
+        'extrablack' : 900,
+) !default;
+
+
+
+///
+/// Default font weight map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-font-weights-map: $font-weights !default;
+
+
+
+///
+/// Get the font size of a font dimension with unit
+///
+/// @param {string} $font-dimension - Name of the font-dimension
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+/// @param {array} $font-dimensions-map [$default-font-dimensions-map] - [`optional`] Font-dimension array
+///
+/// @return {string} font size with unit
+///
+/// @example scss - Set the font-size from the Copytext dimension size
+/// font-size: font-size('Copytext');
+/// @example scss - Set the font-size from the Copytext dimension size with rem units
+/// font-size: font-size('Copytext', 'relative');
+///
+@function font-size(
+    $font-dimension,
+    $font-unit-type: $default-unit-type,
+    $font-dimensions-map: $default-font-dimensions-map
+) {
+
+    @if (not map-has-key($font-dimensions-map, $font-dimension)) {
+
+        @error 'Given font dimensions has no dimension named "#{$font-dimension}".';
+
+    }
+
+    $font-size: map-get(map-get($font-dimensions-map, $font-dimension), "size");
+
+    $font-size: unitize($font-size, $font-unit-type);
+
+    @return $font-size;
+
+}
+
+
+
+///
+/// Get the letter spacing of a font dimension with unit
+///
+/// @param {string} $font-dimension - Name of the font-dimension
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+/// @param {array} $font-dimensions-map [$default-font-dimensions-map] - [`optional`] Font-dimension array
+///
+/// @return {string} letter spacing with unit
+///
+/// @example scss - Set the font-size from the Copytext dimension size
+/// font-size: letter-spacing('Copytext');
+///
+@function letter-spacing(
+    $font-dimension,
+    $font-unit-type: $default-unit-type,
+    $font-dimensions-map: $default-font-dimensions-map
+) {
+
+    @if (not map-has-key($font-dimensions-map, $font-dimension)) {
+
+        @error 'Given font dimensions has no dimension named "#{$font-dimension}".';
+
+    }
+
+    $letter-spacing: 0;
+
+    @if (map-has-key(map-get($font-dimensions-map, $font-dimension), "letter-spacing")) {
+
+        $letter-spacing: map-get(map-get($font-dimensions-map, $font-dimension), "letter-spacing");
+
+        $letter-spacing: unitize($letter-spacing, $font-unit-type);
+
+    }
+
+    @return $letter-spacing;
+
+}
+
+
+
+///
+/// Get the line height of a font dimension as factor
+///
+/// @param {string} $font-dimension - Name of the font-dimension
+/// @param {string} $font-name - [`optional`] Name of the font
+/// @param {array} $font-dimensions-map [$default-font-dimensions-map] - [`optional`] Font-dimension array
+/// @param {array} $font-config-map [$default-font-config-map] - [`optional`] Font config array
+///
+/// @return {string}  Line height
+///
+/// @example scss - Set the line-height from the Copytext dimension line height with font line height factor
+/// line-height: line-height('Copytext','Roboto');
+///
+@function line-height(
+    $font-dimension,
+    $font-name: '',
+    $font-dimensions-map: $default-font-dimensions-map,
+    $font-config-map: $default-font-config-map
+) {
+
+    @if (not map-has-key($font-dimensions-map, $font-dimension)) {
+
+        @error 'Given font dimensions has no dimension named "#{$font-dimension}".';
+
+    }
+
+    $font-line-height: map-get(map-get($font-dimensions-map, $font-dimension), "line-height");
+
+    @if (unit($font-line-height) == "px") {
+
+        $font-line-height: strip-unit($font-line-height) / strip-unit(font-size($font-dimension, 'absolute'));
+
+    }
+
+    @if (str-length($font-name) > 0) {
+
+        @if (not map-has-key($font-config-map, $font-name)) {
+
+            @error 'Given font config has no font named "#{$font-name}".';
+
+        }
+
+        $font-line-height: $font-line-height * map-get(map-get($font-config-map, $font-name), "line-height-scale");
+
+    }
+
+    @return $font-line-height;
+
+}
+
+
+
+///
+/// Get the font stack of a font name
+///
+/// @param {string} $font-name - Name of the font
+/// @param {array} $font-config-map [$default-font-config-map] - [`optional`] Font array
+///
+/// @return {string}  Font-family stack
+///
+/// @example scss - Set the font-family from the 'Roboto' stack in the config fonts array
+/// font-family: font-family('Roboto');
+///
+@function font-family(
+    $font-name,
+    $font-config-map: $default-font-config-map
+) {
+
+    @if (not map-has-key($font-config-map, $font-name)) {
+
+        @error 'Given font config has no font named "#{$font-name}".';
+
+    }
+
+    @return #{$font-name}, #{map-get(map-get($font-config-map, $font-name), "stack")};
+
+}
+
+
+
+///
+/// Get the font weight as number from the weight mapping
+///
+/// @param {string or number} $weight - Name of the font or weight number
+/// @param {array} $font-weights-map [$default-font-weights-map] - [`optional`] Font weight array
+///
+/// @return {number}  Font-weight
+///
+/// @example scss - Set the font-weight form font-weight mapping array
+/// font-weight: font-weight('demi');
+///
+@function font-weight(
+    $weight,
+    $font-weights-map: $default-font-weights-map
+) {
+
+    $font-weight: false;
+
+    @if (not map-has-key($font-weights-map, $weight)) {
+
+        @if (not index(map-values($font-weights-map), $weight)) {
+
+            @error 'Given font weight mapping has no weight "#{$weight}".';
+
+        } @else {
+
+            $font-weight: $weight;
+
+        }
+
+    } @else {
+
+        $font-weight: map-get($font-weights-map, $weight);
+
+    }
+
+    @return $font-weight;
+
+}
+
+
+
+///
+/// Get a complete font declaration from the font-dimension-, font-config- and font-weight array. This ensures the consistency of the CSS declarations.
+///
+/// @param {string} $font-name - Name of the font
+/// @param {string or number} $font-weight-name - Font weight name
+/// @param {string} $font-dimension - Name of the font dimension
+/// @param {number} $font-line-height - [`optional`] Line-height as factor (number) or value with absolute unit (string)
+/// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
+///
+/// @return {string}  Complete font attribute
+///
+/// @example scss - Set the font from the consistent font dimension
+/// font: font('Roboto', 'demi', 'Copytext');
+/// @example scss - Set the font from the font dimension with own line height
+/// font: font('Roboto', 'demi', 'Copytext', 28px);
+///
+@function font(
+    $font-name,
+    $font-weight-name,
+    $font-dimension,
+    $font-line-height: false,
+    $font-unit-type: $default-unit-type
+
+) {
+
+    $font-size: font-size($font-dimension, $font-unit-type);
+
+    @if (not $font-line-height) {
+
+        $font-line-height: line-height($font-dimension, $font-name);
+
+    } @else {
+
+        @if (unit($font-line-height) == "px") {
+
+            $font-line-height: strip-unit($font-line-height) / strip-unit(font-size($font-dimension, 'absolute'));
+
+        } @else {
+
+            $font-line-height: $font-line-height;
+
+        }
+
+    }
+
+    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: 1px");
+
+}
+
+
+
+///
+/// Generate all font-face declarations from the fonts config
+///
+/// @param {string} $path-prefix [./] - [`optional`]  Prefix for the font path
+/// @param {array} $font-config-map [$default-font-config-map] - [`optional`] Font config array
+///
+@mixin generate-font-face-declaration(
+    $path-prefix: './',
+    $font-config-map: $default-font-config-map
+) {
+
+    @if ($font-config-map and length($font-config-map) > 0) {
+
+        @each $font-name, $font-map in $font-config-map {
+
+            @each $font-face in map-get($font-map, "faces") {
+
+                $sources: ();
+
+                @each $path in map-get($font-face, "paths") {
+
+                    $format: to-lower-case(nth(str-split($path, '.'),2));
+
+                    @if ($format == "ttf") {
+
+                        $format: "truetype";
+
+                    }
+
+                    $sources: append($sources, (url('#{$path-prefix}#{$path}') format('#{$format}')), 'comma');
+
+                }
+
+                $font-style: normal;
+
+                @if (map-has-key($font-face, 'style')) {
+
+                    $font-style: map-get($font-face, 'style');
+
+                }
+
+                $font-weight: font-weight(map-get($font-face, 'weight'));
+
+
+                $font-display: auto;
+
+                @if (map-has-key($font-face, 'display')) {
+
+                    $font-display: map-get($font-face, 'display');
+
+                }
+
+                @at-root {
+
+                    @font-face {
+                        font-family: #{$font-name};
+                        src: $sources;
+                        font-style: $font-style;
+                        font-weight: $font-weight;
+                        font-display: $font-display;
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+
+///
+/// Generate font-smoothing declarations
+///
+/// @param {string} $value [antialiased] - `[optional]` smoothing technique.
+/// @param {boolean} $moz-workaround [true] - `[optional]` Defines if the mozilla workaround will be used (`true`) or not (`false`)
+///
+/// @example scss
+/// .selector {
+///     @include font-smoothing();
+/// }
+///
+@mixin font-smoothing($value: antialiased, $moz-workaround: true) {
+
+    -webkit-font-smoothing: $value;
+
+    @if ($moz-workaround) {
+        -moz-osx-font-smoothing : grayscale;
+    }
+}
+
