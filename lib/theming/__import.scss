@@ -1,9 +1,9 @@
 //// ---------------------------------------------------------------------------------------------
 ///   THIS: scss-core
 ///
-///   - Core: Imports -
+///   - Theming: Imports -
 //// ---------------------------------------------------------------------------------------------
 
-@import 'conversion';
-@import 'list-util';
-@import 'view';
+@import 'util';
+@import 'colors';
+@import 'spacings';

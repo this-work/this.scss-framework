@@ -1,20 +1,25 @@
-////
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
 ///
-/// Shape Libary
+///   - Scss-Helper: Centering -
 ///
-/// @group Utils
-/// @since 1.0.0
+///     Contains mixins and functions to create css shapes
 ///
-////
-
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
 
 
 ///
 /// Mixin to create CSS triangles.
 ///
-/// @param {number} $width - The width of the triangle
-/// @param {number} $height - The height of the triangle
-/// @param {string | number} $angle - Direction of the triangle.
+/// Adopted from https://github.com/at-import/toolkit/blob/2.x.x/stylesheets/toolkit/_triangle.scss
+///
+/// @param {number} $width [] - `[required]` The width of the triangle
+///
+/// @param {number} $height [] - `[required]` The height of the triangle
+///
+/// @param {string | number} $angle [] - `[required]` Direction of the triangle.
 ///
 /// Possible values are
 ///
@@ -29,7 +34,7 @@
 ///
 /// or any number between 0 and 360
 ///
-/// @param {color} $color [#000000] - `[optional]` Color of the triangle.
+/// @param {color} $color [#000000] - `[optional]` <br> Color of the triangle.
 ///
 @mixin triangle($width, $height, $angle, $color : #000000) {
 
@@ -44,10 +49,13 @@
     @if $angle == "left"         { $angle : 45 * 6; }
     @if $angle == "top left"     { $angle : 45 * 5; }
 
+    // offset 45deg to make each side start at 0
     $deg : $angle + 45;
 
+    // if units, remove units
     $deg : strip-unit($deg);
 
+    // shift to be on a scale from 0 to 90.
     @while $deg > 90 {
         $deg : $deg - 90;
     }
@@ -56,35 +64,37 @@
         $deg : $deg + 90;
     }
 
+    // Get a ratio of 90 to multiply by.
     $deg: $deg / 90;
 
+    // make sure metrics are reseted
     display: block;
     width: 0;
     height: 0;
-    border-style: solid;
-    border-color: transparent;
+    border: 0 solid transparent;
 
+    // run through sides
     @if $angle <= 45 or $angle > 315 {
 
         border-bottom-color: $color;
-        border-width: 0 unitize($width * abs($deg - 1)) unitize($height) unitize($width * $deg);
+        border-width: 0 ($width * abs($deg - 1)) $height ($width * $deg);
     }
 
     @if $angle > 45 and $angle <= 135 {
 
         border-left-color: $color;
-        border-width: unitize($height * $deg) 0 unitize($height * abs($deg - 1)) unitize($width);
+        border-width: ($height * $deg) 0 ($height * abs($deg - 1)) $width;
     }
 
     @if $angle > 135 and $angle <= 225 {
 
         border-top-color: $color;
-        border-width: unitize($height) unitize($width * $deg) 0 unitize($width * abs($deg - 1));
+        border-width: $height ($width * $deg) 0 ($width * abs($deg - 1));
     }
 
     @if $angle > 225 and $angle <= 315 {
 
         border-right-color: $color;
-        border-width: unitize($height * abs($deg - 1)) unitize($width) unitize($height * $deg) 0;
+        border-width: ($height * abs($deg - 1)) $width ($height * $deg) 0;
     }
 }

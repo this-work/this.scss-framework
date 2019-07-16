@@ -1,0 +1,57 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Theming: Spacings -
+///
+/// @group Theming
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+// @import '~modularscale-sass/stylesheets/modular-scale';
+
+
+///
+$spacing-config: (
+    // 'color-name' : color-value
+) !default;
+
+///
+$default-spacing-map: $spacing-config !default;
+
+
+///
+///
+///
+@function spacing($spacing-id, $spacing-map: $default-spacing-map) {
+
+    @if (not map-has-key($spacing-map, $spacing-id)) {
+        @error 'Given spacing map has no spacing named "#{$spacing-id}".';
+    }
+
+    @return map-get($spacing-map, $spacing-id);
+}
+
+
+
+
+// // modular scale base definitions
+// $ms-spacing-base: 44px !default;
+// $ms-spacing-ratio: $ms-ratio !default;
+
+
+
+// ///
+// ///
+// ///
+// @function ms-spacing($values...) {
+
+//     $spacing: ();
+
+//     @each $value in $values {
+//         $spacing: append($spacing, ms($value, $ms-spacing-base, $ms-spacing-ratio));
+//     }
+
+//     @return if(length($spacing) == 1, nth($spacing, 1), $spacing);
+// }
+
+

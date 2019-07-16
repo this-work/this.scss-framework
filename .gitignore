@@ -1,7 +1,12 @@
-# SCSS Framework GIT Ignore  #
 
-# ignore all hidden files #
+
+node_modules
+bower_components
+
+
+#dont version hidden files (or cache folder etc. #
 /.*
 
-# force versioning config files  #
+#but force gitignore versioning #
 !/.gitignore
+!/.npmignore

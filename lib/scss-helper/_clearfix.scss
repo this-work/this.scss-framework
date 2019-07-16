@@ -1,0 +1,35 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Scss-Helper: Clearfix -
+///
+///     Contains mixins and functions to clear element floats
+///
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+
+///
+/// Micro clearfix
+///
+/// see http://nicolasgallagher.com/micro-clearfix-hack/
+///
+@mixin clearfix() {
+
+    &:before,
+    &:after {
+        content : "";
+        display : table;
+
+        // Fixes Opera/contenteditable bug
+        //
+        // see http://nicolasgallagher.com/micro-clearfix-hack/#comment-36952
+        //
+        line-height : 0;
+    }
+
+    &:after {
+        clear : both;
+    }
+}

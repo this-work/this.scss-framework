@@ -1,0 +1,29 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Scss-Helper: Media Utilities -
+///
+///     Contains mixins and functions to shorthand media queries
+///
+/// @group SCSS Helper
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+///
+/// Matching Retina Screens
+///
+/// see https://css-tricks.com/snippets/css/retina-display-media-query/
+///
+@mixin retina() {
+
+    @media
+        only screen and (-webkit-min-device-pixel-ratio: 2),
+        only screen and (   min--moz-device-pixel-ratio: 2),
+        only screen and (     -o-min-device-pixel-ratio: 2/1),
+        only screen and (        min-device-pixel-ratio: 2),
+        only screen and (                min-resolution: 192dpi),
+        only screen and (                min-resolution: 2dppx) {
+
+        @content;
+    }
+}

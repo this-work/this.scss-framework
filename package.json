@@ -1,17 +1,15 @@
 {
   "name": "@this/scss-framework",
   "version": "2.0.0",
-  "author": "THIS GmbH",
+  "author": "",
   "description": "THIS SCSS Framework",
   "scripts": {},
   "files": [
-    "_import.scss",
     "lib",
     "lib/core",
-    "lib/grid",
-    "lib/styling",
-    "lib/view",
-    "lib/utils"
+    "lib/grid-system",
+    "lib/scss-helper",
+    "lib/scss-theming"
   ],
   "repository": {
     "type": "git",

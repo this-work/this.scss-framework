@@ -1,9 +1,13 @@
 //// ---------------------------------------------------------------------------------------------
 ///   THIS: scss-core
 ///
-///   - Core: Imports -
+///   - Scss-Helper: Imports -
 //// ---------------------------------------------------------------------------------------------
 
-@import 'conversion';
-@import 'list-util';
-@import 'view';
+@import 'centering';
+@import 'clearfix';
+@import 'positioning';
+@import 'form-utilities';
+@import 'general';
+@import 'shapes';
+@import 'media-utilities';

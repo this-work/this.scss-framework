@@ -1,0 +1,114 @@
+//// ---------------------------------------------------------------------------------------------
+///   THIS: scss-core
+///
+///   - Theming: Spacings -
+///
+/// @group Theming
+/// @since 0.0.1
+//// ---------------------------------------------------------------------------------------------
+
+@import '~modularscale-sass/stylesheets/modular-scale';
+
+
+///
+$font-size-config: (
+    // 'font-size-id' : font size value
+    // 'f1': 16px
+) !default;
+
+///
+$default-font-size-map: $font-size-config !default;
+
+
+///
+$line-height-config: (
+    // 'line-height-id': line height value
+    // 'l1': 24px
+) !default;
+
+///
+$default-line-height-map: $line-height-config !default;
+
+
+///
+$font-family-stack-config: (
+    // 'font-family-stack-id': (font family name 1, font family name 1, , ...)
+    // 'f1': (Arial. sans-serif)
+) !default;
+
+///
+$default-font-family-map: $font-family-stack-config !default;
+
+
+///
+$font-type-config: (
+    // 'id': [ <font-style> || <font-variant> || <font-weight> ]?  <font-size>  [ / <line-height> ]? <font-family>
+    //      OR
+    // 'id': font-def(font-weight-id, font-size-id, line-height-id, font-stack-id)
+) !default;
+
+$default-font-type-map: $font-type-config !default;
+
+
+///
+///
+///
+@function font-size($typo-size-id, $font-size-map: $default-font-size-map) {
+
+    @if (not map-has-key($font-size-map, $typo-size-id)) {
+        @error 'Given font size map has no font size named "#{$typo-size-id}".';
+    }
+
+    @return map-get($font-size-map, $typo-size-id);
+}
+
+
+@function font-family($font-family-id, $font-family-map: $default-font-family-map) {
+
+    @if (not map-has-key($font-family-map, $font-family-id)) {
+        @error 'Given font family map has no font family named "#{$font-family-id}".';
+    }
+
+    @return map-get($font-family-map, $font-family-id);
+}
+
+
+@function line-height($line-height-id, $line-height-map: $default-line-height-map) {
+
+    @if (not map-has-key($line-height-map, $line-height-id)) {
+        @error 'Given line-height map has no line height named "#{$line-height-id}".';
+    }
+
+    @return map-get($line-height-map, $line-height-id);
+}
+
+
+@function font-def($weight, $size, $line-height, $font-family) {
+    @return $weigth #{font-size($size)}/#{line-height($line-height)} font-family($font-family);
+}
+
+
+@function font($type-id, $font-type-map: $default-font-type-map) {
+
+    @if (not map-has-key($font-type-map, $type-id)) {
+        @error 'Given font type map has no font type named "#{$type-id}".';
+    }
+
+    @return map-get($font-type-map, $type-id);
+}
+
+
+
+// modular scale base definitions
+$ms-base: 16px !default;
+$ms-ratio: $golden !default;
+
+
+///
+/// @alias ms
+///
+@function ms-font($value) {
+    @return ms($value);
+}
+
+
