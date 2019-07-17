@@ -13,8 +13,8 @@
 /// Max width of the center container
 /// @type number
 ///
-$root-container-max-width: 1024px !default;
-
+$max-page-width: 1440px !default;
+$max-content-width: 1220px !default;
 
 
 ///
@@ -27,7 +27,7 @@ $root-container-max-width: 1024px !default;
 /// include center-relative-horizontal();
 ///
 @mixin center-root-container(
-    $max-width: $root-container-max-width,
+    $max-width: $max-page-width,
     $unit-type: $default-unit-type
 ) {
 

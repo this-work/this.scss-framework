@@ -113,7 +113,7 @@ $default-grid-push-pull-affects-followers: false !default;
 ///
 @function _get-grid-data(
     $field-name,
-    $grid-name
+    $grid-name: $default-grid
 ) {
 
     $grid-data: _get-grid($grid-name);
