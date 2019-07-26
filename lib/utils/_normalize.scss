@@ -15,7 +15,7 @@
 /// Can be defined as font-dimension name
 /// @type string
 ///
-$default-normalize-font-dimension: if(variable-exists($default-font-dimensions), false, $default-font-dimensions) !default;
+$default-normalize-font-dimension: if(variable-exists(default-font-dimensions), false, $default-font-dimensions) !default;
 
 
 
@@ -77,7 +77,7 @@ $default-normalize-word-break: break-word !default;
     html {
         box-sizing: border-box;
 
-        @if (variable-exists($default-unit-type) and $default-unit-type != 'absolute') {
+        @if (variable-exists(default-unit-type) and $default-unit-type != 'absolute') {
 
             font-size: 100%;
 
@@ -367,6 +367,8 @@ $default-normalize-word-break: break-word !default;
 ///
 /// **-webkit-appearance** Correct the inability to style clickable types in iOS and Safari.
 ///
+/// **background-image** Firefox <35 for Android sets a default background-image gradient on all buttons (see Bug 763671). This can be disabled using background-image: none.
+///
 ///
 /// `button::-moz-focus-inner, [type='button']::-moz-focus-inner, [type='reset']::-moz-focus-inner, [type='submit']::-moz-focus-inner`
 ///
@@ -484,6 +486,9 @@ $default-normalize-word-break: break-word !default;
     [type='button'],
     [type='reset'],
     [type='submit'] {
+        font: inherit;
+        outline: none;
+        background-image: none;
         -webkit-appearance: button;
     }
 
@@ -583,8 +588,3 @@ $default-normalize-word-break: break-word !default;
     @include normalize-misc();
 
 }
-
-
-
-
-
