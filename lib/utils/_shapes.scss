@@ -31,7 +31,12 @@
 ///
 /// @param {color} $color [#000000] - `[optional]` Color of the triangle.
 ///
-@mixin triangle($width, $height, $angle, $color : #000000) {
+@mixin triangle(
+    $width,
+    $height,
+    $angle,
+    $color : #000000
+) {
 
     @if nth($angle, 1) == "top" or nth($angle, 1) == "bottom" { $angle : "#{$angle}"; }
 
@@ -87,4 +92,58 @@
         border-right-color: $color;
         border-width: unitize($height * abs($deg - 1)) unitize($width) unitize($height * $deg) 0;
     }
+}
+
+
+
+///
+/// Mixin to create CSS triangles with shadow.
+///
+/// @param {number} $height - The height of the triangle
+/// @param {number} $color - Color of the triangle
+/// @param {number} $shadow-offset - Offset the triangle shadow
+/// @param {number} $shadow-blur - Blur the triangle shadow
+/// @param {number} $shadow-spread - Spread the triangle shadow
+/// @param {number} $shadow-color - Color the triangle shadow
+/// @param {number} $position [relative] - CSS position for the triangle
+///
+@mixin triangle-with-shadow(
+    $height,
+    $color,
+    $shadow-offset,
+    $shadow-blur,
+    $shadow-spread,
+    $shadow-color,
+    $position: relative
+) {
+
+    $shadow-size: $shadow-offset - ($shadow-blur / 2) - $shadow-spread;
+
+    $unitless-height: strip-unit($height);
+    $unitless-shadow-size: strip-unit($shadow-size);
+
+    $triangle__rect-size: sqrt(pow($unitless-height, 2) + pow($unitless-height, 2)) * 1px;
+    $height__shadow: sqrt(pow($unitless-shadow-size, 2) + pow($unitless-shadow-size, 2)) * 1px;
+
+    $height: $height + $height__shadow;
+
+    position: $position;
+    width: $height * 2;
+    height: $height;
+    overflow: hidden;
+
+    &::after {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: $triangle__rect-size;
+        height: $triangle__rect-size;
+        margin-top: ($height / 2);
+        transform: translateX(-50%) translateY(-50%) rotate(45deg);
+
+        background-color: $color;
+        box-shadow: $shadow-offset $shadow-offset $shadow-blur $shadow-spread $shadow-color;
+        content: '';
+    }
+
 }
