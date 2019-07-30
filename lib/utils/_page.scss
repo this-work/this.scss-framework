@@ -24,56 +24,53 @@ $page-spacing-config: () !default;
 
 
 ///
-/// Get the entry from page spacing array with unit
+/// Configuration of the inital value of the page spacings.
+/// @type number
 ///
-/// @param {string} $viewport-name - Name of the viewport spacing key
-/// @param {array} $spacing-map [$default-spacing-map] - [`optional`] Spacing array
-///
-/// @return {string} spacing with unit
-///
-/// @example scss - Set the padding to spacing '10px'
-/// padding: _page-spacing('x');
-///
-@function _page-spacing(
-    $spacing-name,
-    $spacing-map: $page-spacing-config
-) {
-
-    @return spacing($spacing-name, null, $page-spacing-config);
-
-}
+$page-spacing-default-config: 0px !default;
 
 
 
 ///
 /// Generate from the spacing array a bundle of padding spacing classes
 ///
-@mixin page-spacing($inital-viewport: 's', $breakpoints: $breakpoint-config) {
+/// @param {number} $page-spacing-inital [$page-spacing-inital-config] - [`optional`] Value of inital spacing
+/// @param {array} $breakpoints [$page-spacing-config] - [`optional`] Map with breakpoint and spacing values pairs.
+///
+@mixin page-spacing($page-spacing-inital: $page-spacing-default-config, $breakpoints: $page-spacing-config) {
 
-    $inital-spacing: _page-spacing($inital-viewport);
+    @if (str-is-quoted($page-spacing-inital)) {
 
-    padding-right: $inital-spacing;
-    padding-left: $inital-spacing;
+        $page-spacing-inital: spacing($page-spacing-inital);
 
-    @each $breakpoint in $breakpoints {
+    } @else {
 
-        @if ($inital-viewport != $breakpoint) {
+        $page-spacing-inital: unitize($page-spacing-inital);
 
-            @include above($breakpoint) {
+    }
 
-                $spacing: _page-spacing($breakpoint);
+    padding-left: $page-spacing-inital;
+    padding-right: $page-spacing-inital;
 
-                padding-left: $spacing;
-                padding-right: $spacing;
+    @each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
+
+        @include above($breakpoint-key) {
+
+            @if (str-is-quoted($breakpoint-spaceing)) {
+
+                $breakpoint-spaceing: spacing($breakpoint-spaceing);
+
+            } @else {
+
+                $breakpoint-spaceing: unitize($breakpoint-spaceing);
+
             }
 
+            padding-left: $breakpoint-spaceing;
+            padding-right: $breakpoint-spaceing;
 
         }
 
     }
 
 }
-
-
-
-

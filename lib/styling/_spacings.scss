@@ -74,7 +74,7 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
 /// @param {string} $class-prefix [padding] - [`optional`] Class prefix
-/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
+/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class seperator
 ///
 @mixin generate-spacing-padding-classes(
     $spacing-map: $spacing-config,
@@ -93,7 +93,7 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
 /// @param {string} $class-prefix [margin] - [`optional`] Class prefix
-/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
+/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class seperator
 ///
 @mixin generate-spacing-margin-classes(
     $spacing-map: $spacing-config,
