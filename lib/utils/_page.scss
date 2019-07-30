@@ -1,0 +1,79 @@
+////
+///
+/// Page Util Libary
+///
+/// @group Page
+/// @since 2.0.0
+///
+////
+
+///
+/// Associate page spacing array.
+/// Includes a key/value pair of the spacing to increase the consistency.
+/// Key must be an existing viewport key from the mediaquery config.
+///
+/// @type array
+/// @example scss - Set two page spacings
+///  $page-spacing-config (
+///     'x' : 10px,
+///     'l' : 20px
+///  );
+///
+$page-spacing-config: () !default;
+
+
+
+///
+/// Get the entry from page spacing array with unit
+///
+/// @param {string} $viewport-name - Name of the viewport spacing key
+/// @param {array} $spacing-map [$default-spacing-map] - [`optional`] Spacing array
+///
+/// @return {string} spacing with unit
+///
+/// @example scss - Set the padding to spacing '10px'
+/// padding: _page-spacing('x');
+///
+@function _page-spacing(
+    $spacing-name,
+    $spacing-map: $page-spacing-config
+) {
+
+    @return spacing($spacing-name, null, $page-spacing-config);
+
+}
+
+
+
+///
+/// Generate from the spacing array a bundle of padding spacing classes
+///
+@mixin page-spacing($inital-viewport: 's', $breakpoints: $breakpoint-config) {
+
+    $inital-spacing: _page-spacing($inital-viewport);
+
+    padding-right: $inital-spacing;
+    padding-left: $inital-spacing;
+
+    @each $breakpoint in $breakpoints {
+
+        @if ($inital-viewport != $breakpoint) {
+
+            @include above($breakpoint) {
+
+                $spacing: _page-spacing($breakpoint);
+
+                padding-left: $spacing;
+                padding-right: $spacing;
+            }
+
+
+        }
+
+    }
+
+}
+
+
+
+

@@ -205,6 +205,34 @@ $default-grid-push-pull-affects-followers: false !default;
 
 
 ///
+/// Get the column ratio as percentage
+///
+/// @param {number} $sub-units - Span of columns
+/// @param {number} $parent-units - Total number of columns
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+///
+/// @return {number} Column ratio
+///
+@function get-grid-column-ratio(
+    $sub-units,
+    $parent-units,
+    $grid-name: $default-grid
+) {
+
+    $columns: _get-grid-data('columns', $grid-name);
+
+    $gutter: _get-grid-data('gutter', $grid-name);
+
+    $parent-width: _get-grid-column-width($parent-units, $columns, $gutter);
+
+    $sub-width: _get-grid-column-width($sub-units, $columns, $gutter);
+
+    @return ($sub-width / $parent-width) * 100%;
+}
+
+
+
+///
 /// Generate column styles with given expanded arguments
 ///
 /// @param {number} $units - Span of column

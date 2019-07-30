@@ -70,7 +70,7 @@ $default-color-map: $color-config !default;
 ///
 @mixin generate-color-foreground-classes(
     $color-map: $color-config,
-    $class-prefix: 'foreground',
+    $class-prefix: 'foreground-color',
     $class-separator: $default-class-separator
 ) {
 
@@ -89,7 +89,7 @@ $default-color-map: $color-config !default;
 ///
 @mixin generate-color-background-classes(
     $color-map: $color-config,
-    $class-prefix: 'background',
+    $class-prefix: 'background-color',
     $class-separator: $default-class-separator
 ) {
 
