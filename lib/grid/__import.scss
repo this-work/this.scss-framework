@@ -1,10 +1,12 @@
 ////
 ///
-/// Load the grid partial
+/// Load the base grid partial
+/// Didnt load the grid system to prevent a unnecessary grid.
+/// Grid system importing by the global import file to make it changeable from outside.
 ///
-/// @group Grid
+/// @group Grid Base
 /// @since 2.0.0
 ///
 ////
 
-@import 'grid';
+@import 'utils';

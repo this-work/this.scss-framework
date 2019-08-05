@@ -1,0 +1,102 @@
+////
+///
+/// Grid Base
+///
+/// @group Grid Base
+/// @since 2.0.0
+///
+////
+
+
+
+///
+/// Default grid declaration. Used as default in grid mixins when no grid is defined.
+/// @type string
+///
+$default-grid: 'default' !default;
+
+
+
+///
+/// Get the data set of a grid.
+///
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+/// @param {array} $grid-array [$grid-config] - [`optional`] Deviant grid config, default is the $grid-config array
+///
+/// @return {array} Data set of the grid
+///
+/// @example scss - Get the data set of grid 1
+/// $grid: _get-grid('grid-1');
+///
+@function _get-grid(
+    $grid-name: $default-grid,
+    $grid-array: $grid-config
+) {
+
+    $grid-data: ();
+
+    @if (not type-of($grid-name) == string) {
+
+        @error '$grid-name must be a string';
+
+    } @else {
+
+        @if (map-has-key($grid-array, $grid-name)) {
+
+            $grid-data: map-get($grid-array, $grid-name);
+
+        } @else {
+
+            @error 'Requested grid doesnt exist.';
+
+        }
+
+    }
+
+    @return $grid-data;
+
+}
+
+
+
+///
+/// Get data from the grid config. Fallback if field doesnt exist.
+///
+/// @param {string} $field-name - Name of field you want the value
+/// @param {string} $grid-name - grid name from grid config
+///
+/// @return {mixed} Value of the field and false when no data found.
+///
+/// @example scss - Get the gutter from grid 1
+/// margin: _get-grid-data('gutter', 'grid-1');
+///
+@function _get-grid-data(
+    $field-name,
+    $grid-name: $default-grid
+) {
+
+    $grid-data: _get-grid($grid-name);
+
+    $field-data: '';
+
+    @if (map-has-key($grid-data, $field-name)) {
+
+        $field-data: map-get($grid-data, $field-name);
+
+    } @else {
+
+        @if (map-has-key(map-get($grid-config, $default-grid), $field-name)) {
+
+            $field-data: map-get(map-get($grid-config, $default-grid), $field-name);
+
+        } @else {
+
+            $field-data: false;
+
+        }
+
+    }
+
+    @return $field-data;
+
+}

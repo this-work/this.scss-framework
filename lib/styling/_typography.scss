@@ -462,7 +462,10 @@ $default-font-weights-map: $font-weights !default;
 ///     @include font-smoothing();
 /// }
 ///
-@mixin font-smoothing($value: antialiased, $moz-workaround: true) {
+@mixin font-smoothing(
+    $value: antialiased,
+    $moz-workaround: true
+) {
 
     -webkit-font-smoothing: $value;
 

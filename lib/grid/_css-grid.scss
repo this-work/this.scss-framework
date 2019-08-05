@@ -1,0 +1,285 @@
+////
+///
+/// Grid (CSS Grid) System
+///
+/// @group CSS Grid
+/// @since 2.0.0
+///
+////
+
+
+
+///
+/// Grid config array.
+///
+/// @prop {String} grid -  Name of the grid
+/// @prop {Number} grid.columns - Count of columns for the grid
+/// @prop {Number} grid.column-width - Columns width value with unit or minmax function
+/// @prop {Number} grid.column-gutter - Columns gutter value in %, em or px
+/// @prop {Number} grid.rows - [`optional`] Count of rows for the grid. Zero or 'auto' for auto rows.
+/// @prop {Number} grid.rows-height - [`optional`] Row height value with unit or minmax function. Only used when rows not zero/auto.
+/// @prop {Number} grid.rows-gutter - Rows gutter value in %, em or px
+/// @prop {String} grid.grid-flow - Method of the grid flow
+/// @prop {bool} grid.column-first - Indicator if row starts with a column
+///
+/// @type array
+/// @example scss - Set up two grids
+/// $grid-config: (
+///     'default': (
+///         'columns': 12,
+///         'column-width': 1fr,
+///         'column-gutter': 15px,
+///         'rows': auto,
+///         'rows-height': auto,
+///         'row-gutter': 15px,
+///         'grid-flow': row,
+///         'column-first': true
+///     ),
+///     'grid-2': (
+///         'columns': 14,
+///         'column-width': minmax(min-content, 100px),
+///         'column-gutter': 1.25%,
+///         'rows': 0,
+///         'rows-height': 0,
+///         'row-gutter': 0,
+///         'grid-flow': row,
+///         'column-first': true
+///     ),
+/// );
+///
+$grid-config: (
+        'default': (
+                'columns': 12,
+                'column-width': 1fr,
+                'column-gutter': 1.5%,
+                'rows': 0,
+                'rows-height': 0,
+                'row-gutter': 0,
+                'grid-flow': row,
+                'column-first': true
+        )
+) !default;
+
+
+
+///
+/// Generate a IE 10+ compatible repeated column string with gutters as columns.
+/// Only to polyfill the repeat function and gaps/gutter.
+///
+/// @param {number} $type-count - Number of columns
+/// @param {number} $type-width - Width of a column
+/// @param {number} $type-gutter - Size of the gutter between columns
+///
+/// @return {string} - Unquoted compatible column string.
+///
+@function _get-grid-compatible-repeat-value(
+    $type-count,
+    $type-width,
+    $type-gutter
+) {
+
+    $compatible-repeat-value: $type-width;
+
+    @for $count from 2 through $type-count {
+        $compatible-repeat-value: $compatible-repeat-value + " " + $type-gutter + " " + $type-width;
+    }
+
+    @return unquote($compatible-repeat-value);
+}
+
+
+
+///
+/// Generate grid context styles with given expanded arguments to
+/// create a css grid container.
+///
+/// @prop {Number} $columns - Count of columns for the grid
+/// @prop {Number} $column-width - Columns width value with unit or minmax function
+/// @prop {Number} $column-gutter - Columns gutter value in %, em or px
+/// @prop {Number} $rows - Count of rows for the grid. Zero or 'auto' for auto rows.
+/// @prop {Number} $rows-height - Row height value with unit or minmax function. Only used when rows not zero/auto.
+/// @prop {Number} $rows-gutter - Rows gutter value in %, em or px
+/// @prop {String} $grid-flow - Method of the grid flow
+/// @prop {bool} $column-first - Indicator if row starts with a column
+///
+/// @example scss - Ggenerate a 12 column grid with a 10px gap and autoplacement rows.
+/// include _grid-context(12, 1fr, 10px, 0, 0, 0, row, true);
+///
+@mixin _grid-context(
+    $columns,
+    $column-width: 1fr,
+    $column-gutter: 0,
+    $rows: 0,
+    $rows-height: 0,
+    $row-gutter: 0,
+    $grid-flow: row,
+    $column-first: true
+) {
+
+    $column-gutter: unitize($column-gutter);
+    $row-gutter: unitize($row-gutter);
+    $column-width: unitize($column-width);
+
+    display: grid;
+
+    grid-column-gap:$column-gutter;
+    grid-row-gap:$row-gutter;
+
+    grid-auto-flow: $grid-flow;
+
+    -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
+    grid-template-columns: repeat( $columns, $column-width );
+
+    @if ($rows and $rows-height and $rows != auto and $rows > 0 and $rows-height != auto) {
+
+        $rows-height: unitize($rows-height);
+
+        -ms-grid-rows: _get-grid-compatible-repeat-value($rows, $rows-height, $row-gutter);
+        grid-template-rows: repeat( $rows, $rows-height );
+    }
+
+    @if not ($column-first) {
+        padding-left: $column-gutter;
+        padding-right: $column-gutter;
+    }
+
+}
+
+
+
+///
+/// Generate grid context styles from the grid config.
+///
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+///
+/// @example scss - Set all context styles
+/// include grid-context();
+///
+@mixin grid-context(
+    $grid-name: $default-grid
+) {
+
+    $columns: _get-grid-data('columns', $grid-name);
+
+    $column-width: _get-grid-data('column-width', $grid-name);
+
+    $column-gutter: _get-grid-data('column-gutter', $grid-name);
+
+    $rows: _get-grid-data('rows', $grid-name);
+
+    $rows-height: _get-grid-data('rows-height', $grid-name);
+
+    $row-gutter: _get-grid-data('row-gutter', $grid-name);
+
+    $grid-flow: _get-grid-data('grid-flow', $grid-name);
+
+    $column-first: _get-grid-data('column-first', $grid-name);
+
+    @include _grid-context($columns, $column-width, $column-gutter, $rows, $rows-height, $row-gutter, $grid-flow, $column-first);
+
+}
+
+
+
+///
+/// Generate IE 10+ compatible column start style with observance
+/// to the gap polyfill for older browsers.
+///
+/// @prop {number} $x - x postion of the cells position.
+///
+@mixin grid-cell-column-start($x){
+
+    -ms-grid-column:(($x * 2) - 1);
+    grid-column-start:$x;
+
+}
+
+
+
+///
+/// Generate IE 10+ compatible row start style with observance
+/// to the gap polyfill for older browsers.
+///
+/// @prop {number} $y - Y postion of the cells position.
+///
+@mixin grid-cell-row-start($y){
+
+    -ms-grid-row:(($y * 2) - 1);
+    grid-row-start:$y;
+
+}
+
+
+
+///
+/// Generate IE 10+ compatible cell position styles with observance
+/// to the gap polyfill for older browsers. Both attributes are optional.
+///
+/// @prop {number} $x - X postion of the cells position.
+/// @prop {number} $y - Y postion of the cells position.
+///
+@mixin grid-cell-position(
+    $x: false,
+    $y: false
+) {
+    @if ($x) {
+        @include grid-cell-column-start($x);
+    }
+
+    @if ($y) {
+        @include grid-cell-row-start($y);
+    }
+}
+
+
+
+///
+/// Generate IE 10+ compatible column width style with observance
+/// to the gap polyfill for older browsers.
+///
+/// @prop {number} $width - Columns to span.
+///
+@mixin grid-cell-width($width){
+
+    -ms-grid-column-span:(($width * 2) - 1);
+    grid-column-end:span #{$width};
+
+}
+
+
+
+///
+/// Generate IE 10+ compatible row height style with observance
+/// to the gap polyfill for older browsers.
+///
+/// @prop {number} $height - Rows to span.
+///
+@mixin grid-cell-height($height){
+
+    -ms-grid-row-span:(($height * 2) - 1);
+    grid-row-end:span #{$height};
+
+}
+
+
+
+///
+/// Generate IE 10+ compatible cell size styles with observance
+/// to the gap polyfill for older browsers. Both attributes are optional.
+///
+/// @prop {number} $width - Columns to span.
+/// @prop {number} $height - Rows to span.
+///
+@mixin grid-cell-size(
+    $width: false,
+    $height: false
+) {
+    @if ($width) {
+        @include grid-cell-width($width);
+    }
+
+    @if ($height) {
+        @include grid-cell-height($height);
+    }
+
+}

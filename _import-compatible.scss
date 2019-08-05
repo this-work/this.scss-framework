@@ -1,7 +1,8 @@
 ////
 ///
 /// This / SCSS Framework
-/// Load the complete framework
+/// Load the complete framework with Compatible Mode:
+/// - Using Floating Block Grid instead of CSS Grid
 ///
 /// Version 2.0.0
 /// Author Tobias Wöstmann, Hendrik Bunnick, Christian Bäumer
@@ -16,6 +17,6 @@
 
 @import 'lib/grid/_import';
 
-@import 'lib/grid/_css-grid';
+@import 'lib/grid/_fb-grid';
 
 @import 'lib/utils/_import';

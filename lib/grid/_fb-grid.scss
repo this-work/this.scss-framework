@@ -1,8 +1,8 @@
 ////
 ///
-/// Grid System
+/// Compatible (Floating Block Grid) Grid System
 ///
-/// @group Grid
+/// @group Floating Block Grid
 /// @since 1.0.0
 ///
 ////
@@ -33,20 +33,12 @@
 /// );
 ///
 $grid-config: (
-    'default': (
-        'columns': 12,
-        'gutter': 1.5%,
-        'column-first': true
-    )
+        'default': (
+                'columns': 12,
+                'gutter': 1.5%,
+                'column-first': true
+        )
 ) !default;
-
-
-
-///
-/// Default grid declaration. Used as default in grid mixins when no grid is defined.
-/// @type string
-///
-$default-grid: 'default' !default;
 
 
 
@@ -55,92 +47,6 @@ $default-grid: 'default' !default;
 /// @type boolean
 ///
 $default-grid-push-pull-affects-followers: false !default;
-
-
-
-///
-/// Get the data set of a grid.
-///
-/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
-/// @param {array} $grid-array [$grid-config] - [`optional`] Deviant grid config, default is the $grid-config array
-///
-/// @return {array} Data set of the grid
-///
-/// @example scss - Get the data set of grid 1
-/// $grid: _get-grid('grid-1');
-///
-@function _get-grid(
-    $grid-name: $default-grid,
-    $grid-array: $grid-config
-) {
-
-    $grid-data: ();
-
-    @if (not type-of($grid-name) == string) {
-
-        @error '$grid-name must be a string';
-
-    } @else {
-
-        @if (map-has-key($grid-array, $grid-name)) {
-
-            $grid-data: map-get($grid-array, $grid-name);
-
-        } @else {
-
-            @error 'Requested grid doesnt exist.';
-
-        }
-
-    }
-
-    @return $grid-data;
-
-}
-
-
-
-///
-/// Get data from the grid config. Fallback if field doesnt exist.
-///
-/// @param {string} $field-name - Name of field you want the value
-/// @param {string} $grid-name - grid name from grid config
-///
-/// @return {mixed} Value of the field
-///
-/// @example scss - Get the gutter from grid 1
-/// margin: _get-grid-data('gutter', 'grid-1');
-///
-@function _get-grid-data(
-    $field-name,
-    $grid-name: $default-grid
-) {
-
-    $grid-data: _get-grid($grid-name);
-
-    $field-data: '';
-
-    @if (map-has-key($grid-data, $field-name)) {
-
-        $field-data: map-get($grid-data, $field-name);
-
-    } @else {
-
-        @if (map-has-key(map-get($grid-config, $default-grid), $field-name)) {
-
-            $field-data: map-get(map-get($grid-config, $default-grid), $field-name);
-
-        } @else {
-
-            @error 'Requested grid data doesnt exist.';
-
-        }
-
-    }
-
-    @return $field-data;
-
-}
 
 
 
@@ -223,6 +129,10 @@ $default-grid-push-pull-affects-followers: false !default;
 
     $gutter: _get-grid-data('gutter', $grid-name);
 
+    @if not ($gutter) or not ($columns){
+        @error 'Requested grid data doesnt exist.';
+    }
+
     $parent-width: _get-grid-column-width($parent-units, $columns, $gutter);
 
     $sub-width: _get-grid-column-width($sub-units, $columns, $gutter);
@@ -296,6 +206,10 @@ $default-grid-push-pull-affects-followers: false !default;
 
     $column-first: _get-grid-data('column-first', $grid-name);
 
+    @if not ($gutter) or not ($column-first) or not ($columns){
+        @error 'Requested grid data doesnt exist.';
+    }
+
     @include _grid-column($units, $columns, $gutter, $column-first);
 
 }
@@ -366,6 +280,10 @@ $default-grid-push-pull-affects-followers: false !default;
 
     $column-first: _get-grid-data('column-first', $grid-name);
 
+    @if not ($gutter) or not ($column-first) {
+        @error 'Requested grid data doesnt exist.';
+    }
+
     @include _grid-context($gutter, $column-first);
 
 }
@@ -434,6 +352,10 @@ $default-grid-push-pull-affects-followers: false !default;
 
     $gutter: _get-grid-data('gutter', $grid-name);
 
+    @if not ($gutter) or not ($columns) {
+        @error 'Requested grid data doesnt exist.';
+    }
+
     @include _grid-column-offset($units, $columns, $gutter, right, $affect-followers);
 
 }
@@ -459,6 +381,10 @@ $default-grid-push-pull-affects-followers: false !default;
     $columns: _get-grid-data('columns', $grid-name);
 
     $gutter: _get-grid-data('gutter', $grid-name);
+
+    @if not ($gutter) or not ($columns) {
+        @error 'Requested grid data doesnt exist.';
+    }
 
     @include _grid-column-offset($units, $columns, $gutter, left, $affect-followers);
 
