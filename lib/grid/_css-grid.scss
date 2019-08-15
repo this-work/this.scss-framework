@@ -78,7 +78,7 @@ $grid-config: (
     $type-gutter
 ) {
 
-    $compatible-repeat-value: $type-width;
+    $compatible-repeat-value: 0px $type-width;
 
     @for $count from 2 through $type-count {
         $compatible-repeat-value: $compatible-repeat-value + " " + $type-gutter + " " + $type-width;
@@ -189,7 +189,7 @@ $grid-config: (
 ///
 @mixin grid-cell-column-start($x){
 
-    -ms-grid-column:(($x * 2) - 1);
+    -ms-grid-column:($x * 2);
     grid-column-start:$x;
 
 }
@@ -204,7 +204,7 @@ $grid-config: (
 ///
 @mixin grid-cell-row-start($y){
 
-    -ms-grid-row:(($y * 2) - 1);
+    -ms-grid-row:($y * 2);
     grid-row-start:$y;
 
 }
