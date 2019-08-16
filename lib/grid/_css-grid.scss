@@ -139,7 +139,7 @@ $grid-config: (
 
     }@else{
 
-        -ms-grid-rows:0 auto 20px;
+        -ms-grid-rows:0 auto $row-gutter;
 
     }
 
