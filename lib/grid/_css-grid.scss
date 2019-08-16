@@ -136,6 +136,11 @@ $grid-config: (
 
         -ms-grid-rows: _get-grid-compatible-repeat-value($rows, $rows-height, $row-gutter);
         grid-template-rows: repeat( $rows, $rows-height );
+
+    }@else{
+
+        -ms-grid-rows:0 auto 20px;
+
     }
 
     @if not ($column-first) {
