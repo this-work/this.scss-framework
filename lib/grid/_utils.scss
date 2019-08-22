@@ -10,6 +10,15 @@
 
 
 ///
+/// Default container width declarations.
+/// @type number
+///
+$max-page-width: 1440px !default;
+$max-content-width: 1220px !default;
+
+
+
+///
 /// Default grid declaration. Used as default in grid mixins when no grid is defined.
 /// @type string
 ///

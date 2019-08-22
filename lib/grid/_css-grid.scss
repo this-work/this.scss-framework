@@ -139,7 +139,7 @@ $grid-config: (
 
     }@else{
 
-        -ms-grid-rows:0 auto $row-gutter;
+        -ms-grid-rows:0px auto $row-gutter;
 
     }
 
@@ -285,6 +285,52 @@ $grid-config: (
 
     @if ($height) {
         @include grid-cell-height($height);
+    }
+
+}
+
+
+
+///
+/// Generate a margin to push or pull the cell to the
+/// wrapper or the viewport border.
+///
+/// @prop {string} $offsetDirection - Direction of offset (start or end)
+/// @prop {string} $offsetType - Type of offset (wrapper or viewport)
+///
+@mixin grid-cell-offset(
+    $offsetDirection: 'start',
+    $offsetType: 'wrapper'
+){
+
+    $direction: right;
+
+    @if ($offsetDirection == 'start') {
+
+        @include grid-cell-column-start(1);
+
+        $direction: left;
+
+    }
+
+    @media (min-width: $max-content-width) {
+        margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
+    }
+
+    @if ($offsetType == 'wrapper') {
+
+        @media (min-width: $max-page-width) {
+            margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+        }
+
+    }
+
+    @if ($offsetType == 'viewport') {
+
+        @media (min-width: $max-page-width) {
+            margin-#{$direction}:  #{'calc((100vw - ' + $max-page-width + ') / -2 + (' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+        }
+
     }
 
 }
