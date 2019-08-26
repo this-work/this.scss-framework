@@ -26,7 +26,7 @@ Include in your scss with:
 if you need an < IE10 Version use the compatible mode:
 
 ```bash
-@import '../node_modules/@this/scss-framework/import-compatible';
+@import '../node_modules/@this/scss-framework/import-compat';
 ```
 
 The differences are:

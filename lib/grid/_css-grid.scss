@@ -295,41 +295,59 @@ $grid-config: (
 /// Generate a margin to push or pull the cell to the
 /// wrapper or the viewport border.
 ///
-/// @prop {string} $offsetDirection - Direction of offset (start or end)
-/// @prop {string} $offsetType - Type of offset (wrapper or viewport)
+/// @prop {string} $offsetType ['start'] - [`optional`] Direction of offset (start, end, complete)
+/// @prop {string|number} $offset ['wrapper'] - [`optional`] Offset (wrapper or viewport as string or free number)
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
 ///
 @mixin grid-cell-offset(
-    $offsetDirection: 'start',
-    $offsetType: 'wrapper'
+    $offsetType: 'start',
+    $offset: 'wrapper',
+    $grid-name: $default-grid
 ){
 
     $direction: right;
 
-    @if ($offsetDirection == 'start') {
+    @if ($offsetType == 'start') {
 
         @include grid-cell-column-start(1);
-
         $direction: left;
 
     }
 
-    @media (min-width: $max-content-width) {
-        margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
-    }
+    @if (type-of($offset) == 'number') {
 
-    @if ($offsetType == 'wrapper') {
+        margin-#{$direction}: $offset;
 
-        @media (min-width: $max-page-width) {
-            margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+    } @else {
+
+        @media (min-width: ($max-content-width)) {
+            margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
+        }
+
+        @if ($offset == 'wrapper') {
+
+            @media (min-width: ($max-page-width)) {
+                margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+            }
+
+        }
+
+        @if ($offset == 'viewport') {
+
+            @media (min-width: $max-page-width) {
+                margin-#{$direction}:  #{'calc((100vw - ' + $max-page-width + ') / -2 + (' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+            }
+
         }
 
     }
 
-    @if ($offsetType == 'viewport') {
+    @if ($offsetType == 'complete') {
 
-        @media (min-width: $max-page-width) {
-            margin-#{$direction}:  #{'calc((100vw - ' + $max-page-width + ') / -2 + (' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
-        }
+        $columns: _get-grid-data('columns', $grid-name);
+        @include grid-cell-width($columns);
+
+        @include grid-cell-offset('start', $offset, $grid-name);
 
     }
 
