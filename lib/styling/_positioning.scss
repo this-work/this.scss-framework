@@ -1,0 +1,90 @@
+////
+///
+/// Positioning Libary
+///
+/// @group Positioning
+/// @since 3.1.0
+///
+////
+
+
+
+///
+/// zIndex array to get a mapping of the levels.
+///
+/// @type array
+/// @example scss - Set 3 zindexes
+///  $zindex-config (
+///     '100' : 100,
+///     '200' : 200,
+///     '300' : 300
+///   );
+///
+$zindex-config: (
+        0  : -1,
+        100 : 100,
+        200 : 200,
+        300 : 300,
+        400 : 400,
+        500 : 500,
+        600 : 600,
+        700 : 700,
+        800 : 800,
+        900 : 900,
+        999 : 999,
+) !default;
+
+
+
+///
+/// Default zindex-map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-zindex-map: $zindex-config !default;
+
+
+
+///
+/// Get the entry from zindex array
+///
+/// @param {string} $zindex-name - Name of the zindex
+/// @param {array} $zindex-map [$default-zindex-map] - [`optional`] zIndex array
+///
+/// @return {number} zindex
+///
+/// @example scss - Set the zindex to 100
+/// z-index: zindex('100');
+///
+@function zindex(
+    $zindex-name,
+    $zindex-map: $default-zindex-map
+) {
+
+    @if (not map-has-key($zindex-map, $zindex-name)) {
+        @error 'Given zindex map has no zindex named "#{$zindex-name}".';
+    }
+
+    $zindex: map-get($zindex-map, $zindex-name);
+
+    @return $zindex;
+
+}
+
+
+
+///
+/// Generate a cleafix with pseudo elements
+///
+@mixin clearfix() {
+
+    &:before,
+    &:after {
+        content : "";
+        display : table;
+        line-height : 0;
+    }
+
+    &:after {
+        clear : both;
+    }
+}

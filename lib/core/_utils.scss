@@ -228,22 +228,3 @@ $default-class-separator: '--' !default;
         }
     }
 }
-
-
-
-///
-/// Generate a cleafix
-///
-@mixin clearfix() {
-
-    &:before,
-    &:after {
-        content : "";
-        display : table;
-        line-height : 0;
-    }
-
-    &:after {
-        clear : both;
-    }
-}
