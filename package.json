@@ -2,7 +2,12 @@
   "name": "@this/scss-framework",
   "version": "3.1.0",
   "author": "THIS GmbH",
+  "homepage": "https://bitbucket.org/this-work/this.scss-framework/src/master/README.md",
   "description": "THIS SCSS Framework",
+  "keywords": [
+    "scss",
+    "framework"
+  ],
   "scripts": {},
   "files": [
     "_import.scss",
@@ -17,7 +22,10 @@
     "type": "git",
     "url": "git@bitbucket.org:this-work/this.scss-framework.git"
   },
-  "private": true,
+  "bugs": {
+    "url": "https://bitbucket.org/this-work/this.scss-framework/addon/trello/trello-board"
+  },
+  "private": false,
   "devDependencies": {},
   "dependencies": {}
 }
