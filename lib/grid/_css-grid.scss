@@ -81,7 +81,7 @@ $grid-config: (
     $compatible-repeat-value: 0px $type-width;
 
     @for $count from 2 through $type-count {
-        $compatible-repeat-value: $compatible-repeat-value + " " + $type-gutter + " " + $type-width;
+        $compatible-repeat-value: $compatible-repeat-value + " " + $type-gutter + " " + minmax(1px, $type-width);
     }
 
     @return unquote($compatible-repeat-value);
@@ -128,7 +128,7 @@ $grid-config: (
     grid-auto-flow: $grid-flow;
 
     -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
-    grid-template-columns: repeat( $columns, $column-width );
+    grid-template-columns: repeat( $columns, minmax(1px, $column-width));
 
     @if ($rows and $rows-height and $rows != auto and $rows > 0 and $rows-height != auto) {
 
