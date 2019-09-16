@@ -384,7 +384,6 @@ $default-font-weights-map: $font-weights !default;
 /// @param {array} $font-config-map [$default-font-config-map] - [`optional`] Font config array
 ///
 @mixin generate-font-face-declaration(
-    $path-prefix: './',
     $font-config-map: $default-font-config-map
 ) {
 
@@ -398,7 +397,9 @@ $default-font-weights-map: $font-weights !default;
 
                 @each $path in map-get($font-face, "paths") {
 
-                    $format: to-lower-case(nth(str-split($path, '.'),2));
+                    $pathChunks: str-split($path, '.');
+
+                    $format: to-lower-case(nth(str-split($path, '.'), length($pathChunks)));
 
                     @if ($format == "ttf") {
 
@@ -406,7 +407,7 @@ $default-font-weights-map: $font-weights !default;
 
                     }
 
-                    $sources: append($sources, (url('#{$path-prefix}#{$path}') format('#{$format}')), 'comma');
+                    $sources: append($sources, (url('#{$path}') format('#{$format}')), 'comma');
 
                 }
 
