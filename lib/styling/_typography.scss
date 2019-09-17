@@ -371,7 +371,7 @@ $default-font-weights-map: $font-weights !default;
 
     }
 
-    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: 1px");
+    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: ") letter-spacing($font-dimension, $font-unit-type);
 
 }
 
