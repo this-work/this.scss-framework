@@ -32,6 +32,30 @@ $page-spacing-default-config: 0px !default;
 
 
 ///
+/// Get the correct spacing for the type of param. Can be a key
+///
+/// @param {number|string} $spacing - Param to check. Can be a Key of a Spacing Array as string or a number.
+///
+/// @return {string} - Ordered Value from the spacings array or only unitized.
+///
+@function _get-ordered-spacing-value(
+    $spacing
+) {
+
+    @if (str-is-quoted($spacing)) {
+
+        @return spacing($spacing);
+
+    } @else {
+
+        @return unitize($spacing);
+
+    }
+}
+
+
+
+///
 /// Generate from the spacing array a bundle of padding spacing classes
 ///
 /// @param {number} $page-spacing-inital [$page-spacing-inital-config] - [`optional`] Value of inital spacing
@@ -39,35 +63,15 @@ $page-spacing-default-config: 0px !default;
 ///
 @mixin page-spacing($page-spacing-inital: $page-spacing-default-config, $breakpoints: $page-spacing-config) {
 
-    @if (str-is-quoted($page-spacing-inital)) {
-
-        $page-spacing-inital: spacing($page-spacing-inital);
-
-    } @else {
-
-        $page-spacing-inital: unitize($page-spacing-inital);
-
-    }
-
-    padding-left: $page-spacing-inital;
-    padding-right: $page-spacing-inital;
+    padding-left: _get-ordered-spacing-value($page-spacing-inital);
+    padding-right: _get-ordered-spacing-value($page-spacing-inital);
 
     @each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
 
         @include above($breakpoint-key) {
 
-            @if (str-is-quoted($breakpoint-spaceing)) {
-
-                $breakpoint-spaceing: spacing($breakpoint-spaceing);
-
-            } @else {
-
-                $breakpoint-spaceing: unitize($breakpoint-spaceing);
-
-            }
-
-            padding-left: $breakpoint-spaceing;
-            padding-right: $breakpoint-spaceing;
+            padding-left: _get-ordered-spacing-value($breakpoint-spaceing);
+            padding-right: _get-ordered-spacing-value($breakpoint-spaceing);
 
         }
 

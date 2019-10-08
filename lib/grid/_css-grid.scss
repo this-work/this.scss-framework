@@ -302,7 +302,9 @@ $grid-config: (
 @mixin grid-cell-offset(
     $offsetType: 'start',
     $offset: 'wrapper',
-    $grid-name: $default-grid
+    $grid-name: $default-grid,
+    $page-spacing-inital: $page-spacing-default-config,
+    $breakpoints: $page-spacing-config
 ){
 
     $direction: right;
@@ -320,12 +322,35 @@ $grid-config: (
 
     } @else {
 
-        @media (min-width: ($max-content-width)) {
+        margin-#{$direction}: _get-ordered-spacing-value($page-spacing-inital) * -1;
+
+
+
+
+
+
+        $max-content-width-with-padding: strip-unit($max-content-width) + 54;
+
+
+
+
+        @each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
+
+            @if (strip-unit(_get-breakpoint($breakpoint-key)) < $max-content-width-with-padding ) {
+                @include above($breakpoint-key) {
+
+                    margin-#{$direction}: _get-ordered-spacing-value($breakpoint-spaceing) * -1;
+
+                }
+            }
+
+        }
+
+        @media (min-width: ($max-content-width-with-padding)) {
             margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
         }
 
         @if ($offset == 'wrapper') {
-
             @media (min-width: ($max-page-width)) {
                 margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
             }
@@ -333,7 +358,6 @@ $grid-config: (
         }
 
         @if ($offset == 'viewport') {
-
             @media (min-width: $max-page-width) {
                 margin-#{$direction}:  #{'calc((100vw - ' + $max-page-width + ') / -2 + (' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
             }
