@@ -293,11 +293,14 @@ $grid-config: (
 
 ///
 /// Generate a margin to push or pull the cell to the
-/// wrapper or the viewport border.
+/// wrapper or the viewport border. These mixin needs the view/mediqquery functions
+/// and the utils/page functions.
 ///
 /// @prop {string} $offsetType ['start'] - [`optional`] Direction of offset (start, end, complete)
 /// @prop {string|number} $offset ['wrapper'] - [`optional`] Offset (wrapper or viewport as string or free number)
 /// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+/// @param {number} $page-spacing-inital [$page-spacing-inital-config] - [`optional`] Value of inital spacing
+/// @param {array} $breakpoints [$page-spacing-config] - [`optional`] Map with breakpoint and spacing values pairs.
 ///
 @mixin grid-cell-offset(
     $offsetType: 'start',
@@ -324,19 +327,14 @@ $grid-config: (
 
         margin-#{$direction}: _get-ordered-spacing-value($page-spacing-inital) * -1;
 
-
-
-
-
-
-        $max-content-width-with-padding: strip-unit($max-content-width) + 54;
-
-
-
+        $last-spaceing-below-content-width: 0;
 
         @each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
 
-            @if (strip-unit(_get-breakpoint($breakpoint-key)) < $max-content-width-with-padding ) {
+            @if (strip-unit(_get-breakpoint($breakpoint-key)) < strip-unit($max-content-width) ) {
+
+                $last-spaceing-below-content-width: _get-ordered-spacing-value($breakpoint-spaceing);
+
                 @include above($breakpoint-key) {
 
                     margin-#{$direction}: _get-ordered-spacing-value($breakpoint-spaceing) * -1;
@@ -346,7 +344,7 @@ $grid-config: (
 
         }
 
-        @media (min-width: ($max-content-width-with-padding)) {
+        @media (min-width: ($max-content-width + ($last-spaceing-below-content-width * 2))) {
             margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
         }
 
