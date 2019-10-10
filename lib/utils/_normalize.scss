@@ -295,6 +295,10 @@ $default-normalize-word-break: break-word !default;
         border-style: none;
     }
 
+    figure {
+        margin: 0;
+    }
+
     svg:not([fill]) {
         fill: currentColor;
     }
