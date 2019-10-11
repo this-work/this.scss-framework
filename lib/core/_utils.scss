@@ -200,6 +200,105 @@
 
 
 ///
+/// Helper to convert a string to a number
+///
+/// @param {String | Number} $value - Value to be parsed
+///
+/// @return {Number}
+///
+@function number(
+    $value
+) {
+
+    @if type-of($value) == 'number' {
+
+        @return $value;
+
+    }
+
+    $result: 0;
+
+    $digits: 0;
+
+    $minus: str-slice($value, 1, 1) == '-';
+
+    $numbers: ('0': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9);
+
+    @for $i from if($minus, 2, 1) through str-length($value) {
+        $character: str-slice($value, $i, $i);
+
+        @if not (index(map-keys($numbers), $character) or $character == '.') {
+
+            $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
+
+            @return if($minus, -$result, $result) * map-get($units, str-slice($value, $i));
+
+        }
+
+        @if $character == '.' {
+
+            $digits: 1;
+
+        } @else if $digits == 0 {
+
+            $result: $result * 10 + map-get($numbers, $character);
+
+        } @else {
+
+            $digits: $digits * 10;
+            $result: $result + map-get($numbers, $character) / $digits;
+
+        }
+    }
+
+    @return if($minus, -$result, $result);
+}
+
+
+
+///
+/// Sort an array by value.
+///
+/// @param {array} $array - Array to sort.
+///
+/// @return {array} - Sorted Array
+///
+@function sort-values($array) {
+
+    $keys: map-keys($array);
+
+    $values: map-values($array);
+
+    @for $i from 1 through length($values) {
+
+        // Compare the item with the previous items in the list
+        @for $j from $i * -1 through -1 {
+
+            // abs() trick to loop backward
+            $j: abs($j);
+
+            @if ($j > 1 and number(nth($values, $j)) < number(nth($values, $j - 1))) {
+
+                // If the item should go before the other, swap them
+                $keys: swap($keys, $j, $j - 1);
+                $values: swap($values, $j, $j - 1);
+
+            }
+        }
+    }
+
+    $sortedArray: ();
+
+    @for $k from 1 through length($values) {
+        $sortedArray: map-merge($sortedArray, (nth($keys, $k): nth($values, $k)));
+    }
+
+    @return $sortedArray;
+}
+
+
+
+///
 /// Default class-separator.
 /// @type string
 ///
