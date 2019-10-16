@@ -42,7 +42,7 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @return {string} - Ordered Value from the spacings array or only unitized.
 ///
-@function _get-ordered-spacing-value(
+@function _get-possible-spacing-value(
     $spacing
 ) {
 

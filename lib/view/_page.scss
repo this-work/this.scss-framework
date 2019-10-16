@@ -50,23 +50,21 @@ $max-content-width: 1080px !default;
 /// @param {number} $min-page-value [$min-page-width] - [`optional`] Value of inital page areas width
 /// @param {array} $min-page-width-array [$min-page-width-config] - [`optional`] Map with breakpoint and spacing values pairs.
 ///
-@mixin page-areas(
+@mixin page-area-columns(
     $max-page-value: $max-page-width,
     $max-content-value: $max-content-width,
     $min-page-value: $min-page-width,
     $min-page-width-array: $min-page-width-config
 ) {
 
-    @include _grid-context(false);
-
-    $temp-page-spacing: _get-ordered-spacing-value($min-page-value);
+    $temp-page-spacing: _get-possible-spacing-value($min-page-value);
 
     grid-template-columns: 0 $temp-page-spacing 1fr $temp-page-spacing 0;
 
     @each $breakpoint-key, $page-spacing in $min-page-width-array {
 
         $breakpoint: _get-breakpoint($breakpoint-key);
-        $page-spacing: _get-ordered-spacing-value($page-spacing);
+        $page-spacing: _get-possible-spacing-value($page-spacing);
 
         @if (($max-content-value + (2 * $page-spacing)) > $breakpoint) {
 
@@ -86,7 +84,7 @@ $max-content-width: 1080px !default;
     @each $breakpoint-key, $page-spacing in $min-page-width-array {
 
         $breakpoint: _get-breakpoint($breakpoint-key);
-        $page-spacing: _get-ordered-spacing-value($page-spacing);
+        $page-spacing: _get-possible-spacing-value($page-spacing);
 
         @if (($max-content-value + (2 * $page-spacing)) < $breakpoint and $max-page-value > $breakpoint) {
 
@@ -101,6 +99,63 @@ $max-content-width: 1080px !default;
 
     @include above($max-page-value + ( 2 * $max-page-spacing)) {
         grid-template-columns: 1fr $max-page-spacing $max-content-value $max-page-spacing 1fr;
+    }
+
+}
+
+///
+/// Generate from the page width array css grid columns with breakpoints.
+///
+/// @param {number} $max-page-value [$max-page-width] - [`optional`] Value of the max page areas width
+///
+@mixin page-area-cell-positions(
+    $element,
+    $max-content-value: $max-content-width,
+    $min-page-value: $min-page-width,
+    $min-page-width-array: $min-page-width-config
+) {
+
+    &__content {
+
+        grid-column-start: 3;
+        grid-column-end: span 1;
+
+    }
+
+    &__page {
+        grid-column-start: 2;
+        grid-column-end: span 3;
+    }
+
+    &__viewport {
+
+        grid-column-start: 1;
+        grid-column-end: span 5;
+
+    }
+
+    &__page,
+    &__viewport {
+
+        #{$element} {
+            max-width: $max-content-value;
+            width: calc(100% - 2 * #{$min-page-value}px);
+            margin: 0 auto;
+        }
+
+        @each $breakpoint-key, $page-spacing in $min-page-width-array {
+
+            $breakpoint: _get-breakpoint($breakpoint-key);
+            $page-spacing: _get-possible-spacing-value($page-spacing);
+
+            @include above($breakpoint) {
+                #{$element} {
+                    width: calc(100% - 2 * #{$page-spacing}px);
+                }
+            }
+
+        }
+
     }
 
 }

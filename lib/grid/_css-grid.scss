@@ -190,6 +190,20 @@ $grid-config: (
 
 
 ///
+/// Generate a generic grid context without column declaration or settings.
+///
+/// @example scss - Set all context styles
+/// include generic-grid-context();
+///
+@mixin generic-grid-context{
+
+    @include _grid-context(false);
+
+}
+
+
+
+///
 /// Generate IE 10+ compatible column start style with observance
 /// to the gap polyfill for older browsers.
 ///
@@ -328,7 +342,7 @@ $grid-config: (
 
     } @else {
 
-        margin-#{$direction}: _get-ordered-spacing-value($page-spacing-inital) * -1;
+        margin-#{$direction}: _get-possible-spacing-value($page-spacing-inital) * -1;
 
         $last-spaceing-below-content-width: 0;
 
@@ -336,11 +350,11 @@ $grid-config: (
 
             @if (strip-unit(_get-breakpoint($breakpoint-key)) < strip-unit($max-content-width) ) {
 
-                $last-spaceing-below-content-width: _get-ordered-spacing-value($breakpoint-spaceing);
+                $last-spaceing-below-content-width: _get-possible-spacing-value($breakpoint-spaceing);
 
                 @include above($breakpoint-key) {
 
-                    margin-#{$direction}: _get-ordered-spacing-value($breakpoint-spaceing) * -1;
+                    margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
 
                 }
             }
