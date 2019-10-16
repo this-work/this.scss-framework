@@ -1,0 +1,106 @@
+////
+///
+/// Page Libary
+///
+/// @group Page
+/// @since 2.3.0
+///
+////
+
+
+
+///
+/// Associate page width areas array.
+/// Includes a key/value pair of the spacing to increase the consistency.
+/// Key must be an existing viewport key from the mediaquery config.
+///
+/// @type array
+/// @example scss - Set two page spacings
+///  $min-page-width-config (
+///     'x' : 10px,
+///     'l' : 20px
+///  );
+///
+$min-page-width-config: () !default;
+
+
+
+///
+/// Configuration of the inital value of the page width areas.
+/// @type number
+///
+$min-page-width: 20px !default;
+
+
+
+///
+/// Max of the page and content areas
+/// @type number
+///
+$max-page-width: 1920px !default;
+$max-content-width: 1080px !default;
+
+
+
+///
+/// Generate from the page width array css grid columns with breakpoints.
+///
+/// @param {number} $max-page-value [$max-page-width] - [`optional`] Value of the max page areas width
+/// @param {number} $max-content-value [$max-content-width] - [`optional`] Value of the max content areas width
+/// @param {number} $min-page-value [$min-page-width] - [`optional`] Value of inital page areas width
+/// @param {array} $min-page-width-array [$min-page-width-config] - [`optional`] Map with breakpoint and spacing values pairs.
+///
+@mixin page-areas(
+    $max-page-value: $max-page-width,
+    $max-content-value: $max-content-width,
+    $min-page-value: $min-page-width,
+    $min-page-width-array: $min-page-width-config
+) {
+
+    @include _grid-context(false);
+
+    $temp-page-spacing: _get-ordered-spacing-value($min-page-value);
+
+    grid-template-columns: 0 $temp-page-spacing 1fr $temp-page-spacing 0;
+
+    @each $breakpoint-key, $page-spacing in $min-page-width-array {
+
+        $breakpoint: _get-breakpoint($breakpoint-key);
+        $page-spacing: _get-ordered-spacing-value($page-spacing);
+
+        @if (($max-content-value + (2 * $page-spacing)) > $breakpoint) {
+
+            $temp-page-spacing: $page-spacing;
+
+            @include above($breakpoint) {
+                grid-template-columns: 0 $temp-page-spacing 1fr $temp-page-spacing 0;
+            }
+        }
+
+    }
+
+    @include above(($max-content-value + (2 * $temp-page-spacing))) {
+        grid-template-columns: 1fr minmax($temp-page-spacing, 1fr) $max-content-value minmax($temp-page-spacing, 1fr) 1fr;
+    }
+
+    @each $breakpoint-key, $page-spacing in $min-page-width-array {
+
+        $breakpoint: _get-breakpoint($breakpoint-key);
+        $page-spacing: _get-ordered-spacing-value($page-spacing);
+
+        @if (($max-content-value + (2 * $page-spacing)) < $breakpoint and $max-page-value > $breakpoint) {
+
+            @include above(($max-content-value + (2 * $temp-page-spacing))) {
+                grid-template-columns: 1fr minmax($page-spacing, 1fr) $max-content-value minmax($page-spacing, 1fr) 1fr;
+            }
+        }
+
+    }
+
+    $max-page-spacing: ($max-page-value - $max-content-value) / 2;
+
+    @include above($max-page-value + ( 2 * $max-page-spacing)) {
+        grid-template-columns: 1fr $max-page-spacing $max-content-value $max-page-spacing 1fr;
+    }
+
+}

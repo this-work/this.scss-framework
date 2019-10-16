@@ -127,20 +127,23 @@ $grid-config: (
 
     grid-auto-flow: $grid-flow;
 
-    -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
-    grid-template-columns: repeat( $columns, minmax(1px, $column-width));
+    @if ($columns) {
 
-    @if ($rows and $rows-height and $rows != auto and $rows > 0 and $rows-height != auto) {
+        -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
+        grid-template-columns: repeat( $columns, minmax(1px, $column-width));
 
-        $rows-height: unitize($rows-height);
+        @if ($rows and $rows-height and $rows != auto and $rows > 0 and $rows-height != auto) {
 
-        -ms-grid-rows: _get-grid-compatible-repeat-value($rows, $rows-height, $row-gutter);
-        grid-template-rows: repeat( $rows, $rows-height );
+            $rows-height: unitize($rows-height);
 
-    }@else{
+            -ms-grid-rows: _get-grid-compatible-repeat-value($rows, $rows-height, $row-gutter);
+            grid-template-rows: repeat( $rows, $rows-height );
 
-        -ms-grid-rows:0px auto $row-gutter;
+        }@else{
 
+            -ms-grid-rows:0px auto $row-gutter;
+
+        }
     }
 
     @if not ($column-first) {
@@ -306,8 +309,8 @@ $grid-config: (
     $offsetType: 'start',
     $offset: 'wrapper',
     $grid-name: $default-grid,
-    $page-spacing-inital: $page-spacing-default-config,
-    $breakpoints: $page-spacing-config
+    $page-spacing-inital: $min-page-width,
+    $breakpoints: $min-page-width-config
 ){
 
     $direction: right;

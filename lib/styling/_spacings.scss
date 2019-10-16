@@ -36,6 +36,30 @@ $default-spacing-map: $spacing-config !default;
 
 
 ///
+/// Get the correct spacing for the type of param. Can be a key
+///
+/// @param {number|string} $spacing - Param to check. Can be a Key of a Spacing Array as string or a number.
+///
+/// @return {string} - Ordered Value from the spacings array or only unitized.
+///
+@function _get-ordered-spacing-value(
+    $spacing
+) {
+
+    @if (str-is-quoted($spacing)) {
+
+        @return spacing($spacing);
+
+    } @else {
+
+        @return unitize($spacing);
+
+    }
+}
+
+
+
+///
 /// Get the entry from spacing array with unit
 ///
 /// @param {string} $spacing-name - Name of the spacing pair

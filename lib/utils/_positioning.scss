@@ -10,14 +10,6 @@
 
 
 ///
-/// Max width of the center container
-/// @type number
-///
-$max-page-width: 1440px !default;
-$max-content-width: 1220px !default;
-
-
-///
 /// Get the opposite direction of given direction.
 /// Supports top, right, bottom, left, center, ltr, rtl.
 ///
