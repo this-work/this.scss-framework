@@ -186,6 +186,31 @@ $default-breakpoint-map: $breakpoint-config !default;
 
 
 ///
+/// Generates a above include excluding the default breakpoint.
+///
+/// @param {string} $breakpoint - Breakpoint id
+/// @param {string} $direction - Direction of the possible mediaquery
+/// @content Rules or directives, which are wrapped in a media query
+///
+@mixin possible-mediaquery($breakpoint, $direction: 'above') {
+    @if ($breakpoint == 'default') {
+        @content;
+    } @else {
+        @if ($direction == 'above') {
+            @include above($breakpoint) {
+                @content;
+            }
+        } @else {
+            @include below($breakpoint) {
+                @content;
+            }
+        }
+    }
+}
+
+
+
+///
 /// Generates a max-width media query
 ///
 /// @param {string | css-length} $max - breakpoint id or value

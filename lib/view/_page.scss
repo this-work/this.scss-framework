@@ -10,30 +10,6 @@
 
 
 ///
-/// Associate page width areas array.
-/// Includes a key/value pair of the spacing to increase the consistency.
-/// Key must be an existing viewport key from the mediaquery config.
-///
-/// @type array
-/// @example scss - Set two page spacings
-///  $min-page-width-config (
-///     'x' : 10px,
-///     'l' : 20px
-///  );
-///
-$min-page-width-config: () !default;
-
-
-
-///
-/// Configuration of the inital value of the page width areas.
-/// @type number
-///
-$min-page-width: 20px !default;
-
-
-
-///
 /// Max of the page and content areas
 /// @type number
 ///
@@ -43,119 +19,36 @@ $max-content-width: 1080px !default;
 
 
 ///
-/// Generate from the page width array css grid columns with breakpoints.
+/// Up to this breakpoint, the page-area is full-width and
+/// the viewport-area is not visible
+/// @type string
 ///
-/// @param {number} $max-page-value [$max-page-width] - [`optional`] Value of the max page areas width
-/// @param {number} $max-content-value [$max-content-width] - [`optional`] Value of the max content areas width
-/// @param {number} $min-page-value [$min-page-width] - [`optional`] Value of inital page areas width
-/// @param {array} $min-page-width-array [$min-page-width-config] - [`optional`] Map with breakpoint and spacing values pairs.
-///
-@mixin page-area-columns(
-    $max-page-value: $max-page-width,
-    $max-content-value: $max-content-width,
-    $min-page-value: $min-page-width,
-    $min-page-width-array: $min-page-width-config
-) {
+$page-fullwidth-breakpoint: 's' !default;
 
-    $temp-page-spacing: _get-possible-spacing-value($min-page-value);
 
-    grid-template-columns: 0 $temp-page-spacing 1fr $temp-page-spacing 0;
-
-    @each $breakpoint-key, $page-spacing in $min-page-width-array {
-
-        $breakpoint: _get-breakpoint($breakpoint-key);
-        $page-spacing: _get-possible-spacing-value($page-spacing);
-
-        @if (($max-content-value + (2 * $page-spacing)) > $breakpoint) {
-
-            $temp-page-spacing: $page-spacing;
-
-            @include above($breakpoint) {
-                grid-template-columns: 0 $temp-page-spacing 1fr $temp-page-spacing 0;
-            }
-        }
-
-    }
-
-    @include above(($max-content-value + (2 * $temp-page-spacing))) {
-        grid-template-columns: 1fr minmax($temp-page-spacing, 1fr) $max-content-value minmax($temp-page-spacing, 1fr) 1fr;
-    }
-
-    @each $breakpoint-key, $page-spacing in $min-page-width-array {
-
-        $breakpoint: _get-breakpoint($breakpoint-key);
-        $page-spacing: _get-possible-spacing-value($page-spacing);
-
-        @if (($max-content-value + (2 * $page-spacing)) < $breakpoint and $max-page-value > $breakpoint) {
-
-            @include above(($max-content-value + (2 * $temp-page-spacing))) {
-                grid-template-columns: 1fr minmax($page-spacing, 1fr) $max-content-value minmax($page-spacing, 1fr) 1fr;
-            }
-        }
-
-    }
-
-    $max-page-spacing: ($max-page-value - $max-content-value) / 2;
-
-    @include above($max-page-value + ( 2 * $max-page-spacing)) {
-        grid-template-columns: 1fr $max-page-spacing $max-content-value $max-page-spacing 1fr;
-    }
-
-}
 
 ///
-/// Generate from the page width array css grid columns with breakpoints.
+/// The minimum spacing between the viewport-area and page-area,
+/// if the viewport-area is visible. If there is more room for space,
+/// the spacing between the viewport-area and content-area is halved.
+/// @type number
 ///
-/// @param {number} $max-page-value [$max-page-width] - [`optional`] Value of the max page areas width
+$spacing-viewport-to-page: 27px !default;
+
+
+
 ///
-@mixin page-area-cell-positions(
-    $element,
-    $max-content-value: $max-content-width,
-    $min-page-value: $min-page-width,
-    $min-page-width-array: $min-page-width-config
-) {
-
-    &__content {
-
-        grid-column-start: 3;
-        grid-column-end: span 1;
-
-    }
-
-    &__page {
-        grid-column-start: 2;
-        grid-column-end: span 3;
-    }
-
-    &__viewport {
-
-        grid-column-start: 1;
-        grid-column-end: span 5;
-
-    }
-
-    &__page,
-    &__viewport {
-
-        #{$element} {
-            max-width: $max-content-value;
-            width: calc(100% - 2 * #{$min-page-value}px);
-            margin: 0 auto;
-        }
-
-        @each $breakpoint-key, $page-spacing in $min-page-width-array {
-
-            $breakpoint: _get-breakpoint($breakpoint-key);
-            $page-spacing: _get-possible-spacing-value($page-spacing);
-
-            @include above($breakpoint) {
-                #{$element} {
-                    width: calc(100% - 2 * #{$page-spacing}px);
-                }
-            }
-
-        }
-
-    }
-
-}
+/// The spacing between the page-area and content-area
+/// Includes a key/value pair of the spacing to increase the consistency.
+/// Key must be an existing viewport key from the mediaquery config.
+/// 'default' is required.
+///
+/// @type array
+/// @example scss - Set two page spacings
+///  $page-content-spacing (
+///     'default': 16px,
+///     's' : 10px,
+///     'm' : 20px
+///  );
+///
+$spacing-page-to-content: () !default;

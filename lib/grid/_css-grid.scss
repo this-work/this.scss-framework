@@ -190,20 +190,6 @@ $grid-config: (
 
 
 ///
-/// Generate a generic grid context without column declaration or settings.
-///
-/// @example scss - Set all context styles
-/// include generic-grid-context();
-///
-@mixin generic-grid-context{
-
-    @include _grid-context(false);
-
-}
-
-
-
-///
 /// Generate IE 10+ compatible column start style with observance
 /// to the gap polyfill for older browsers.
 ///
@@ -314,17 +300,15 @@ $grid-config: (
 /// and the utils/page functions.
 ///
 /// @prop {string} $offsetType ['start'] - [`optional`] Direction of offset (start, end, complete)
-/// @prop {string|number} $offset ['wrapper'] - [`optional`] Offset (wrapper or viewport as string or free number)
+/// @prop {string|number} $offset ['page'] - [`optional`] Offset (page or viewport as string or free number)
 /// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
-/// @param {number} $page-spacing-inital [$page-spacing-inital-config] - [`optional`] Value of inital spacing
-/// @param {array} $breakpoints [$page-spacing-config] - [`optional`] Map with breakpoint and spacing values pairs.
+/// @param {array} $breakpoints [$spacing-page-to-content] - [`optional`] Map with breakpoint and spacing values pairs.
 ///
 @mixin grid-cell-offset(
     $offsetType: 'start',
-    $offset: 'wrapper',
+    $offset: 'page',
     $grid-name: $default-grid,
-    $page-spacing-inital: $min-page-width,
-    $breakpoints: $min-page-width-config
+    $breakpoints: $spacing-page-to-content
 ){
 
     $direction: right;
@@ -342,41 +326,55 @@ $grid-config: (
 
     } @else {
 
-        margin-#{$direction}: _get-possible-spacing-value($page-spacing-inital) * -1;
-
-        $last-spaceing-below-content-width: 0;
+        $page-spacing-below-extending: 0px;
 
         @each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
 
-            @if (strip-unit(_get-breakpoint($breakpoint-key)) < strip-unit($max-content-width) ) {
+            @if ($breakpoint-key == 'default'){
 
-                $last-spaceing-below-content-width: _get-possible-spacing-value($breakpoint-spaceing);
+                $page-spacing-below-extending: _get-possible-spacing-value($breakpoint-spaceing);
 
-                @include above($breakpoint-key) {
+                margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
 
-                    margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
+            } @else {
+
+                @if (strip-unit(_get-breakpoint($breakpoint-key)) <= strip-unit(_get-breakpoint($page-fullwidth-breakpoint)) ) {
+
+                    @include possible-mediaquery($breakpoint-key) {
+                            margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
+                    }
+
+                } @else {
+
+                    @if ($offset == 'page') {
+
+                        $page-spacing-below-extending: _get-possible-spacing-value($breakpoint-spaceing);
+
+                        @include possible-mediaquery($breakpoint-key) {
+                            margin-#{$direction}: (_get-possible-spacing-value($breakpoint-spaceing)) * -1;
+                        }
+
+                    }
 
                 }
+
             }
 
         }
 
-        @media (min-width: ($max-content-width + ($last-spaceing-below-content-width * 2))) {
-            margin-#{$direction}:  #{'calc((100vw - ' + $max-content-width + ') / -2)'};
-        }
-
-        @if ($offset == 'wrapper') {
-            @media (min-width: ($max-page-width)) {
+        @if ($offset == 'page') {
+            @media (min-width: ($max-content-width + ($page-spacing-below-extending * 2) + ($page-spacing-below-extending * 2))) {
+                margin-#{$direction}: #{'calc(((100vw - 100%) / 2) / -2)'};
+            }
+            @media (min-width: ($max-page-width + (2 * ($max-page-width - $max-content-width) / 2))) {
                 margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
             }
-
         }
 
         @if ($offset == 'viewport') {
-            @media (min-width: $max-page-width) {
-                margin-#{$direction}:  #{'calc((100vw - ' + $max-page-width + ') / -2 + (' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
+            @media (min-width: _get-breakpoint($page-fullwidth-breakpoint)) {
+                margin-#{$direction}: #{'calc((100vw - 100%) / -2)'};
             }
-
         }
 
     }

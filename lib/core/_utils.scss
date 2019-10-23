@@ -49,6 +49,9 @@
 /// str-is-quoted($string)
 ///
 @function str-is-quoted($string) {
+    @if type-of($string) != string {
+        @return false;
+    }
     @return "#{$string#{''}}" != $string;
 }
 

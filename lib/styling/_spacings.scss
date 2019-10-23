@@ -28,6 +28,35 @@ $spacing-config: () !default;
 
 
 ///
+/// Responsive spacing configuration.
+/// Configuration of all standardized responsive spacings you can use.
+/// Can configure with spacing config keys.
+///
+/// @type array
+/// @example scss - Set three responsive spacings
+//  $responsive-spacing-config: (
+//          'medium': (
+//                'default': '71',
+//                's': '115',
+//                'l': '186'
+//          ),
+//          'large': (
+//                'default': '71',
+//                's': '115',
+//                'm': '186',
+//                'l': '301'
+//          ),
+//          'special': (
+//                'default': '0',
+//                'l': '301'
+//          ),
+//);
+///
+$responsive-spacing-config: () !default;
+
+
+
+///
 /// Default spacing-map declaration. Only used for default params in functions.
 /// @type array
 ///
@@ -88,6 +117,39 @@ $default-spacing-map: $spacing-config !default;
     $spacing: unitize($spacing, $spacing-unit-type);
 
     @return $spacing;
+
+}
+
+
+
+///
+/// Generate from the responsive spacing array a bundle of spacing classes
+///
+/// @param {string} $spacing-type [margin] - [`optional`] CSS Type
+/// @param {string} $direction [top] - [`optional`] Direction of the spacing
+/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
+///
+@mixin generate-responsive-spacing-classes(
+    $spacing-type: 'margin',
+    $direction: 'top',
+    $spacing-map: $responsive-spacing-config
+) {
+
+    @each $spacing-name, $spacings in $spacing-map {
+
+        @each $breakpoint, $spacing in $spacings {
+
+            @include possible-mediaquery($breakpoint) {
+
+                .spacing-#{$spacing-type}-#{$direction}-#{$spacing-name} {
+                    #{$spacing-type}-#{$direction}: _get-possible-spacing-value($spacing);
+                }
+
+            }
+
+        }
+
+    }
 
 }
 
