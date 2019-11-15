@@ -102,7 +102,7 @@ $grid-config: (
 /// @prop {String} $grid-flow - Method of the grid flow
 /// @prop {bool} $column-first - Indicator if row starts with a column
 ///
-/// @example scss - Ggenerate a 12 column grid with a 10px gap and autoplacement rows.
+/// @example scss - Generate a 12 column grid with a 10px gap and autoplacement rows.
 /// include _grid-context(12, 1fr, 10px, 0, 0, 0, row, true);
 ///
 @mixin _grid-context(
@@ -125,9 +125,9 @@ $grid-config: (
     grid-column-gap:$column-gutter;
     grid-row-gap:$row-gutter;
 
-    grid-auto-flow: $grid-flow;
-
     @if ($columns) {
+
+        grid-auto-flow: $grid-flow;
 
         -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
         grid-template-columns: repeat( $columns, minmax(1px, $column-width));
@@ -187,6 +187,36 @@ $grid-config: (
 
 }
 
+///
+/// Generate a IE compatible grid column style for the polyfill.
+///
+/// @param {array} $definition [1fr] - [`optional`] Array of column definitions
+/// @param {number} $gutter [0px] - [`optional`] Gutter between the columns
+///
+@mixin grid-template-columns(
+    $definition,
+    $column-gutter: 0px
+) {
+
+    $custom-columns: nth($definition, 1);
+    $compatible-custom-columns: "0px " + nth($definition, 1);
+
+    @for $count from 2 through length($definition) {
+
+        $custom-columns: $custom-columns + " " + nth($definition, $count);
+
+        $compatible-custom-columns: $compatible-custom-columns + " " + $column-gutter + " " + nth($definition, $count);
+
+    }
+
+    grid-column-gap:$column-gutter;
+
+    -ms-grid-columns: unquote($compatible-custom-columns);
+
+    grid-template-columns: unquote($custom-columns);
+
+}
+
 
 
 ///
@@ -197,8 +227,13 @@ $grid-config: (
 ///
 @mixin grid-cell-column-start($x){
 
-    -ms-grid-column:($x * 2);
-    grid-column-start:$x;
+    @if ($x) {
+        -ms-grid-column: ($x * 2);
+        grid-column-start: $x;
+    } @else {
+        -ms-grid-column: 1;
+        grid-column-start: unset;
+    }
 
 }
 
@@ -212,8 +247,13 @@ $grid-config: (
 ///
 @mixin grid-cell-row-start($y){
 
-    -ms-grid-row:($y * 2);
-    grid-row-start:$y;
+    @if ($y) {
+        -ms-grid-row:($y * 2);
+        grid-row-start:$y;
+    } @else {
+        -ms-grid-row: 1;
+        grid-row-start: unset;
+    }
 
 }
 
@@ -230,13 +270,11 @@ $grid-config: (
     $x: false,
     $y: false
 ) {
-    @if ($x) {
-        @include grid-cell-column-start($x);
-    }
 
-    @if ($y) {
-        @include grid-cell-row-start($y);
-    }
+    @include grid-cell-column-start($x);
+
+    @include grid-cell-row-start($y);
+
 }
 
 
