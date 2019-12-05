@@ -10,7 +10,7 @@
 
 
 ///
-/// Associate color array.
+/// Associate base color array.
 /// Includes a key/value pair of the color to increase the consistency.
 ///
 /// @prop {String} name -  Name of the color
@@ -23,7 +23,25 @@
 ///     'color-2' : #FFFFFF
 ///  );
 ///
-$color-config: () !default;
+$color-base: () !default;
+
+
+
+///
+/// Associate color derivate array.
+/// Includes a key/value pair of the color to increase the consistency.
+///
+/// @prop {String} name -  Name of the color
+/// @prop {Number} hex -  Hexcode of the color
+///
+/// @type array
+/// @example scss - Set two colors
+///  $color-config (
+///     'color-1' : #000000,
+///     'color-2' : #FFFFFF
+///  );
+///
+$color-derivates: () !default;
 
 
 
@@ -31,7 +49,23 @@ $color-config: () !default;
 /// Default color-map declaration. Only used for default params in functions.
 /// @type array
 ///
-$default-color-map: $color-config !default;
+$default-color-map: map-merge($color-base, $color-derivates) !default;
+
+
+
+///
+/// XXXXXXX
+/// @type array
+///
+$color-palettes: ()!default;
+
+
+
+///
+/// XXXXXXX
+/// @type array
+///
+$default-color-palettes-map: $color-palettes !default;
 
 
 
@@ -48,6 +82,7 @@ $default-color-map: $color-config !default;
 ///
 @function color(
     $color-name,
+    $color-contrast: false,
     $color-map: $default-color-map
 ) {
 
@@ -62,6 +97,89 @@ $default-color-map: $color-config !default;
 
 
 ///
+///
+@mixin _generate-color-palette-attributes(
+    $attributes,
+    $cherrypick
+) {
+
+
+    @each $attribute, $value in $attributes {
+
+        @if ($attribute == $cherrypick and not ($cherrypick == false)) or ($cherrypick == false) {
+
+            @if type-of($value) == color {
+
+                #{$attribute}: $value;
+
+            } @else if type-of($value) == string {
+
+                #{$attribute}: color($value);
+
+            } @else {
+
+                @each $pseudo, $color in $value {
+
+                    @if $pseudo == 'default' {
+
+                        @if type-of($color) == string {
+                            #{$attribute}: color($color);
+                        } @else {
+                            #{$attribute}: $color;
+                        }
+
+                    } @else {
+
+                        &#{$pseudo} {
+                            @if type-of($color) == string {
+                                #{$attribute}: color($color);
+                            } @else {
+                                #{$attribute}: $color;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+
+
+///
+///
+@mixin color-palette(
+    $palette,
+    $contrast: false,
+    $cherrypick: false,
+    $color-palettes-map: $default-color-palettes-map
+) {
+
+    @each $scheme, $attributes in map-get($color-palettes-map, $palette) {
+
+        @if not ($contrast == false) or ($scheme == 'default') {
+
+            @if not ($contrast == false) and not ($scheme == 'default') {
+
+                @at-root .is-#{$scheme}-contrast #{if(&,&, '')} {
+
+                    @include _generate-color-palette-attributes($attributes, $cherrypick);
+
+                }
+
+            } @else {
+
+                @include _generate-color-palette-attributes($attributes, $cherrypick);
+
+            }
+        }
+    }
+
+}
+
+
+///
 /// Generate from the color array a bundle of foreground color classes
 ///
 /// @param {array} $color-map [$color-config] - [`optional`] Color array
@@ -69,7 +187,7 @@ $default-color-map: $color-config !default;
 /// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
 ///
 @mixin generate-color-foreground-classes(
-    $color-map: $color-config,
+    $color-map: $color-base,
     $class-prefix: 'foreground-color',
     $class-separator: $default-class-separator
 ) {
@@ -85,10 +203,10 @@ $default-color-map: $color-config !default;
 ///
 /// @param {array} $color-map [$color-config] - [`optional`] Color array
 /// @param {string} $class-prefix [background] - [`optional`] Class prefix
-/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class sperator
+/// @param {string} $class-separator [$default-class-separator] - [`optional`] Class seperator
 ///
 @mixin generate-color-background-classes(
-    $color-map: $color-config,
+    $color-map: $color-base,
     $class-prefix: 'background-color',
     $class-separator: $default-class-separator
 ) {

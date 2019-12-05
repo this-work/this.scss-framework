@@ -73,17 +73,12 @@ $default-normalize-word-break: break-word !default;
     $normalize-word-break: $default-normalize-word-break
 ) {
 
-
     html {
         box-sizing: border-box;
 
         @if (variable-exists(default-unit-type) and $default-unit-type != 'absolute') {
 
             font-size: 100%;
-
-        } @else {
-
-            font-size: 16px;
 
         }
 
@@ -100,6 +95,10 @@ $default-normalize-word-break: break-word !default;
 
     *, *:before, *:after {
         box-sizing: inherit;
+    }
+
+    *:-moz-focusring {
+        outline: 0 dotted transparent;
     }
 
     body {
@@ -210,9 +209,8 @@ $default-normalize-word-break: break-word !default;
 
     abbr[title] {
         border-bottom: none;
-        text-decoration: underline;
-        text-decoration: underline dotted;
-
+        text-decoration: none;
+        cursor: help;
     }
 
     b, strong {
@@ -289,6 +287,9 @@ $default-normalize-word-break: break-word !default;
 
     audio, video {
         display: inline-block;
+        &:focus {
+            outline: none;
+        }
     }
 
     iframe {
@@ -502,13 +503,6 @@ $default-normalize-word-break: break-word !default;
     [type='submit']::-moz-focus-inner {
         padding: 0;
         border-style: none;
-    }
-
-    button:-moz-focusring,
-    [type='button']:-moz-focusring,
-    [type='reset']:-moz-focusring,
-    [type='submit']:-moz-focusring {
-        outline: 1px dotted ButtonText;
     }
 
     [type='checkbox'],

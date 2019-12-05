@@ -49,6 +49,29 @@ $default-font-dimensions: '' !default;
 
 
 ///
+//// Project default font family.
+//// @type string
+////
+$default-font-family: 'Arial' !default;
+
+
+
+///
+/// Responsive font type array.
+///
+$responsive-font-types: () !default;
+
+
+
+///
+/// Default font type map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-responsive-font-types-map: $responsive-font-types !default;
+
+
+
+///
 /// Associate font config array with all informations to generate the font-face css declaration
 ///
 /// @prop {String} font - Name of font
@@ -246,7 +269,15 @@ $default-font-weights-map: $font-weights !default;
 
         }
 
-        $font-line-height: $font-line-height * map-get(map-get($font-config-map, $font-name), "line-height-scale");
+        $line-height-scale: 1;
+
+        @if (map-has-key(map-get($font-config-map, $font-name), "line-height-scale")) {
+
+            $line-height-scale: map-get(map-get($font-config-map, $font-name), "line-height-scale");
+
+        }
+
+        $font-line-height: $font-line-height * $line-height-scale;
 
     }
 
@@ -378,9 +409,84 @@ $default-font-weights-map: $font-weights !default;
 
 
 ///
+/// Generate a font attribute with mediaquerys based on the responsive font-type array.
+///
+/// @param {string} $type - Font type
+/// @param {string} $font-family-overwrite [false] - [`optional`] Overwrite the font family
+/// @param {string|number|array} $font-weight-overwrite [false] - [`optional`] Overwrite the font weight - Can be an array to overwrite only certain breakpoints.
+/// @param {number|array} $line-height-overwrite [false] - [`optional`] Overwrite the line height - Can be an array to overwrite only certain breakpoints.
+/// @param {array} $responsive-font-types-map [$default-responsive-font-types-map] - [`optional`] Font type array
+///
+/// @example scss - Set the 'h1' font type
+/// include responsive-font('h1');
+/// @example scss - Set the 'h1' font type with an line height overwrite of 26px at the xl viewport
+/// include responsive-font(
+///     $type: 'h1',
+///     $line-height-overwrite: (
+///             'xl': 26px
+///     )
+/// );
+///
+@mixin responsive-font(
+    $type,
+    $font-family-overwrite: false,
+    $font-weight-overwrite: false,
+    $line-height-overwrite: false,
+    $responsive-font-types-map: $default-responsive-font-types-map
+) {
+    $responsive-font-definitions: map-get($responsive-font-types-map, $type);
+    @each $breakpoint, $definitions in $responsive-font-definitions {
+        @include possible-mediaquery($breakpoint) {
+
+            $font-family: nth($definitions, 1);
+            @if ($font-family-overwrite) {
+                $font-family: $font-family-overwrite;
+            }
+
+            $font-weight: nth($definitions, 2);
+            @if ($font-weight-overwrite) {
+                @if type-of($font-weight-overwrite) == map {
+
+                    @if (map-has-key($font-weight-overwrite, $breakpoint)) {
+                        $font-weight: map-get($font-weight-overwrite, $breakpoint);
+                    }
+
+                } @else {
+
+                    $font-weight: $font-weight-overwrite;
+
+                }
+            }
+
+            $line-height: false;
+            @if ($line-height-overwrite) {
+                @if type-of($line-height-overwrite) == map {
+
+                    @if (map-has-key($line-height-overwrite, $breakpoint)) {
+                        $line-height: map-get($line-height-overwrite, $breakpoint);
+                    }
+
+                } @else {
+
+                    $line-height: $line-height-overwrite;
+
+                }
+            } @else if (index($definitions, 4)) {
+                $line-height: nth($definitions, 4);
+            }
+
+
+            font: font($font-family, $font-weight, nth($definitions, 3), $line-height);
+
+        }
+    }
+}
+
+
+
+///
 /// Generate all font-face declarations from the fonts config
 ///
-/// @param {string} $path-prefix [./] - [`optional`]  Prefix for the font path
 /// @param {array} $font-config-map [$default-font-config-map] - [`optional`] Font config array
 ///
 @mixin generate-font-face-declaration(
@@ -474,4 +580,3 @@ $default-font-weights-map: $font-weights !default;
         -moz-osx-font-smoothing : grayscale;
     }
 }
-
