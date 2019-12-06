@@ -156,6 +156,10 @@ $default-color-palettes-map: $color-palettes !default;
     $color-palettes-map: $default-color-palettes-map
 ) {
 
+    @if (not map-has-key($color-palettes-map, $palette)) {
+        @error 'Given color pallette was not found in the $color-palettes array.';
+    }
+
     @each $scheme, $attributes in map-get($color-palettes-map, $palette) {
 
         @if not ($contrast == false) or ($scheme == 'default') {

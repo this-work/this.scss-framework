@@ -434,6 +434,11 @@ $default-font-weights-map: $font-weights !default;
     $line-height-overwrite: false,
     $responsive-font-types-map: $default-responsive-font-types-map
 ) {
+
+    @if (not map-has-key($responsive-font-types-map, $type)) {
+        @error 'Given responsive font type was not found in the $responsive-font-types array.';
+    }
+
     $responsive-font-definitions: map-get($responsive-font-types-map, $type);
     @each $breakpoint, $definitions in $responsive-font-definitions {
         @include possible-mediaquery($breakpoint) {
