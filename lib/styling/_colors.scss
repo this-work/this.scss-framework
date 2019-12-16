@@ -54,15 +54,28 @@ $default-color-map: map-merge($color-base, $color-derivates) !default;
 
 
 ///
-/// XXXXXXX
+/// Associate color palettes array.
+/// Includes a object with the palette names, contrast type and attributes with colors.
 /// @type array
+///
+/// @example scss - Set a copytext color palette
+///  $color-palettes: (
+///     'copytext': (
+///         default: (
+///             color: 'black'
+///         ),
+///         negative: (
+///             color: 'white'
+///         )
+///     ),
+///  );
 ///
 $color-palettes: ()!default;
 
 
 
 ///
-/// XXXXXXX
+/// Default color-palettes declaration. Only used for default params in functions.
 /// @type array
 ///
 $default-color-palettes-map: $color-palettes !default;
@@ -97,6 +110,10 @@ $default-color-palettes-map: $color-palettes !default;
 
 
 ///
+/// Generate the color palette attributes
+///
+/// @param {array} $attributes - Attributes with colors
+/// @param {string} $cherrypick - Only the given attribute will be rendered.
 ///
 @mixin _generate-color-palette-attributes(
     $attributes,
@@ -148,11 +165,19 @@ $default-color-palettes-map: $color-palettes !default;
 
 
 ///
+/// Generate from the color-palettes array a bundle of color classes
+///
+/// @param {string} $palette - Color palette name
+/// @param {bool} $contrast [false] - [`optional`] Render the contrast color classes.
+/// @param {string} $cherrypick [false] - [`optional`] Only the given attribute will be rendered.
+/// @param {string} $fallback-default-scheme-name [positive] - [`optional`] Fallback contrast class key when no parent selector are given
+/// @param {array} $color-palettes-map[$default-color-palettes-map] - [`optional`] color palette array
 ///
 @mixin color-palette(
     $palette,
     $contrast: false,
     $cherrypick: false,
+    $fallback-default-scheme-name: 'positive',
     $color-palettes-map: $default-color-palettes-map
 ) {
 
@@ -162,9 +187,15 @@ $default-color-palettes-map: $color-palettes !default;
 
     @each $scheme, $attributes in map-get($color-palettes-map, $palette) {
 
-        @if not ($contrast == false) or ($scheme == 'default') {
+        @if ($contrast == true) or ($scheme == 'default') {
 
-            @if not ($contrast == false) and not ($scheme == 'default') {
+            @if (($contrast == true) and not ($scheme == 'default')) or (& == null) {
+
+                @if ($scheme == 'default') {
+
+                    $scheme: $fallback-default-scheme-name;
+
+                }
 
                 @at-root .is-#{$scheme}-contrast #{if(&,&, '')} {
 
