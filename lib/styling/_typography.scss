@@ -81,7 +81,7 @@ $default-responsive-font-types-map: $responsive-font-types !default;
 /// @prop {String or Number} font.faces.weight - Declaration of font weight as String or Number. As String you can use the mapping of the font-weight array.
 /// @prop {String} font.faces.display - [`optional`] Font-display css attribute for the current font face
 /// @prop {Number} font.line-height-scale - Line height scale factor for the font compared to the $font-dimension line-height value
-/// @prop {String} font.stack - Font-family stack with an alternate font and the font-type
+/// @prop {String} font.alternate-stack - Font-family stack with an alternate font and the font-type
 ///
 /// @type array
 /// @example scss - Set the Roboto font with a regular and demi font face
@@ -102,7 +102,7 @@ $default-responsive-font-types-map: $responsive-font-types !default;
 ///             ),
 ///         ),
 ///         'line-height-scale': 1,
-///         'stack' : 'Arial, sans-serif'
+///         'alternate-stack' : 'Arial, sans-serif'
 ///     ),
 ///   );
 ///
@@ -309,7 +309,7 @@ $default-font-weights-map: $font-weights !default;
 
     }
 
-    @return #{$font-name}, #{map-get(map-get($font-config-map, $font-name), "stack")};
+    @return #{$font-name}, #{map-get(map-get($font-config-map, $font-name), "alternate-stack")};
 
 }
 
