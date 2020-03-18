@@ -197,7 +197,7 @@ $default-color-palettes-map: $color-palettes !default;
 
                 }
 
-                @at-root .theme-#{$scheme} #{if(&,&, '')} {
+                @at-root .theme-#{$scheme} #{if(&,&, '')}, #{if(&,&, '')}.theme-#{$scheme} {
 
                     @include _generate-color-theme-attributes($attributes, $cherrypick);
 
