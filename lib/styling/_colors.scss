@@ -110,12 +110,12 @@ $default-color-palettes-map: $color-palettes !default;
 
 
 ///
-/// Generate the color palette attributes
+/// Generate the color theme attributes
 ///
 /// @param {array} $attributes - Attributes with colors
 /// @param {string} $cherrypick - Only the given attribute will be rendered.
 ///
-@mixin _generate-color-palette-attributes(
+@mixin _generate-color-theme-attributes(
     $attributes,
     $cherrypick
 ) {
@@ -168,16 +168,16 @@ $default-color-palettes-map: $color-palettes !default;
 /// Generate from the color-palettes array a bundle of color classes
 ///
 /// @param {string} $palette - Color palette name
-/// @param {bool} $contrast [false] - [`optional`] Render the contrast color classes.
+/// @param {bool} $contrast [true] - [`optional`] Render the contrast color classes.
 /// @param {string} $cherrypick [false] - [`optional`] Only the given attribute will be rendered.
 /// @param {string} $fallback-default-scheme-name [positive] - [`optional`] Fallback contrast class key when no parent selector are given
 /// @param {array} $color-palettes-map[$default-color-palettes-map] - [`optional`] color palette array
 ///
-@mixin color-palette(
+@mixin color-theme(
     $palette,
-    $contrast: false,
+    $contrast: true,
     $cherrypick: false,
-    $fallback-default-scheme-name: 'positive',
+    $fallback-default-scheme-name: 'light',
     $color-palettes-map: $default-color-palettes-map
 ) {
 
@@ -197,15 +197,15 @@ $default-color-palettes-map: $color-palettes !default;
 
                 }
 
-                @at-root .is-#{$scheme}-contrast #{if(&,&, '')} {
+                @at-root .theme-#{$scheme} #{if(&,&, '')} {
 
-                    @include _generate-color-palette-attributes($attributes, $cherrypick);
+                    @include _generate-color-theme-attributes($attributes, $cherrypick);
 
                 }
 
             } @else {
 
-                @include _generate-color-palette-attributes($attributes, $cherrypick);
+                @include _generate-color-theme-attributes($attributes, $cherrypick);
 
             }
         }
