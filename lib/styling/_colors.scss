@@ -130,9 +130,11 @@ $default-color-palettes-map: $color-palettes !default;
                 #{$attribute}: $value;
 
             } @else if type-of($value) == string {
-
-                #{$attribute}: color($value);
-
+                @if str-index($value, "gradient") {
+                    #{$attribute}: $value;
+                } @else {
+                    #{$attribute}: color($value);
+                }
             } @else {
 
                 @each $pseudo, $color in $value {
@@ -140,7 +142,11 @@ $default-color-palettes-map: $color-palettes !default;
                     @if $pseudo == 'default' {
 
                         @if type-of($color) == string {
-                            #{$attribute}: color($color);
+                            @if str-index($value, "gradient") {
+                                #{$attribute}: $value;
+                            } @else {
+                                #{$attribute}: color($value);
+                            }
                         } @else {
                             #{$attribute}: $color;
                         }
@@ -149,7 +155,11 @@ $default-color-palettes-map: $color-palettes !default;
 
                         &#{$pseudo} {
                             @if type-of($color) == string {
-                                #{$attribute}: color($color);
+                                @if str-index($value, "gradient") {
+                                    #{$attribute}: $value;
+                                } @else {
+                                    #{$attribute}: color($value);
+                                }
                             } @else {
                                 #{$attribute}: $color;
                             }
@@ -197,7 +207,7 @@ $default-color-palettes-map: $color-palettes !default;
 
                 }
 
-                @at-root .theme-#{$scheme} #{if(&,&, '')}, #{if(&,&, '')}.theme-#{$scheme} {
+                @at-root .theme-#{$scheme} #{if(&,&, '')}, .theme-#{$scheme}#{if(&,&, '')} {
 
                     @include _generate-color-theme-attributes($attributes, $cherrypick);
 

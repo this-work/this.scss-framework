@@ -156,6 +156,41 @@ $default-spacing-map: $spacing-config !default;
 
 
 ///
+/// Generate from the responsive spacing array a bundle of neglect spacing classes
+///
+/// @param {string} $spacing-type [margin] - [`optional`] CSS Type
+/// @param {string} $direction [top] - [`optional`] Direction of the spacing
+/// @param {string} $spacing-type [&] - [`optional`] Element to neglect the spacing
+/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
+///
+@mixin generate-neglect-responsive-spacing-classes(
+    $spacing-type: 'margin',
+    $direction: 'top',
+    $spacing-type: &,
+    $spacing-map: $responsive-spacing-config
+) {
+
+    @each $spacing-name, $spacings in $spacing-map {
+
+        @each $breakpoint, $spacing in $spacings {
+
+            @include possible-mediaquery($breakpoint) {
+
+                .spacing-#{$spacing-type}-#{$direction}-#{$spacing-name} > & {
+                    margin-#{$direction}: -#{_get-possible-spacing-value($spacing)};
+                }
+
+            }
+
+        }
+
+    }
+
+}
+
+
+
+///
 /// Generate from the spacing array a bundle of padding spacing classes
 ///
 /// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array

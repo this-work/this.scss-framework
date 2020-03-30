@@ -476,7 +476,7 @@ $default-font-weights-map: $font-weights !default;
                     $line-height: $line-height-overwrite;
 
                 }
-            } @else if (index($definitions, 4)) {
+            } @else if length($definitions) > 3 {
                 $line-height: nth($definitions, 4);
             }
 
