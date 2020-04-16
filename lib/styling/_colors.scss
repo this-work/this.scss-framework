@@ -142,10 +142,10 @@ $default-color-palettes-map: $color-palettes !default;
                     @if $pseudo == 'default' {
 
                         @if type-of($color) == string {
-                            @if str-index($value, "gradient") {
-                                #{$attribute}: $value;
+                            @if str-index($color, "gradient") {
+                                #{$attribute}: $color;
                             } @else {
-                                #{$attribute}: color($value);
+                                #{$attribute}: color($color);
                             }
                         } @else {
                             #{$attribute}: $color;
@@ -155,10 +155,10 @@ $default-color-palettes-map: $color-palettes !default;
 
                         &#{$pseudo} {
                             @if type-of($color) == string {
-                                @if str-index($value, "gradient") {
-                                    #{$attribute}: $value;
+                                @if str-index($color, "gradient") {
+                                    #{$attribute}: $color;
                                 } @else {
-                                    #{$attribute}: color($value);
+                                    #{$attribute}: color($color);
                                 }
                             } @else {
                                 #{$attribute}: $color;
