@@ -185,7 +185,6 @@ $default-color-palettes-map: $color-palettes !default;
 ///
 @mixin color-theme(
     $palette,
-    $contrast: true,
     $cherrypick: false,
     $fallback-default-scheme-name: 'light',
     $color-palettes-map: $default-color-palettes-map
@@ -197,28 +196,13 @@ $default-color-palettes-map: $color-palettes !default;
 
     @each $scheme, $attributes in map-get($color-palettes-map, $palette) {
 
-        @if ($contrast == true) or ($scheme == 'default') {
+        @at-root .theme-#{$scheme} #{if(&,&, '')}, .theme-#{$scheme}#{if(&,&, '')},
+        *[class*="theme"] .theme-#{$scheme} #{if(&,&, '')}, *[class*="theme"] .theme-#{$scheme}#{if(&,&, '')} {
 
-            @if (($contrast == true) and not ($scheme == 'default')) or (& == null) {
+            @include _generate-color-theme-attributes($attributes, $cherrypick);
 
-                @if ($scheme == 'default') {
-
-                    $scheme: $fallback-default-scheme-name;
-
-                }
-
-                @at-root .theme-#{$scheme} #{if(&,&, '')}, .theme-#{$scheme}#{if(&,&, '')} {
-
-                    @include _generate-color-theme-attributes($attributes, $cherrypick);
-
-                }
-
-            } @else {
-
-                @include _generate-color-theme-attributes($attributes, $cherrypick);
-
-            }
         }
+
     }
 
 }
