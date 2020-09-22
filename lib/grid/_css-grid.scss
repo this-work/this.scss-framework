@@ -120,6 +120,7 @@ $grid-config: (
     $row-gutter: unitize($row-gutter);
     $column-width: unitize($column-width);
 
+    display: -ms-grid;
     display: grid;
 
     grid-column-gap:$column-gutter;
@@ -127,7 +128,6 @@ $grid-config: (
 
     @if ($columns) {
 
-        /* autoprefixer: ignore next */
         grid-auto-flow: $grid-flow;
 
         -ms-grid-columns: _get-grid-compatible-repeat-value($columns, $column-width, $column-gutter);
