@@ -10,45 +10,106 @@
 
 
 ///
-/// Max of the page and content areas
+/// Max width of the page area
 /// @type number
 ///
 $max-page-width: 1920px !default;
-$max-content-width: 1080px !default;
 
 
 
 ///
-/// Up to this breakpoint, the page-area is full-width and
-/// the viewport-area is not visible
-/// @type string
-///
-$page-fullwidth-breakpoint: 's' !default;
-
-
-
-///
-/// The minimum spacing between the viewport-area and page-area,
-/// if the viewport-area is visible. If there is more room for space,
-/// the spacing between the viewport-area and content-area is halved.
+/// Basic width of the content area for calculations
 /// @type number
 ///
-$spacing-viewport-to-page: 27px !default;
+$basic-content-width: 1080px !default;
 
 
 
 ///
-/// The spacing between the page-area and content-area
-/// Includes a key/value pair of the spacing to increase the consistency.
-/// Key must be an existing viewport key from the mediaquery config.
-/// 'default' is required.
-///
+/// Responsive declaration of the site area columns
+/// Key can be existing viewport key or absolute number
+/// 'viewport' defines the width of the viewport area
+/// 'page' defines the width of the page area
+/// 'content' defines the width of the content area
 /// @type array
 /// @example scss - Set two page spacings
-///  $page-content-spacing (
-///     'default': 16px,
-///     's' : 10px,
-///     'm' : 20px
-///  );
+///  $site-area-columns: (
+// 		'default': (
+//        	'viewport': 0,
+//        	'page': 20px,
+//        	'content': 1fr
+// 		)
+//   );
 ///
-$spacing-page-to-content: () !default;
+$site-area-columns: () !default;
+
+
+
+///
+/// Generate the grid context for the viewport, page and content areas
+///
+/// @param {string} $mode [viewport] - [`optional`] mode auf the column classification
+///
+/// @example scss - Set all area columns
+/// include grid-areas();
+///
+@mixin grid-areas (
+	$mode: 'viewport'
+) {
+	display: grid;
+	grid-row-gap: 0;
+
+	$largest-breakpoint: 0px;
+	$largest-breakpoint-content-width: 0px;
+
+	@each $breakpoint, $settings in $site-area-columns {
+
+		$content-width: map-get($settings, 'content');
+		$page-spacing: map-get($settings, 'page');
+		$viewport-spacing: map-get($settings, 'viewport');
+
+		$current-breakpoint: $breakpoint;
+
+		@if (type-of($breakpoint) == string) {
+
+			@if ($breakpoint == 'default') {
+
+				$current-breakpoint: 0px;
+
+			}@else{
+
+				$current-breakpoint: map-get($breakpoint-config, $breakpoint);
+
+			}
+		}
+
+		@if ($largest-breakpoint < $current-breakpoint) {
+			$largest-breakpoint: $current-breakpoint;
+			$largest-breakpoint-content-width: $content-width;
+		}
+
+		@include possible-mediaquery($breakpoint) {
+
+			@if($mode == 'page') {
+
+				@include grid-template-columns($page-spacing $content-width $page-spacing);
+
+			}@else{
+
+				@include grid-template-columns($viewport-spacing $page-spacing $content-width $page-spacing $viewport-spacing);
+
+			}
+
+		}
+
+	}
+
+	@include above(2 * $max-page-width - $largest-breakpoint-content-width) {
+
+		$fixed-page-width: ($max-page-width - $largest-breakpoint-content-width) / 2;
+
+		@include grid-template-columns(1fr $fixed-page-width $largest-breakpoint-content-width $fixed-page-width 1fr);
+
+	}
+
+}

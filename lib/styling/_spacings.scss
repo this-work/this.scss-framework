@@ -123,6 +123,50 @@ $default-spacing-map: $spacing-config !default;
 
 
 ///
+/// Generate from the responsive spacing array responsive properties
+///
+/// @param {string} $spacing-name [false] - [`optional`] Name of the responsive spacing from the $spacing-map
+/// @param {string} $properties [margin-top margin-bottom] - [`optional`] Properties for the spacing to set
+/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array,
+/// @param {string} $direction [positive] - [`optional`] Direction of the spacing (positive or negative)
+///
+@mixin responsive-spacing(
+    $spacing-name: false,
+    $properties: margin-top margin-bottom,
+    $spacing-map: $responsive-spacing-config,
+    $direction: 'positive'
+) {
+
+    @if ($spacing-name) {
+        @if (not map-has-key($spacing-map, $spacing-name)) {
+            @error 'Given responsive spacing map has no spacing named "#{$spacing-name}".';
+        }
+
+        $spacing-map: map-get($spacing-map, $spacing-name);
+    }
+
+    @each $breakpoint, $spacing-value in $spacing-map {
+
+        @include possible-mediaquery($breakpoint) {
+
+            @each $property in $properties {
+
+                @if ($direction == 'positive') {
+                    #{$property}: #{_get-possible-spacing-value($spacing-value)};
+                } @else {
+                    #{$property}: _get-possible-spacing-value($spacing-value) * -1;
+                }
+
+            }
+
+        }
+
+    }
+}
+
+
+
+///
 /// Generate from the responsive spacing array a bundle of spacing classes
 ///
 /// @param {string} $spacing-type [margin] - [`optional`] CSS Type
