@@ -108,7 +108,16 @@ $site-area-columns: () !default;
 
 		$fixed-page-width: ($max-page-width - $largest-breakpoint-content-width) / 2;
 
-		@include grid-template-columns(1fr $fixed-page-width $largest-breakpoint-content-width $fixed-page-width 1fr);
+		@if($mode == 'page') {
+
+			@include grid-template-columns($fixed-page-width $largest-breakpoint-content-width $fixed-page-width);
+
+		}@else{
+
+			@include grid-template-columns(1fr $fixed-page-width $largest-breakpoint-content-width $fixed-page-width 1fr);
+
+		}
+
 
 	}
 
