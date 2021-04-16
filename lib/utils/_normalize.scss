@@ -427,6 +427,16 @@ $default-normalize-word-break: break-word !default;
 ///
 /// **box-shadow** Remove the additional :invalid styles in Firefox.
 ///
+///
+/// `:-ms-clear, :-ms-reveal`
+///
+/// **display** Remove the browser clear button in IE.
+///
+///
+/// `:-webkit-search-decoration, :-webkit-search-cancel-button, :-webkit-search-results-button, :-webkit-search-results-decoration`
+///
+/// **display** Remove the browser clear button in webkit browser.
+///
 @mixin normalize-ui(
     $normalize-font-dimension: $default-normalize-font-dimension
 ) {
@@ -540,6 +550,20 @@ $default-normalize-word-break: break-word !default;
 
     :-moz-ui-invalid {
         box-shadow: none;
+    }
+
+    &::-ms-clear,
+    &::-ms-reveal{
+        display: none;
+        width : 0;
+        height: 0;
+    }
+
+    &::-webkit-search-decoration,
+    &::-webkit-search-cancel-button,
+    &::-webkit-search-results-button,
+    &::-webkit-search-results-decoration {
+        display: none;
     }
 
 }
