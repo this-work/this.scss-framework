@@ -75,7 +75,7 @@ $default-spacing-map: $spacing-config !default;
     $spacing
 ) {
 
-    @if (str-is-quoted($spacing)) {
+    @if type-of($spacing) != number {
 
         @return spacing($spacing);
 
@@ -169,7 +169,7 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// Generate from the responsive spacing array a bundle of spacing classes
 ///
-/// @param {string} $spacing-type [margin] - [`optional`] CSS Type
+/// @param {string} $spacing-type [margin] - [`optional`] CSS attribute
 /// @param {string} $direction [top] - [`optional`] Direction of the spacing
 /// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
 ///
@@ -202,15 +202,13 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// Generate from the responsive spacing array a bundle of neglect spacing classes
 ///
-/// @param {string} $spacing-type [margin] - [`optional`] CSS Type
+/// @param {string} $spacing-type [margin] - [`optional`] CSS attribute
 /// @param {string} $direction [top] - [`optional`] Direction of the spacing
-/// @param {string} $spacing-type [&] - [`optional`] Element to neglect the spacing
 /// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
 ///
 @mixin generate-neglect-responsive-spacing-classes(
     $spacing-type: 'margin',
     $direction: 'top',
-    $spacing-type: &,
     $spacing-map: $responsive-spacing-config
 ) {
 
