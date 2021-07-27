@@ -23,16 +23,6 @@ Include in your scss with:
 @import '../node_modules/@this/scss-framework/import';
 ```
 
-if you need an < IE10 Version use the compatible mode:
-
-```bash
-@import '../node_modules/@this/scss-framework/import-compat';
-```
-
-The differences are:
-- Using a floating block system instead of CSS grid as grid.
-
-
 
 #### Documentation
 

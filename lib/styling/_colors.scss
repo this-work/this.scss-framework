@@ -18,7 +18,7 @@
 ///
 /// @type array
 /// @example scss - Set two colors
-///  $color-config (
+///  $color-base (
 ///     'color-1' : #000000,
 ///     'color-2' : #FFFFFF
 ///  );
@@ -36,7 +36,7 @@ $color-base: () !default;
 ///
 /// @type array
 /// @example scss - Set two colors
-///  $color-config (
+///  $color-derivates (
 ///     'color-1' : #000000,
 ///     'color-2' : #FFFFFF
 ///  );
@@ -129,12 +129,18 @@ $default-color-palettes-map: $color-palettes !default;
 
                 #{$attribute}: $value;
 
+            } @else if type-of($value) == list {
+
+                #{$attribute}: $value;
+
             } @else if type-of($value) == string {
+
                 @if str-index($value, "gradient") {
                     #{$attribute}: $value;
                 } @else {
                     #{$attribute}: color($value);
                 }
+
             } @else {
 
                 @each $pseudo, $color in $value {

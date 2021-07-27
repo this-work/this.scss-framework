@@ -28,6 +28,13 @@ $spacing-config: () !default;
 
 
 ///
+/// Default spacing-map declaration. Only used for default params in functions.
+/// @type array
+///
+$default-spacing-map: $spacing-config !default;
+
+
+///
 /// Responsive spacing configuration.
 /// Configuration of all standardized responsive spacings you can use.
 /// Can configure with spacing config keys.
@@ -56,11 +63,13 @@ $responsive-spacing-config: () !default;
 
 
 
+
 ///
-/// Default spacing-map declaration. Only used for default params in functions.
+/// Default responsive spacing-map declaration. Only used for default params in functions.
 /// @type array
 ///
-$default-spacing-map: $spacing-config !default;
+$default-responsive-spacing-map: $responsive-spacing-config !default;
+
 
 
 
@@ -127,13 +136,13 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @param {string} $spacing-name [false] - [`optional`] Name of the responsive spacing from the $spacing-map
 /// @param {string} $properties [margin-top margin-bottom] - [`optional`] Properties for the spacing to set
-/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array,
+/// @param {array} $spacing-map [$default-responsive-spacing-map] - [`optional`] Responsive spacing array,
 /// @param {string} $direction [positive] - [`optional`] Direction of the spacing (positive or negative)
 ///
 @mixin responsive-spacing(
     $spacing-name: false,
     $properties: margin-top margin-bottom,
-    $spacing-map: $responsive-spacing-config,
+    $spacing-map: $default-responsive-spacing-map,
     $direction: 'positive'
 ) {
 
@@ -171,12 +180,12 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @param {string} $spacing-type [margin] - [`optional`] CSS attribute
 /// @param {string} $direction [top] - [`optional`] Direction of the spacing
-/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
+/// @param {array} $spacing-map [$default-responsive-spacing-map] - [`optional`] Responsive spacing array
 ///
 @mixin generate-responsive-spacing-classes(
     $spacing-type: 'margin',
     $direction: 'top',
-    $spacing-map: $responsive-spacing-config
+    $spacing-map: $default-responsive-spacing-map
 ) {
 
     @each $spacing-name, $spacings in $spacing-map {
@@ -204,12 +213,12 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// @param {string} $spacing-type [margin] - [`optional`] CSS attribute
 /// @param {string} $direction [top] - [`optional`] Direction of the spacing
-/// @param {array} $spacing-map [$responsive-spacing-config] - [`optional`] Responsive spacing array
+/// @param {array} $spacing-map [$default-responsive-spacing-map] - [`optional`] Responsive spacing array
 ///
 @mixin generate-neglect-responsive-spacing-classes(
     $spacing-type: 'margin',
     $direction: 'top',
-    $spacing-map: $responsive-spacing-config
+    $spacing-map: $default-responsive-spacing-map
 ) {
 
     @each $spacing-name, $spacings in $spacing-map {
@@ -235,12 +244,12 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// Generate from the spacing array a bundle of padding spacing classes
 ///
-/// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
+/// @param {array} $spacing-map [$default-spacing-map] - [`optional`] Spacing array
 /// @param {string} $class-prefix [padding] - [`optional`] Class prefix
 /// @param {string} $class-separator [$default-class-separator] - [`optional`] Class seperator
 ///
 @mixin generate-spacing-padding-classes(
-    $spacing-map: $spacing-config,
+    $spacing-map: $default-spacing-map,
     $class-prefix: 'padding',
     $class-separator: $default-class-separator
 ) {
@@ -254,12 +263,12 @@ $default-spacing-map: $spacing-config !default;
 ///
 /// Generate from the spacing array a bundle of margin spacing classes
 ///
-/// @param {array} $spacing-map [$spacing-config] - [`optional`] Spacing array
+/// @param {array} $spacing-map [$default-spacing-map] - [`optional`] Spacing array
 /// @param {string} $class-prefix [margin] - [`optional`] Class prefix
 /// @param {string} $class-separator [$default-class-separator] - [`optional`] Class seperator
 ///
 @mixin generate-spacing-margin-classes(
-    $spacing-map: $spacing-config,
+    $spacing-map: $default-spacing-map,
     $class-prefix: 'margin',
     $class-separator: $default-class-separator
 ) {
