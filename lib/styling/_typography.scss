@@ -502,53 +502,57 @@ $default-font-weights-map: $font-weights !default;
 
         @each $font-name, $font-map in $font-config-map {
 
-            @each $font-face in map-get($font-map, "faces") {
+            @if type-of($font-map) == list or type-of($font-map) == map {
 
-                $sources: ();
+                @each $font-face in map-get($font-map, "faces") {
 
-                @each $path in map-get($font-face, "paths") {
+                    $sources: ();
 
-                    $pathChunks: str-split($path, '.');
+                    @each $path in map-get($font-face, "paths") {
 
-                    $format: to-lower-case(nth(str-split($path, '.'), length($pathChunks)));
+                        $pathChunks: str-split($path, '.');
 
-                    @if ($format == "ttf") {
+                        $format: to-lower-case(nth(str-split($path, '.'), length($pathChunks)));
 
-                        $format: "truetype";
+                        @if ($format == "ttf") {
+
+                            $format: "truetype";
+
+                        }
+
+                        $sources: append($sources, (url('#{$path}') format('#{$format}')), 'comma');
 
                     }
 
-                    $sources: append($sources, (url('#{$path}') format('#{$format}')), 'comma');
+                    $font-style: normal;
 
-                }
+                    @if (map-has-key($font-face, 'style')) {
 
-                $font-style: normal;
+                        $font-style: map-get($font-face, 'style');
 
-                @if (map-has-key($font-face, 'style')) {
+                    }
 
-                    $font-style: map-get($font-face, 'style');
-
-                }
-
-                $font-weight: font-weight(map-get($font-face, 'weight'));
+                    $font-weight: font-weight(map-get($font-face, 'weight'));
 
 
-                $font-display: auto;
+                    $font-display: auto;
 
-                @if (map-has-key($font-face, 'display')) {
+                    @if (map-has-key($font-face, 'display')) {
 
-                    $font-display: map-get($font-face, 'display');
+                        $font-display: map-get($font-face, 'display');
 
-                }
+                    }
 
-                @at-root {
+                    @at-root {
 
-                    @font-face {
-                        font-family: #{$font-name};
-                        src: $sources;
-                        font-style: $font-style;
-                        font-weight: $font-weight;
-                        font-display: $font-display;
+                        @font-face {
+                            font-family: #{$font-name};
+                            src: $sources;
+                            font-style: $font-style;
+                            font-weight: $font-weight;
+                            font-display: $font-display;
+                        }
+
                     }
 
                 }
