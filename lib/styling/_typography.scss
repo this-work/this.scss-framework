@@ -502,7 +502,7 @@ $default-font-weights-map: $font-weights !default;
 
         @each $font-name, $font-map in $font-config-map {
 
-            @if type-of($font-map) == list or type-of($font-map) == map {
+            @if map-has-key($font-map, "faces") {
 
                 @each $font-face in map-get($font-map, "faces") {
 
