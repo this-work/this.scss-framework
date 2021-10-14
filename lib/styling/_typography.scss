@@ -507,7 +507,7 @@ $default-font-weights-map: $font-weights !default;
 
                 }
             } @else if length($definitions) > 4 {
-                $line-height: nth($definitions, 5);
+                $letter-spacing: nth($definitions, 5);
             }
 
             font: font($font-family, $font-weight, nth($definitions, 3), $line-height, $letter-spacing);
