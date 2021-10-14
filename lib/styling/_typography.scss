@@ -364,6 +364,7 @@ $default-font-weights-map: $font-weights !default;
 /// @param {string or number} $font-weight-name - Font weight name
 /// @param {string} $font-dimension - Name of the font dimension
 /// @param {number} $font-line-height - [`optional`] Line-height as factor (number) or value with absolute unit (string)
+/// @param {number} $font-letter-spacing - [`optional`] Letter-spacing as value with absolute unit (px, rem or em)
 /// @param {string} $font-unit-type [$default-unit-type] - [`optional`] Type of font unit ('relative' or 'absolute')
 ///
 /// @return {string}  Complete font attribute
@@ -378,8 +379,8 @@ $default-font-weights-map: $font-weights !default;
     $font-weight-name,
     $font-dimension,
     $font-line-height: false,
+    $font-letter-spacing: false,
     $font-unit-type: $default-unit-type
-
 ) {
 
     $font-size: font-size($font-dimension, $font-unit-type);
@@ -402,7 +403,17 @@ $default-font-weights-map: $font-weights !default;
 
     }
 
-    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: ") letter-spacing($font-dimension, $font-unit-type);
+    @if (not $font-letter-spacing) {
+
+        $font-letter-spacing: letter-spacing($font-dimension, $font-unit-type);
+
+    } @else {
+
+        $font-letter-spacing: $font-letter-spacing;
+
+    }
+
+    @return font-weight($font-weight-name) #{$font-size}/$font-line-height font-family($font-name) unquote("; letter-spacing: ") $font-letter-spacing;
 
 }
 
@@ -415,6 +426,7 @@ $default-font-weights-map: $font-weights !default;
 /// @param {string} $font-family-overwrite [false] - [`optional`] Overwrite the font family
 /// @param {string|number|array} $font-weight-overwrite [false] - [`optional`] Overwrite the font weight - Can be an array to overwrite only certain breakpoints.
 /// @param {number|array} $line-height-overwrite [false] - [`optional`] Overwrite the line height - Can be an array to overwrite only certain breakpoints.
+/// @param {number|array} $letter-spacing-overwrite [false] - [`optional`] Overwrite the letter spacing - Can be an array to overwrite only certain breakpoints.
 /// @param {array} $responsive-font-types-map [$default-responsive-font-types-map] - [`optional`] Font type array
 ///
 /// @example scss - Set the 'h1' font type
@@ -432,6 +444,7 @@ $default-font-weights-map: $font-weights !default;
     $font-family-overwrite: false,
     $font-weight-overwrite: false,
     $line-height-overwrite: false,
+    $letter-spacing-overwrite: false,
     $responsive-font-types-map: $default-responsive-font-types-map
 ) {
 
@@ -480,8 +493,24 @@ $default-font-weights-map: $font-weights !default;
                 $line-height: nth($definitions, 4);
             }
 
+            $letter-spacing: false;
+            @if ($letter-spacing-overwrite) {
+                @if type-of($letter-spacing-overwrite) == map {
 
-            font: font($font-family, $font-weight, nth($definitions, 3), $line-height);
+                    @if (map-has-key($letter-spacing-overwrite, $breakpoint)) {
+                        $letter-spacing: map-get($letter-spacing-overwrite, $breakpoint);
+                    }
+
+                } @else {
+
+                    $letter-spacing: $letter-spacing-overwrite;
+
+                }
+            } @else if length($definitions) > 4 {
+                $line-height: nth($definitions, 5);
+            }
+
+            font: font($font-family, $font-weight, nth($definitions, 3), $line-height, $letter-spacing);
 
         }
     }
