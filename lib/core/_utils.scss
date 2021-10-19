@@ -39,25 +39,6 @@
 
 
 ///
-/// Helper to check if the string has qoutes
-///
-/// @param {string} $string - Haystack
-///
-/// @return {bool}
-///
-/// @example scss
-/// str-is-quoted($string)
-///
-@function str-is-quoted($string) {
-    @if type-of($string) != string {
-        @return false;
-    }
-    @return "#{$string#{''}}" != $string;
-}
-
-
-
-///
 /// Helper to split string in array
 ///
 /// @param {string} $string - Haystack

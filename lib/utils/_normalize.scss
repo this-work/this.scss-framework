@@ -186,8 +186,7 @@ $default-normalize-word-break: break-word !default;
 ) {
 
     @if (function-exists(font-weight) and
-         type-of($normalize-bold-weight) == string and
-         str-is-quoted($normalize-bold-weight)
+         type-of($normalize-bold-weight) == string
     ) {
 
         $normalize-bold-weight: font-weight($normalize-bold-weight)
