@@ -90,6 +90,37 @@ $grid-config: (
 
 
 ///
+/// Get the column width as percentage
+///
+/// @param {Number} $column-number - Span of columns
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+///
+/// @return {Number} Column width as percentage
+///
+/// @example scss - Set the width to 4 columns of the grid
+/// width: grid-column-width-percentage(4);
+///
+@function grid-column-width-percentage(
+    $column-number,
+    $grid-name: $default-grid
+) {
+
+    $columns: _get-grid-data('columns', $grid-name);
+
+    $gutter: _get-grid-data('column-gutter', $grid-name);
+
+    $gutter : if(unit($gutter) == '%', $gutter, 0);
+
+    $total-gutter: ($columns - 1) * $gutter;
+
+    $single-column-width: (100% - $total-gutter) / $columns;
+
+    @return ($single-column-width * $column-number) + ($gutter * ($column-number - 1));
+}
+
+
+
+///
 /// Generate grid context styles with given expanded arguments to
 /// create a css grid container.
 ///
