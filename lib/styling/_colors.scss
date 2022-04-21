@@ -28,6 +28,24 @@ $color-base: () !default;
 
 
 ///
+/// Associate color variation array.
+/// Includes a key/value pair of the color to increase the consistency.
+///
+/// @prop {String} name -  Name of the color
+/// @prop {Number} hex -  Hexcode of the color
+///
+/// @type array
+/// @example scss - Set two colors
+///  $color-derivates (
+///     'color-1' : #000000,
+///     'color-2' : #FFFFFF
+///  );
+///
+$color-variations: () !default;
+
+
+
+///
 /// Associate color derivate array.
 /// Includes a key/value pair of the color to increase the consistency.
 ///
@@ -49,7 +67,7 @@ $color-derivates: () !default;
 /// Default color-map declaration. Only used for default params in functions.
 /// @type array
 ///
-$default-color-map: map-merge($color-base, $color-derivates) !default;
+$default-color-map: map-merge(map-merge($color-base, $color-derivates), $color-variations) !default;
 
 
 
