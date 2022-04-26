@@ -106,7 +106,7 @@ $site-area-columns: () !default;
 
 	@include above(2 * $max-page-width - $largest-breakpoint-content-width) {
 
-		$fixed-page-width: ($max-page-width - $largest-breakpoint-content-width) / 2;
+		$fixed-page-width: calc(($max-page-width - $largest-breakpoint-content-width) / 2);
 
 		@if($mode == 'page') {
 
