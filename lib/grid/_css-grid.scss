@@ -373,92 +373,34 @@ $grid-config: (
 /// and the utils/page functions.
 ///
 /// @prop {string} $offsetType ['start'] - [`optional`] Direction of offset (start, end, complete)
-/// @prop {string|number} $offset ['page'] - [`optional`] Offset (page or viewport as string or free number)
 /// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
-/// @param {array} $breakpoints [$spacing-page-to-content] - [`optional`] Map with breakpoint and spacing values pairs.
+/// @param {array} $site-area-config [$site-area-columns] - [`optional`] Responsive declaration of the site area columns
 ///
 @mixin grid-cell-offset(
     $offsetType: 'start',
-    $offset: 'page',
     $grid-name: $default-grid,
-    $breakpoints: $site-area-columns
+    $site-area-config: $site-area-columns
 ){
 
-    $direction: right;
+    $direction: left;
 
-    @if ($offsetType == 'start') {
-
-        @include grid-cell-column-start(1);
-        $direction: left;
-
-    }
-
-    @if (type-of($offset) == 'number') {
-
-        margin-#{$direction}: $offset;
-
-    } @else {
-
-        //$page-spacing-below-extending: 0px;
-        //
-        //@each $breakpoint-key, $breakpoint-spaceing in $breakpoints {
-        //
-        //    @if ($breakpoint-key == 'default'){
-        //
-        //        $page-spacing-below-extending: _get-possible-spacing-value($breakpoint-spaceing);
-        //
-        //        margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
-        //
-        //    } @else {
-        //
-        //        @if (strip-unit(_get-breakpoint($breakpoint-key)) <= strip-unit(_get-breakpoint($page-fullwidth-breakpoint)) ) {
-        //
-        //            @include possible-mediaquery($breakpoint-key) {
-        //                    margin-#{$direction}: _get-possible-spacing-value($breakpoint-spaceing) * -1;
-        //            }
-        //
-        //        } @else {
-        //
-        //            @if ($offset == 'page') {
-        //
-        //                $page-spacing-below-extending: _get-possible-spacing-value($breakpoint-spaceing);
-        //
-        //                @include possible-mediaquery($breakpoint-key) {
-        //                    margin-#{$direction}: (_get-possible-spacing-value($breakpoint-spaceing)) * -1;
-        //                }
-        //
-        //            }
-        //
-        //        }
-        //
-        //    }
-        //
-        //}
-        //
-        //@if ($offset == 'page') {
-        //    @media (min-width: ($max-content-width + ($page-spacing-below-extending * 2) + ($page-spacing-below-extending * 2))) {
-        //        margin-#{$direction}: #{'calc(((100vw - 100%) / 2) / -2)'};
-        //    }
-        //    @media (min-width: ($max-page-width + (2 * ($max-page-width - $max-content-width) / 2))) {
-        //        margin-#{$direction}:  #{'calc((' + $max-page-width + ' - ' + $max-content-width + ') / -2)'};
-        //    }
-        //}
-        //
-        //@if ($offset == 'viewport') {
-        //    @media (min-width: _get-breakpoint($page-fullwidth-breakpoint)) {
-        //        margin-#{$direction}: #{'calc((100vw - 100%) / -2)'};
-        //    }
-        //}
-
+    @if ($offsetType == 'end') {
+        $direction: right;
     }
 
     @if ($offsetType == 'complete') {
-
-        $columns: _get-grid-data('columns', $grid-name);
-        @include grid-cell-width($columns);
-
-        @include grid-cell-offset('start', $offset, $grid-name);
-
+        @include grid-cell-offset('end', $grid-name, $site-area-config);
     }
 
+    @each $breakpoint, $config in $site-area-config {
+        @if (unit(map-get($config, 'content')) != 'px') {
+            @include possible-mediaquery($breakpoint) {
+                margin-#{$direction}: (_get-possible-spacing-value(map-get($config, 'page')) + _get-possible-spacing-value(map-get($config, 'viewport'))) * -1;
+            }
+        } @else {
+            @include possible-mediaquery($breakpoint) {
+                margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2)'};
+            }
+        }
+    }
 }
