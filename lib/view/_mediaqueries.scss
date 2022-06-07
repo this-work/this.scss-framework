@@ -43,7 +43,7 @@ $default-breakpoint-map: $breakpoint-config !default;
 ///
 /// @return {number} Breakpoint
 ///
-/// @example scss - Set max-width to the xl breakpint
+/// @example scss - Set max-width to the xl breakpoint
 /// max-width: _get-breakpoint('xl');
 ///
 @function _get-breakpoint(
@@ -58,6 +58,35 @@ $default-breakpoint-map: $breakpoint-config !default;
     @return map-get($breakpoint-map, $breakpoint-name);
 
 }
+
+///
+/// Get a breakpoint
+///
+/// @param {string} $breakpoint - Name or value of the breakpoint
+/// @param {array} $breakpoint-map [$default-breakpoint-map] - [`optional`] breakpoint array
+///
+/// @return {number} Breakpoint
+///
+/// @example scss - Set max-width to the xl breakpoint
+/// max-width: breakpoint('xl');
+///
+@function breakpoint(
+    $breakpoint,
+    $breakpoint-map: $default-breakpoint-map
+) {
+
+    @if ($breakpoint == 'default') {
+        $breakpoint: 0px
+    }
+
+    @if (type-of($breakpoint) == string) {
+        @return _get-breakpoint($breakpoint);
+    }
+
+    @return $breakpoint;
+
+}
+
 
 ///
 /// Decrease the input to the next safe value.

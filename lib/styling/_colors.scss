@@ -184,15 +184,12 @@ $default-color-palettes-map: $color-palettes !default;
 /// Generate from the color-palettes array a bundle of color classes
 ///
 /// @param {string} $palette - Color palette name
-/// @param {bool} $contrast [true] - [`optional`] Render the contrast color classes.
 /// @param {string} $cherrypick [false] - [`optional`] Only the given attribute will be rendered.
-/// @param {string} $fallback-default-scheme-name [positive] - [`optional`] Fallback contrast class key when no parent selector are given
 /// @param {array} $color-palettes-map[$default-color-palettes-map] - [`optional`] color palette array
 ///
 @mixin color-theme(
     $palette,
     $cherrypick: false,
-    $fallback-default-scheme-name: 'light',
     $color-palettes-map: $default-color-palettes-map
 ) {
 
@@ -203,7 +200,8 @@ $default-color-palettes-map: $color-palettes !default;
     @each $scheme, $attributes in map-get($color-palettes-map, $palette) {
 
         @at-root .theme-#{$scheme} #{if(&,&, '')}, .theme-#{$scheme}#{if(&,&, '')},
-        *[class*="theme"] .theme-#{$scheme} #{if(&,&, '')}, *[class*="theme"] .theme-#{$scheme}#{if(&,&, '')} {
+        *[class*="theme"] .theme-#{$scheme} #{if(&,&, '')}, *[class*="theme"] .theme-#{$scheme}#{if(&,&, '')},
+        *[class*="theme"] *[class*="theme"] .theme-#{$scheme} #{if(&,&, '')}, *[class*="theme"] *[class*="theme"] .theme-#{$scheme}#{if(&,&, '')} {
 
             @include _generate-color-theme-attributes($attributes, $cherrypick);
 

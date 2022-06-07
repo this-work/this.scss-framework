@@ -21,9 +21,9 @@
 ///
 @mixin placeholder($context : '&') {
 
-    @each $prefix in "::-webkit-input", ":moz", "::-moz", ":-ms-input" {
+    @each $prefix in "::-webkit-input-", ":-moz-", "::-moz-", ":-ms-input-", "::" {
 
-        #{$context}#{$prefix}-placeholder {
+        #{$context}#{$prefix}placeholder {
             @content;
         }
 
@@ -75,4 +75,22 @@
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+}
+
+
+
+///
+/// Mixin to hide the scrollbar
+///
+/// @example scss - Hide the scrollbar
+/// include hide-scrollbar();
+///
+@mixin hide-scrollbar() {
+
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+
 }
