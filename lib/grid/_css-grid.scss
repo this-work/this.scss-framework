@@ -197,24 +197,16 @@ $grid-config: (
 /// include grid-context();
 ///
 @mixin grid-context(
-    $grid-name: $default-grid
+    $grid-name:     $default-grid,
+    $columns:       _get-grid-data('columns', $grid-name),
+    $column-width:  _get-grid-data('column-width', $grid-name),
+    $column-gutter: _get-grid-data('column-gutter', $grid-name),
+    $rows:          _get-grid-data('rows', $grid-name),
+    $rows-height:   _get-grid-data('rows-height', $grid-name),
+    $row-gutter:    _get-grid-data('row-gutter', $grid-name),
+    $grid-flow:     _get-grid-data('grid-flow', $grid-name),
+    $column-first:  _get-grid-data('column-first', $grid-name)
 ) {
-
-    $columns: _get-grid-data('columns', $grid-name);
-
-    $column-width: _get-grid-data('column-width', $grid-name);
-
-    $column-gutter: _get-grid-data('column-gutter', $grid-name);
-
-    $rows: _get-grid-data('rows', $grid-name);
-
-    $rows-height: _get-grid-data('rows-height', $grid-name);
-
-    $row-gutter: _get-grid-data('row-gutter', $grid-name);
-
-    $grid-flow: _get-grid-data('grid-flow', $grid-name);
-
-    $column-first: _get-grid-data('column-first', $grid-name);
 
     @include _grid-context($columns, $column-width, $column-gutter, $rows, $rows-height, $row-gutter, $grid-flow, $column-first);
 
