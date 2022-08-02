@@ -365,16 +365,20 @@ $grid-config: (
 /// and the utils/page functions.
 ///
 /// @param {string} $offsetType ['start'] - [`optional`] Direction of offset (start, end, complete)
+/// @param {string|number} $offsetWidth ['viewport'] - [`optional`] Width of offset (viewport, page)
 /// @param {string} $offsetVisbility ['m'] - [`optional`] The breakpoint from which width the offset is visible
+/// @param {string} $offsetVisbilityDirection ['above'] - [`optional`] The direction of the offset visbility
 /// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
 /// @param {array} $site-area-config [$site-area-columns] - [`optional`] Responsive declaration of the site area columns
 ///
 @mixin grid-cell-offset(
     $offsetType: 'start',
+    $offsetWidth: 'viewport',
     $offsetVisbility: 'm',
+    $offsetVisbilityDirection: 'above',
     $grid-name: $default-grid,
     $site-area-config: $site-area-columns
-){
+) {
 
     $direction: left;
 
@@ -383,14 +387,78 @@ $grid-config: (
     }
 
     @if ($offsetType == 'complete') {
-        @include grid-cell-offset('end', $grid-name, $site-area-config);
+        @include grid-cell-offset('end', $offsetWidth, $offsetVisbility, $offsetVisbilityDirection, $grid-name, $site-area-config);
     }
 
-    @each $breakpoint, $config in $site-area-config {
-        @if (strip-unit(breakpoint($breakpoint)) >= strip-unit(breakpoint($offsetVisbility))) {
-            @include possible-mediaquery($breakpoint) {
-                margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2)'};
+    $largest-breakpoint: 0px;
+    $largest-breakpoint-content-width: 0px;
+
+    @if (type-of($offsetWidth) == 'number') {
+
+        margin-#{$direction}: $offsetWidth * -1;
+
+    } @else {
+
+        @each $breakpoint, $config in $site-area-config {
+
+            @if (($offsetVisbilityDirection == 'above' and strip-unit(breakpoint($breakpoint)) >= strip-unit(breakpoint($offsetVisbility))) or ($offsetVisbilityDirection == 'below' and strip-unit(breakpoint($breakpoint)) < strip-unit(breakpoint($offsetVisbility)))) {
+
+                @if ($largest-breakpoint < breakpoint($breakpoint)) {
+                    $largest-breakpoint: breakpoint($breakpoint);
+                    $largest-breakpoint-content-width: map-get($config, 'content');
+                }
+
+                @include possible-mediaquery($breakpoint) {
+                    @if ($offsetWidth == 'viewport') {
+
+                        @if (unit(map-get($config, 'content')) != 'px') {
+
+                            margin-#{$direction}: (_get-possible-spacing-value(map-get($config, 'page')) + _get-possible-spacing-value(map-get($config, 'viewport'))) * -1;
+
+                        } @else {
+
+                            margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2)'};
+
+                        }
+
+                    } @else {
+
+                        @if (str-index(#{map-get($config, 'page')}, 'minmax')) {
+
+                            margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2 / 2)'};
+
+                            $minPageWidth: str-slice(#{map-get($config, 'page')}, 8, (str-index(#{map-get($config, 'page')}, "px,") + 1));
+                            margin-#{$direction}: #{'calc(max(#{$minPageWidth}, ((100vw - #{map-get($config, 'content')}) / 2 / 2)) * -1)'};
+
+                        } @else {
+
+                            margin-#{$direction}: map-get($config, 'page') * -1;
+
+                        }
+
+                    }
+                }
+
+            } @else {
+                @if ($offsetVisbilityDirection == 'below') {
+                    @include possible-mediaquery($breakpoint) {
+
+                        margin-#{$direction}: 0;
+
+                    }
+                }
+            }
+
+        }
+
+        @if ($offsetVisbilityDirection == 'above' and $offsetWidth == 'page') {
+            @include above(2 * $max-page-width - $largest-breakpoint-content-width) {
+
+                margin-#{$direction}: ($max-page-width - $largest-breakpoint-content-width) / -2;
+
             }
         }
+
     }
+
 }
