@@ -360,6 +360,27 @@ $grid-config: (
 
 
 ///
+/// Generate a margin to include the next gap.
+///
+/// @param {string} $direction - Direction of next gap (left, right, both)
+/// @param {number} $columns - Size of the current grid element (1, 2, 3 ...)
+/// @param {string} $grid-name [$default-grid] - [`optional`] Name of the grid, default is the $default-grid
+///
+@mixin grid-cell-push-gap($direction, $columns, $grid-name: $default-grid) {
+
+    $column-gutter: _get-grid-data('column-gutter', $grid-name);
+
+    @if(unit($column-gutter) == '%') {
+        margin-#{$direction}: calc( ((#{strip-unit($column-gutter)} * (100% * 100 / #{strip-unit(grid-column-width-percentage($columns))})) / 100 ) * -1);
+    } @else {
+        margin-#{$direction}: calc( #{$column-gutter} * -1 );
+    }
+
+}
+
+
+
+///
 /// Generate a margin to push or pull the cell to the
 /// wrapper or the viewport border. These mixin needs the view/mediaquery functions
 /// and the utils/page functions.
