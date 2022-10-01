@@ -212,7 +212,11 @@
 
             $units: ('px': 1px, 'cm': 1cm, 'mm': 1mm, '%': 1%, 'ch': 1ch, 'pc': 1pc, 'in': 1in, 'em': 1em, 'rem': 1rem, 'pt': 1pt, 'ex': 1ex, 'vw': 1vw, 'vh': 1vh, 'vmin': 1vmin, 'vmax': 1vmax);
 
-            @return if($minus, -$result, $result) * map-get($units, str-slice($value, $i));
+            @if map-get($units, str-slice($value, $i)) {
+                @return if($minus, -$result, $result) * map-get($units, str-slice($value, $i));
+            } @else {
+                @return if($minus, -$result, $result)
+            }
 
         }
 
@@ -227,7 +231,7 @@
         } @else {
 
             $digits: $digits * 10;
-            $result: $result + map-get($numbers, $character) / $digits;
+            $result: $result + calc(map-get($numbers, $character) / $digits);
 
         }
     }

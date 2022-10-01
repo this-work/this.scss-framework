@@ -101,6 +101,8 @@ $default-conversion-context: 16px !default;
 ///
 @function unitize($value, $unit-type: $default-unit-type) {
 
+    $value: number(#{$value});
+
     @if ($unit-type == "relative" and unit($value) == "px" ) {
 
         $value: rem($value);

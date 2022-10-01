@@ -313,7 +313,7 @@ $grid-config: (
 /// @prop {number} $width - Columns to span.
 ///
 @mixin grid-cell-width($width){
-
+    $width: number(#{$width});
     -ms-grid-column-span:(($width * 2) - 1);
     grid-column-end:span #{$width};
 
@@ -328,7 +328,7 @@ $grid-config: (
 /// @prop {number} $height - Rows to span.
 ///
 @mixin grid-cell-height($height){
-
+    $width: number(#{$height});
     -ms-grid-row-span:(($height * 2) - 1);
     grid-row-end:span #{$height};
 
