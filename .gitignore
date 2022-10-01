@@ -1,7 +1,7 @@
 # SCSS Framework GIT Ignore  #
 
 # ignore all hidden files #
-/.*
+/.idea
 
 # force versioning config files  #
 !/.gitignore
