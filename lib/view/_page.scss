@@ -54,71 +54,58 @@ $site-area-columns: () !default;
 /// include grid-areas();
 ///
 @mixin grid-areas (
-	$mode: 'viewport'
+    $mode: 'viewport'
 ) {
-	display: grid;
-	grid-row-gap: 0;
+    display: grid;
+    grid-row-gap: 0;
 
-	$largest-breakpoint: 0px;
-	$largest-breakpoint-content-width: 0px;
+    $largest-breakpoint: 0px;
+    $largest-breakpoint-content-width: 0px;
 
-	@each $breakpoint, $settings in $site-area-columns {
+    @each $breakpoint, $settings in sort-breakpoints($site-area-columns) {
 
-		$content-width: map-get($settings, 'content');
-		$page-spacing: map-get($settings, 'page');
-		$viewport-spacing: map-get($settings, 'viewport');
+        $content-width: map-get($settings, 'content');
+        $page-spacing: map-get($settings, 'page');
+        $viewport-spacing: map-get($settings, 'viewport');
 
-		$current-breakpoint: $breakpoint;
+        $current-breakpoint: $breakpoint;
 
-		@if (type-of($breakpoint) == string) {
+        @if ($largest-breakpoint < $current-breakpoint) {
+            $largest-breakpoint: $current-breakpoint;
+            $largest-breakpoint-content-width: $content-width;
+        }
 
-			@if ($breakpoint == 'default') {
+        @include possible-mediaquery($breakpoint) {
 
-				$current-breakpoint: 0px;
+            @if($mode == 'page') {
 
-			}@else{
+                @include grid-template-columns($page-spacing $content-width $page-spacing);
 
-				$current-breakpoint: map-get($breakpoint-config, $breakpoint);
+            }@else{
 
-			}
-		}
+                @include grid-template-columns($viewport-spacing $page-spacing $content-width $page-spacing $viewport-spacing);
 
-		@if ($largest-breakpoint < $current-breakpoint) {
-			$largest-breakpoint: $current-breakpoint;
-			$largest-breakpoint-content-width: $content-width;
-		}
+            }
 
-		@include possible-mediaquery($breakpoint) {
+        }
 
-			@if($mode == 'page') {
+    }
 
-				@include grid-template-columns($page-spacing $content-width $page-spacing);
+    @include above(2 * $max-page-width - $largest-breakpoint-content-width) {
 
-			}@else{
+        $fixed-page-width: calc(($max-page-width - $largest-breakpoint-content-width) / 2);
 
-				@include grid-template-columns($viewport-spacing $page-spacing $content-width $page-spacing $viewport-spacing);
+        @if($mode == 'page') {
 
-			}
+            @include grid-template-columns($fixed-page-width $largest-breakpoint-content-width $fixed-page-width);
 
-		}
+        }@else{
 
-	}
+            @include grid-template-columns(1fr $fixed-page-width $largest-breakpoint-content-width $fixed-page-width 1fr);
 
-	@include above(2 * $max-page-width - $largest-breakpoint-content-width) {
-
-		$fixed-page-width: calc(($max-page-width - $largest-breakpoint-content-width) / 2);
-
-		@if($mode == 'page') {
-
-			@include grid-template-columns($fixed-page-width $largest-breakpoint-content-width $fixed-page-width);
-
-		}@else{
-
-			@include grid-template-columns(1fr $fixed-page-width $largest-breakpoint-content-width $fixed-page-width 1fr);
-
-		}
+        }
 
 
-	}
+    }
 
 }

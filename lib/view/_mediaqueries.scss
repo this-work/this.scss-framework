@@ -213,6 +213,44 @@ $default-breakpoint-map: $breakpoint-config !default;
 }
 
 
+///
+/// Sort a map of values and breakpoints as keys by size of the breakpoint
+///
+/// @param {array} $breakpointMap - Map with breakpoint as keys. Can be a number or da breakpoint config value
+///
+/// @return {array} sorted and resolved breakpoint map with given values
+///
+///
+@function sort-breakpoints($breakpointMap) {
+
+    $solvedBreakpointMap: ();
+    @each $breakpoint, $value in $breakpointMap {
+
+        $solvedBreakpoint: $breakpoint;
+
+        @if (type-of($breakpoint) == string) {
+
+            @if ($breakpoint == 'default') {
+                $solvedBreakpoint: 0px;
+            }@else{
+                $solvedBreakpoint: map-get($breakpoint-config, $breakpoint);
+            }
+
+        }
+
+        $solvedBreakpointMap: map-merge($solvedBreakpointMap, ($breakpoint: $solvedBreakpoint));
+
+    }
+
+    $sortedBreakpointMap: ();
+    @each $breakpoint, $value in sort-values($solvedBreakpointMap) {
+        $sortedBreakpointMap: map-merge($sortedBreakpointMap, ($value: map-get($breakpointMap, $breakpoint)));
+    }
+
+    @return $sortedBreakpointMap;
+
+}
+
 
 ///
 /// Generates a above include excluding the default breakpoint.
@@ -222,7 +260,7 @@ $default-breakpoint-map: $breakpoint-config !default;
 /// @content Rules or directives, which are wrapped in a media query
 ///
 @mixin possible-mediaquery($breakpoint, $direction: 'above') {
-    @if ($breakpoint == 'default') {
+    @if ($breakpoint == 'default' or $breakpoint == 0px) {
         @content;
     } @else {
         @if ($direction == 'above') {

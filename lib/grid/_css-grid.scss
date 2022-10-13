@@ -48,16 +48,16 @@
 /// );
 ///
 $grid-config: (
-        'default': (
-                'columns': 12,
-                'column-width': 1fr,
-                'column-gutter': 1.5%,
-                'rows': 0,
-                'rows-height': 0,
-                'row-gutter': 0,
-                'grid-flow': row,
-                'column-first': true
-        )
+    'default': (
+        'columns': 12,
+        'column-width': 1fr,
+        'column-gutter': 1.5%,
+        'rows': 0,
+        'rows-height': 0,
+        'row-gutter': 0,
+        'grid-flow': row,
+        'column-first': true
+    )
 ) !default;
 
 
@@ -420,12 +420,12 @@ $grid-config: (
 
     } @else {
 
-        @each $breakpoint, $config in $site-area-config {
+        @each $breakpoint, $config in sort-breakpoints($site-area-columns) {
 
-            @if (($offsetVisbilityDirection == 'above' and strip-unit(breakpoint($breakpoint)) >= strip-unit(breakpoint($offsetVisbility))) or ($offsetVisbilityDirection == 'below' and strip-unit(breakpoint($breakpoint)) < strip-unit(breakpoint($offsetVisbility)))) {
+            @if (($offsetVisbilityDirection == 'above' and strip-unit($breakpoint) >= strip-unit(breakpoint($offsetVisbility))) or ($offsetVisbilityDirection == 'below' and strip-unit($breakpoint) < strip-unit(breakpoint($offsetVisbility)))) {
 
-                @if ($largest-breakpoint < breakpoint($breakpoint)) {
-                    $largest-breakpoint: breakpoint($breakpoint);
+                @if ($largest-breakpoint < $breakpoint) {
+                    $largest-breakpoint: $breakpoint;
                     $largest-breakpoint-content-width: map-get($config, 'content');
                 }
 

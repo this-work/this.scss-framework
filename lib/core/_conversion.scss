@@ -58,7 +58,7 @@ $default-conversion-context: 16px !default;
 /// @returns {number} - the `px` value converted to `em`
 ///
 @function em($px, $context: $default-conversion-context) {
-    @return (strip-unit($px) / strip-unit($context)) * 1em;
+    @return calc(strip-unit($px) / strip-unit($context)) * 1em;
 }
 
 
@@ -72,7 +72,7 @@ $default-conversion-context: 16px !default;
 /// @returns {number} - the `px` value converted to `rem`
 ///
 @function rem($px, $context: $default-conversion-context) {
-    @return (strip-unit($px) / strip-unit($context)) * 1rem;
+    @return calc(strip-unit($px) / strip-unit($context)) * 1rem;
 }
 
 
@@ -86,7 +86,7 @@ $default-conversion-context: 16px !default;
 /// @returns {number} - the `rem` | `em` value converted to `px`
 ///
 @function px($r-em, $context: $default-conversion-context) {
-    @return (strip-unit($r-em) * strip-unit($context)) * 1px;
+    @return calc(strip-unit($r-em) * strip-unit($context)) * 1px;
 }
 
 
