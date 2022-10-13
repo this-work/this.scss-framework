@@ -475,7 +475,7 @@ $grid-config: (
         @if ($offsetVisbilityDirection == 'above' and $offsetWidth == 'page') {
             @include above(2 * $max-page-width - $largest-breakpoint-content-width) {
 
-                margin-#{$direction}: ($max-page-width - $largest-breakpoint-content-width) / -2;
+                margin-#{$direction}: calc(($max-page-width - $largest-breakpoint-content-width) / -2);
 
             }
         }
