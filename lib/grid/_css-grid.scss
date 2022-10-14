@@ -105,9 +105,9 @@ $grid-config: (
     $grid-name: $default-grid
 ) {
 
-    $columns: _get-grid-data('columns', $grid-name);
+    $columns: number(_get-grid-data('columns', $grid-name));
 
-    $gutter: _get-grid-data('column-gutter', $grid-name);
+    $gutter: number(_get-grid-data('column-gutter', $grid-name));
 
     $gutter : if(unit($gutter) == '%', $gutter, 0);
 
