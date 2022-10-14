@@ -41,7 +41,7 @@ $default-conversion-context: 16px !default;
 
     @if type-of($number) == 'number' and not unitless($number) {
         $pseudoDivider: ($number * 0 + 1);
-        @return calc($number / $pseudoDivider);
+        @return number(calc($number / $pseudoDivider));
     }
 
     @return $number;

@@ -368,7 +368,7 @@ $grid-config: (
 ///
 @mixin grid-cell-push-gap($direction, $columns, $grid-name: $default-grid) {
 
-    $column-gutter: _get-grid-data('column-gutter', $grid-name);
+    $column-gutter: number(_get-grid-data('column-gutter', $grid-name));
 
     @if(unit($column-gutter) == '%') {
         margin-#{$direction}: calc( ((#{strip-unit($column-gutter)} * (100% * 100 / #{strip-unit(grid-column-width-percentage($columns))})) / 100 ) * -1);
