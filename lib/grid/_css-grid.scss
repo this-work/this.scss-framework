@@ -115,7 +115,7 @@ $grid-config: (
 
     $single-column-width: calc((100% - $total-gutter) / $columns);
 
-    @return ($single-column-width * number($column-number)) + ($gutter * (number($column-number - 1)));
+    @return ($single-column-width * number($column-number)) + ($gutter * (number($column-number) - 1));
 }
 
 
