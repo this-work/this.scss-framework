@@ -449,7 +449,7 @@ $grid-config: (
                             margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2 / 2)'};
 
                             $minPageWidth: str-slice(#{map-get($config, 'page')}, 8, (str-index(#{map-get($config, 'page')}, "px,") + 1));
-                            margin-#{$direction}: #{'calc(max(#{$minPageWidth}, ((100vw - #{map-get($config, 'content')}) / 2 / 2)) * -1)'};
+                            margin-#{$direction}: #{'calc(max(#{$minPageWidth}, (100vw - #{map-get($config, 'content')}) / 2 / 2) * -1)'};
 
                         } @else {
 
