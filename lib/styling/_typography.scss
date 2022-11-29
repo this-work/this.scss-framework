@@ -257,7 +257,7 @@ $default-font-weights-map: $font-weights !default;
 
     @if (unit($font-line-height) == "px") {
 
-        $font-line-height: strip-unit($font-line-height) / strip-unit(font-size($font-dimension, 'absolute'));
+        $font-line-height: calc(strip-unit($font-line-height) / strip-unit(font-size($font-dimension, 'absolute')));
 
     }
 
