@@ -18,6 +18,18 @@
 @mixin rtl() {
     @at-root [dir='rtl'] & {
         @content;
+    }
+}
 
+
+///
+/// Mixin to generate Styles for the LTR direction
+/// Works with and without 'dir' attribute
+///
+/// @content Styles for the LTR direction
+///
+@mixin ltr() {
+    @at-root html:not([dir='rtl']) & {
+        @content;
     }
 }

@@ -369,11 +369,28 @@ $grid-config: (
 @mixin grid-cell-push-gap($direction, $columns, $grid-name: $default-grid) {
 
     $column-gutter: number(_get-grid-data('column-gutter', $grid-name));
+    $gapSize;
+
+    @if ($direction == 'both') {
+        $direction: left;
+        @include grid-cell-push-gap('right', $columns, $grid-name);
+    }
 
     @if(unit($column-gutter) == '%') {
-        margin-#{$direction}: calc( ((#{strip-unit($column-gutter)} * (100% * 100 / #{strip-unit(grid-column-width-percentage($columns))})) / 100 ) * -1);
+        $gapSize: calc( ((#{strip-unit($column-gutter)} * (100% * 100 / #{strip-unit(grid-column-width-percentage($columns))})) / 100 ) * -1);
     } @else {
-        margin-#{$direction}: calc( #{$column-gutter} * -1 );
+        $gapSize: calc( #{$column-gutter} * -1 );
+    }
+
+    @include ltr() {
+        margin-#{$direction}: $gapSize;
+    }
+    @include rtl() {
+        @if ($direction == 'left') {
+            margin-right: $gapSize;
+        } @else {
+            margin-left: $gapSize;
+        }
     }
 
 }
@@ -402,9 +419,11 @@ $grid-config: (
 ) {
 
     $direction: left;
+    $directionRtl: right;
 
     @if ($offsetType == 'end') {
         $direction: right;
+        $directionRtl: left;
     }
 
     @if ($offsetType == 'complete') {
@@ -416,7 +435,13 @@ $grid-config: (
 
     @if (type-of($offsetWidth) == 'number') {
 
-        margin-#{$direction}: $offsetWidth * -1;
+        $value: $offsetWidth * -1;
+        @include ltr() {
+            margin-#{$direction}: $value;
+        }
+        @include rtl() {
+            margin-#{$directionRtl}: $value;
+        }
 
     } @else {
 
@@ -434,11 +459,23 @@ $grid-config: (
 
                         @if (unit(map-get($config, 'content')) != 'px') {
 
-                            margin-#{$direction}: (_get-possible-spacing-value(map-get($config, 'page')) + _get-possible-spacing-value(map-get($config, 'viewport'))) * -1;
+                            $value: (_get-possible-spacing-value(map-get($config, 'page')) + _get-possible-spacing-value(map-get($config, 'viewport'))) * -1;
+                            @include ltr() {
+                                margin-#{$direction}: $value;
+                            }
+                            @include rtl() {
+                                margin-#{$directionRtl}: $value;
+                            }
 
                         } @else {
 
-                            margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2)'};
+                            $value: #{'calc((100vw - #{map-get($config, 'content')}) / -2)'};
+                            @include ltr() {
+                                margin-#{$direction}: $value;
+                            }
+                            @include rtl() {
+                                margin-#{$directionRtl}: $value;
+                            }
 
                         }
 
@@ -446,14 +483,32 @@ $grid-config: (
 
                         @if (str-index(#{map-get($config, 'page')}, 'minmax')) {
 
-                            margin-#{$direction}: #{'calc((100vw - #{map-get($config, 'content')}) / -2 / 2)'};
+                            $value: #{'calc((100vw - #{map-get($config, 'content')}) / -2 / 2)'};
+                            @include ltr() {
+                                margin-#{$direction}: $value;
+                            }
+                            @include rtl() {
+                                margin-#{$directionRtl}: $value;
+                            }
 
                             $minPageWidth: str-slice(#{map-get($config, 'page')}, 8, (str-index(#{map-get($config, 'page')}, "px,") + 1));
-                            margin-#{$direction}: #{'calc(max(#{$minPageWidth}, (100vw - #{map-get($config, 'content')}) / 2 / 2) * -1)'};
+                            $value: #{'calc(max(#{$minPageWidth}, (100vw - #{map-get($config, 'content')}) / 2 / 2) * -1)'};
+                            @include ltr() {
+                                margin-#{$direction}: $value;
+                            }
+                            @include rtl() {
+                                margin-#{$directionRtl}: $value;
+                            }
 
                         } @else {
 
-                            margin-#{$direction}: map-get($config, 'page') * -1;
+                            $value: map-get($config, 'page') * -1;
+                            @include ltr() {
+                                margin-#{$direction}: $value;
+                            }
+                            @include rtl() {
+                                margin-#{$directionRtl}: $value;
+                            }
 
                         }
 
@@ -464,7 +519,13 @@ $grid-config: (
                 @if ($offsetVisbilityDirection == 'below') {
                     @include possible-mediaquery($breakpoint) {
 
-                        margin-#{$direction}: 0;
+                        $value: 0;
+                        @include ltr() {
+                            margin-#{$direction}: $value;
+                        }
+                        @include rtl() {
+                            margin-#{$directionRtl}: $value;
+                        }
 
                     }
                 }
@@ -475,7 +536,13 @@ $grid-config: (
         @if ($offsetVisbilityDirection == 'above' and $offsetWidth == 'page') {
             @include above(2 * $max-page-width - $largest-breakpoint-content-width) {
 
-                margin-#{$direction}: calc(($max-page-width - $largest-breakpoint-content-width) / -2);
+                $value: calc(($max-page-width - $largest-breakpoint-content-width) / -2);
+                @include ltr() {
+                    margin-#{$direction}: $value;
+                }
+                @include rtl() {
+                    margin-#{$directionRtl}: $value;
+                }
 
             }
         }
