@@ -369,7 +369,7 @@ $grid-config: (
 @mixin grid-cell-push-gap($direction, $columns, $grid-name: $default-grid) {
 
     $column-gutter: number(_get-grid-data('column-gutter', $grid-name));
-    $gapSize;
+    $gapSize: 0px;
 
     @if ($direction == 'both') {
         $direction: left;
