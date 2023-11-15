@@ -61,7 +61,7 @@
         $deg : $deg + 90;
     }
 
-    $deg: $deg / 90;
+    $deg: calc($deg / 90);
 
     display: block;
     width: 0;
@@ -117,7 +117,7 @@
     $position: relative
 ) {
 
-    $shadow-size: $shadow-offset - ($shadow-blur / 2) - $shadow-spread;
+    $shadow-size: $shadow-offset - calc($shadow-blur / 2) - $shadow-spread;
 
     $unitless-height: strip-unit($height);
     $unitless-shadow-size: strip-unit($shadow-size);
@@ -138,7 +138,7 @@
         left: 50%;
         width: $triangle__rect-size;
         height: $triangle__rect-size;
-        margin-top: ($height / 2);
+        margin-top: calc($height / 2);
         transform: translateX(-50%) translateY(-50%) rotate(45deg);
 
         background-color: $color;
